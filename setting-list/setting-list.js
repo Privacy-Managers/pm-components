@@ -45,17 +45,17 @@ class SettingList extends HTMLElement {
     if (oldValue === newValue) {
       return;
     }
-    if (name === "data-msg") {
+    if (name === "text") {
       this.text = newValue;
     }
-    else if (name === "data-desc") {
+    else if (name === "description") {
       this.description = newValue;
     }
     this._render();
   }
 
   static get observedAttributes() {
-    return ["data-msg", "data-desc"];
+    return ["text", "description"];
   }
 
   _getMsg(id)

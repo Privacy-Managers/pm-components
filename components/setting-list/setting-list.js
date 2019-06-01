@@ -10,6 +10,18 @@ class SettingList extends HTMLElement {
 
     this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
+      <style>
+        span::after
+        {
+          content: "";
+          border: none;
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          background: url(info.svg) center no-repeat transparent;
+          margin: 0px 3px;
+        }
+      </style>
       <label>
         <span><slot>Some default</slot></span>
         <input type="checkbox" />

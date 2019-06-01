@@ -51,7 +51,8 @@ class SettingList extends HTMLElement {
     else if (name === "description") {
       this.description = newValue;
     }
-    this._render();
+    if (!this.connected)
+      this._render();
   }
 
   static get observedAttributes() {
@@ -86,9 +87,6 @@ class SettingList extends HTMLElement {
   }
 
   _render() {
-    if (!this.connected)
-      return;
-
     this.textElem.textContent = this._getMsg(this.text);
     this.labelElem.setAttribute("title", this._getMsg(this.description));
     this.shadowRoot.appendChild(this.labelElem);

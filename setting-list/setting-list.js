@@ -70,12 +70,12 @@ class SettingList extends HTMLElement {
           background-color: var(--color-secondary);
           color: #fff;
         }
-        :host([checked]) button[role="checkbox"] > span:first-child
+        :host([checked="true"]) button[role="checkbox"] > span:first-child
         {
           background-color: var(--color-primary);
           color: #fff;
         }
-        :host([checked]) button[role="checkbox"] > span:last-child
+        :host([checked="true"]) button[role="checkbox"] > span:last-child
         {
           color: #000;
           background: none;
@@ -96,7 +96,6 @@ class SettingList extends HTMLElement {
     this.toggleElem = this.shadowRoot.querySelector("button");
     this.containerElem = this.shadowRoot.querySelector("div");
     this.labelElem = this.shadowRoot.querySelector("#label");
-    this.setAttribute("checked", "");
     if (this.dataset.msg)
       this.text = this.dataset.msg;
     if (this.dataset.desc)
@@ -109,8 +108,7 @@ class SettingList extends HTMLElement {
 
     this.toggleElem.addEventListener("click", (e) =>
     {
-      const changed = new CustomEvent("change");
-      this.dispatchEvent(changed);
+      this.toggle();
     });
 
     this._render();
@@ -146,24 +144,35 @@ class SettingList extends HTMLElement {
     return data[id] || id;
   }
 
+  _dispatchChangeEvent()
+  {
+    const changed = new CustomEvent("change");
+    this.dispatchEvent(changed);
+  }
+
   isEnabled()
   {
-    return this.checkboxElem.checked;
+    if (this.getAttribute("checked") == "true")
+      return true;
+    return false;
   }
 
   setEnabled(status)
   {
-    this.checkboxElem.checked = status;
+    this.setAttribute("checked", status);
+    if (isEnabled() != status)
+      this._dispatchChangeEvent();
   }
 
   toggle()
   {
-    this.checkboxElem.checked = !this.checkboxElem.checked;
+    this.setAttribute("checked", !this.isEnabled());
+    this._dispatchChangeEvent();
   }
 
   _render() {
     this.labelElem.textContent = this._getMsg(this.text);
-    this.containerElem.setAttribute("title", this._getMsg(this.description));
+    this.labelElem.setAttribute("title", this._getMsg(this.description));
     this.shadowRoot.appendChild(this.containerElem);
   }
 }

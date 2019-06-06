@@ -82,7 +82,7 @@ class SettingList extends HTMLElement {
         }
       </style>
       <div>
-        <span id="label"><slot>Some default</slot></span>
+        <span id="label" tabindex="0"><slot>Some default</slot></span>
         <button aria-labelledby="label" role="checkbox" type="button">
           <span id="btn-on-label">On</span>
           <span id="btn-off-label">Off</span>
@@ -102,6 +102,11 @@ class SettingList extends HTMLElement {
       this.description = this.dataset.desc;
 
     this.toggleElem.addEventListener("click", this.toggle.bind(this));
+    this.labelElem.addEventListener("click", this._requestInfo.bind(this));
+    this.labelElem.addEventListener("keyup", ({key}) => {
+      if (key === "Enter" || key === " ")
+        this._requestInfo();
+    });
     this._render();
   }
 
@@ -115,7 +120,6 @@ class SettingList extends HTMLElement {
     else if (name === "description") {
       this.description = newValue;
     }
-    console.log(name, newValue);
     if (this.connected)
       this._render();
   }
@@ -134,6 +138,11 @@ class SettingList extends HTMLElement {
     };
 
     return data[id] || id;
+  }
+
+  _requestInfo()
+  {
+    alert(this.description);
   }
 
   _onChanged()

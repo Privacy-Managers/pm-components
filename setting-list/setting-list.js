@@ -83,7 +83,7 @@ class SettingList extends HTMLElement {
       </style>
       <div>
         <span id="label"><slot>Some default</slot></span>
-        <button aria-labelledby="label" role="checkbox">
+        <button aria-labelledby="label" role="checkbox" type="button">
           <span id="btn-on-label">On</span>
           <span id="btn-off-label">Off</span>
         </button>
@@ -101,16 +101,7 @@ class SettingList extends HTMLElement {
     if (this.dataset.desc)
       this.description = this.dataset.desc;
 
-    this.labelElem.addEventListener("click", (e) =>
-    {
-      e.preventDefault();
-    });
-
-    this.toggleElem.addEventListener("click", (e) =>
-    {
-      this.toggle();
-    });
-
+    this.toggleElem.addEventListener("click", this.toggle.bind(this));
     this._render();
   }
 
@@ -124,12 +115,13 @@ class SettingList extends HTMLElement {
     else if (name === "description") {
       this.description = newValue;
     }
+    console.log(name, newValue);
     if (this.connected)
       this._render();
   }
 
   static get observedAttributes() {
-    return ["text", "description"];
+    return ["text", "description", "checked"];
   }
 
   _getMsg(id)
@@ -144,10 +136,11 @@ class SettingList extends HTMLElement {
     return data[id] || id;
   }
 
-  _dispatchChangeEvent()
+  _onChanged()
   {
     const changed = new CustomEvent("change");
     this.dispatchEvent(changed);
+    this._render();
   }
 
   isEnabled()
@@ -161,19 +154,21 @@ class SettingList extends HTMLElement {
   {
     this.setAttribute("checked", status);
     if (isEnabled() != status)
-      this._dispatchChangeEvent();
+    {
+      this._onChanged();
+    }
   }
 
   toggle()
   {
     this.setAttribute("checked", !this.isEnabled());
-    this._dispatchChangeEvent();
+    this._onChanged();
   }
 
   _render() {
+    this.toggleElem.setAttribute("aria-checked", this.isEnabled());
     this.labelElem.textContent = this._getMsg(this.text);
     this.labelElem.setAttribute("title", this._getMsg(this.description));
-    this.shadowRoot.appendChild(this.containerElem);
   }
 }
 

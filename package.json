@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha tests/setting-list.js",
-    "start": "http-server components -p 3000"
+    "start": "http-server components -p 3000",
+    "cypress:open": "npm run start & cypress open"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,8 @@
     "http-server": "^0.11.1",
     "jsdom": "^15.1.1",
     "mocha": "^6.1.4"
+  },
+  "devDependencies": {
+    "cypress": "^3.3.1"
   }
 }

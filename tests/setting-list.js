@@ -6,6 +6,11 @@ const {document} = window;
 
 const settingListElem = document.querySelector("setting-list");
 
+
+settingListElem.hasAttribute("checked");
+settingListElem.toggle();
+console.log(settingListElem);
+
 const scenarios = [
   {
     description: "No 'checked' attribute on the element",
@@ -35,6 +40,7 @@ function runAction(method, args = [], equal)
     console.error("method is required");
 }
 
+/*
 describe("Testing setting-list custom element", () => {
   scenarios.forEach(({description, method, args, equal}) =>
   {
@@ -47,3 +53,4 @@ describe("Testing setting-list custom element", () => {
     runAction(method, args, equal);
   });
 });
+*/

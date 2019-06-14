@@ -162,7 +162,7 @@ class SettingList extends HTMLElement {
   setEnabled(status)
   {
     this.setAttribute("checked", status);
-    if (isEnabled() != status)
+    if (this.isEnabled() != status)
     {
       this._onChanged();
     }

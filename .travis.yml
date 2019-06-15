@@ -11,5 +11,4 @@ cache:
     - node_modules
   before_script:
   - npm install
-  script:
-  - npm test:puppeteer
+  script:npm test:puppeteer

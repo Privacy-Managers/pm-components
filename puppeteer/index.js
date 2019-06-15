@@ -5,6 +5,7 @@ const assert = require('assert');
 let browser;
 let page;
 let settingListHandle;
+let buttonHandle;
 
 before(async () => {
   browser = await puppeteer.launch({headless: true});
@@ -13,6 +14,7 @@ before(async () => {
   const pathToComponent = resolve("components/setting-list/setting-list.html");
   await page.goto(`file://${pathToComponent}`);
   settingListHandle = await page.$('setting-list');
+  buttonHandle = await page.evaluateHandle(`document.querySelector('setting-list').shadowRoot.querySelector('button')`);
 });
 
 function isEnabled()
@@ -53,6 +55,13 @@ describe("Testing settings-list component", () =>
     assert.equal(await setEnabledAndGetChecked(true), "true");
     assert.equal(await isEnabled(), true);
     assert.equal(await setEnabledAndGetChecked(false), "false");
+    assert.equal(await isEnabled(), false);
+  });
+
+  it("Clicking the button changes the status", async () => {
+    await buttonHandle.click();
+    assert.equal(await isEnabled(), true);
+    await buttonHandle.click();
     assert.equal(await isEnabled(), false);
   });
 });

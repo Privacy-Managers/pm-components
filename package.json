@@ -6,8 +6,8 @@
   "scripts": {
     "test": "mocha tests/setting-list.js",
     "start": "http-server components -p 3000",
-    "cypress:open": "npm run start & cypress open",
-    "puppeteer:open": "mocha puppeteer/index.js"
+    "test:cypress": "npm run start & cypress open",
+    "test:puppeteer": "mocha puppeteer/index.js"
   },
   "repository": {
     "type": "git",

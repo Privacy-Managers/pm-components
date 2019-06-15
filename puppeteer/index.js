@@ -26,7 +26,7 @@ function isEnabled()
 
 describe("Testing settings-list component", () =>
 {
-  it("Should change 'checked' attribute and status on toggle() method call", async () =>
+  it("Should change 'checked' attribute and status on toggle() method call", async() =>
   {
     function toggleAndGetChecked()
     {
@@ -42,7 +42,7 @@ describe("Testing settings-list component", () =>
     assert.equal(await isEnabled(), false);
   });
 
-  it("Should change 'checked' and status attribute on setEnabled() method call", async () =>
+  it("Should change 'checked' and status attribute on setEnabled() method call", async() =>
   {
     function setEnabledAndGetChecked(status)
     {
@@ -58,12 +58,21 @@ describe("Testing settings-list component", () =>
     assert.equal(await isEnabled(), false);
   });
 
-  it("Clicking the button changes the status", async () => {
+  it("Clicking the button changes the status", async() => {
     await buttonHandle.click();
     assert.equal(await isEnabled(), true);
     await buttonHandle.click();
     assert.equal(await isEnabled(), false);
   });
+
+  it("Hitting 'Enter' on focused button changes the status", async() => {
+    await buttonHandle.focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await isEnabled(), true);
+    await page.keyboard.press("Enter");
+    assert.equal(await isEnabled(), false);
+  });
+
 });
 
 after(async () => {

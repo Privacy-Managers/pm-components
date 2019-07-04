@@ -91,7 +91,11 @@ class SettingList extends HTMLElement {
     `;
   }
 
-  connectedCallback() {
+  /**
+   * Invoked each time the custom element is appended into a DOM element
+   */
+  connectedCallback()
+  {
     this.connected = true;
     this.toggleElem = this.shadowRoot.querySelector("button");
     this.containerElem = this.shadowRoot.querySelector("div");
@@ -110,7 +114,14 @@ class SettingList extends HTMLElement {
     this._render();
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  /**
+   * Called each time an attribute on the custom element is changed
+   * @param {String} name attribute name
+   * @param {String} oldValue Old value of the attribute
+   * @param {String} newValue New value of the attribute
+   */
+  attributeChangedCallback(name, oldValue, newValue)
+  {
     if (oldValue === newValue) {
       return;
     }
@@ -140,11 +151,17 @@ class SettingList extends HTMLElement {
     return data[id] || id;
   }
 
+  /**
+   * Called when the info(description) is requested
+   */
   _requestInfo()
   {
     alert(this.description);
   }
 
+  /**
+   * Dipatches custom change event
+   */
   _onChanged()
   {
     const changed = new CustomEvent("change");
@@ -152,6 +169,10 @@ class SettingList extends HTMLElement {
     this._render();
   }
 
+  /**
+   * Check if the component is toggled or not
+   * @return {Boolean} state
+   */
   isEnabled()
   {
     if (this.getAttribute("checked") == "true")
@@ -159,6 +180,10 @@ class SettingList extends HTMLElement {
     return false;
   }
 
+  /**
+   * Enable/Dissable toggle
+   * @param {boolen} status set the state of the toggle
+   */
   setEnabled(status)
   {
     this.setAttribute("checked", status);
@@ -168,12 +193,18 @@ class SettingList extends HTMLElement {
     }
   }
 
+  /**
+   * Toggles the state of the component
+   */
   toggle()
   {
     this.setAttribute("checked", !this.isEnabled());
     this._onChanged();
   }
 
+  /**
+   * Render method to be called after each state change
+   */
   _render() {
     this.toggleElem.setAttribute("aria-checked", this.isEnabled());
     this.labelElem.textContent = this._getMsg(this.text);

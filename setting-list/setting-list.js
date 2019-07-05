@@ -100,10 +100,6 @@ class SettingList extends HTMLElement {
     this.toggleElem = this.shadowRoot.querySelector("button");
     this.containerElem = this.shadowRoot.querySelector("div");
     this.labelElem = this.shadowRoot.querySelector("#label");
-    if (this.dataset.msg)
-      this.text = this.dataset.msg;
-    if (this.dataset.desc)
-      this.description = this.dataset.desc;
 
     this.toggleElem.addEventListener("click", this.toggle.bind(this));
     this.labelElem.addEventListener("click", this._requestInfo.bind(this));

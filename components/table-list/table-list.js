@@ -2,6 +2,17 @@ class SettingList extends HTMLElement {
   constructor() {
     super();
 
+    this.items = [];
+    // TODO: add setSort method.
+    this.sort = (a, b) => a.dataset.access.localeCompare(b.dataset.access);
+    this.listElem = null;
+    this.listItemTemplate = null;
+    this.listSubItemTemplate = null;
+    this.loaded = 0;
+    this.loadAmount = 50;
+    this.scrollLoadPercentage = 0.8;
+
+    this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
       <style>
         .tableList,
@@ -51,30 +62,111 @@ class SettingList extends HTMLElement {
           display: inline-block;
         }
       </style>
-      <div>
-        
-      </div>
+      <ul></ul>
     `;
   }
 
-  connectedCallback() {
+  connectedCallback()
+  {
+    this.listItemTemplate = document.querySelector("#cookiesListTemplate"); // TODO: make this dynamic
+    this.listSubItemTemplate = document.querySelector("#cookiesSubListTemplate");
+    this.listElem = this.shadowRoot.querySelector("ul");
     this._render();
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  attributeChangedCallback(name, oldValue, newValue)
+  {
   }
 
-  static get observedAttributes() {
+  static get observedAttributes()
+  {
     return [];
   }
 
+  addItem(itemObjs)
+  {
+    this.items = this.items.concat(itemObjs);
+
+    if (this.sort)
+      this.items.sort(this.sort);
+
+    for (var i = 0; i < itemObjs.length; i++)
+    {
+      var itemObj = itemObjs[i];
+      var itemIndex = this.items.indexOf(itemObj);
+  
+      if (itemIndex < this.loaded || itemIndex <= this.loadAmount)
+        this._loadItem(itemObj);
+    }
+  }
+
+  _loadItem(itemObj)
+  {
+    if (!itemObj.dataset)
+      itemObj.dataset = {};
+
+    if (!itemObj.dataset.access)
+      itemObj.dataset.access = this.items.indexOf(itemObj);
+
+    var listItem = this._itemFromTmpl(itemObj, this.listItemTemplate);
+    var itemIndex = this.items.indexOf(itemObj);
+    var elemAfter = this.listElem.children[itemIndex];
+
+    if (elemAfter)
+      this.listElem.insertBefore(listItem, elemAfter);
+    else
+      this.listElem.appendChild(listItem);
+
+    this.loaded++;
+  }
+
+  _itemFromTmpl(itemObj, template)
+  {
+    var tmpContent = template.content;
+    var tmpList = tmpContent.querySelector("li");
+
+    this._updateListElem(itemObj, tmpList);
+    return document.importNode(tmpContent, true);
+  }
+
+  _updateListElem(itemObj, listElem)
+  {
+    var datasetObj = itemObj.dataset;
+    for (const name in datasetObj)
+      listElem.dataset[name] = datasetObj[name];
+
+    var textsObj = itemObj.texts;
+    for (const name in textsObj)
+    {
+      var textElement = listElem.querySelector("[data-text='"+ name +"']");
+      if (textElement)
+        textElement.textContent = textsObj[name];
+    }
+    var titleObjs = itemObj.titles;
+    for (var title in titleObjs)
+    {
+      var titleElement = listElem.querySelector("[data-text='"+ title +"']");
+      if (titleElement)
+        titleElement.title = titleObjs[title];
+    }
+
+    // Set default tabindex to the first list Element
+    if (this.listElem.childElementCount == 0)
+      listElem.setAttribute("tabindex", "0");
+    else
+      listElem.setAttribute("tabindex", "-1");
+  }
+
+  removeItem(accessor)
+  {
+
+  }
 
   _render() {
   }
 }
 
 customElements.define('table-list', SettingList);
-
 
 /**
  * Constructor TableList

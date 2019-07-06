@@ -48,10 +48,19 @@
     <table-list></table-list>
   </div>
   <script>
-    document.querySelector("table-list").addItem([{
+    document.querySelector("table-list").addItems([{
       dataset:  { access: "example.com", datasetname: "/" },
       texts: {"domain": "example.com", "cookienum": "3 Cookies"}
+  },
+  {
+      dataset:  { access: "example.com1", datasetname: "/" },
+      texts: {"domain": "example.com1", "cookienum": "3 Cookies"}
+  },
+  {
+      dataset:  { access: "example.com2", datasetname: "/" },
+      texts: {"domain": "example.com2", "cookienum": "3 Cookies"}
   }]);
+  document.querySelector("table-list").removeItem("example.com1");
   </script>
 </body>
 </html>

@@ -62,7 +62,7 @@ class SettingList extends HTMLElement {
           display: inline-block;
         }
       </style>
-      <ul></ul>
+      <ul class="tableList "></ul>
     `;
   }
 
@@ -90,10 +90,10 @@ class SettingList extends HTMLElement {
     if (this.sort)
       this.items.sort(this.sort);
 
-    for (var i = 0; i < itemObjs.length; i++)
+    for (let i = 0; i < itemObjs.length; i++)
     {
-      var itemObj = itemObjs[i];
-      var itemIndex = this.items.indexOf(itemObj);
+      const itemObj = itemObjs[i];
+      const itemIndex = this.items.indexOf(itemObj);
   
       if (itemIndex < this.loaded || itemIndex <= this.loadAmount)
         this._loadItem(itemObj);
@@ -108,9 +108,9 @@ class SettingList extends HTMLElement {
     if (!itemObj.dataset.access)
       itemObj.dataset.access = this.items.indexOf(itemObj);
 
-    var listItem = this._itemFromTmpl(itemObj, this.listItemTemplate);
-    var itemIndex = this.items.indexOf(itemObj);
-    var elemAfter = this.listElem.children[itemIndex];
+    const listItem = this._itemFromTmpl(itemObj, this.listItemTemplate);
+    const itemIndex = this.items.indexOf(itemObj);
+    const elemAfter = this.listElem.children[itemIndex];
 
     if (elemAfter)
       this.listElem.insertBefore(listItem, elemAfter);
@@ -122,8 +122,8 @@ class SettingList extends HTMLElement {
 
   _itemFromTmpl(itemObj, template)
   {
-    var tmpContent = template.content;
-    var tmpList = tmpContent.querySelector("li");
+    const tmpContent = template.content;
+    const tmpList = tmpContent.querySelector("li");
 
     this._updateListElem(itemObj, tmpList);
     return document.importNode(tmpContent, true);
@@ -131,21 +131,23 @@ class SettingList extends HTMLElement {
 
   _updateListElem(itemObj, listElem)
   {
-    var datasetObj = itemObj.dataset;
+    const datasetObj = itemObj.dataset;
     for (const name in datasetObj)
       listElem.dataset[name] = datasetObj[name];
 
-    var textsObj = itemObj.texts;
+    const textsObj = itemObj.texts;
     for (const name in textsObj)
     {
-      var textElement = listElem.querySelector("[data-text='"+ name +"']");
+      console.log(name);
+      console.log(textsObj);
+      const textElement = listElem.querySelector("[data-text='"+ name +"']");
       if (textElement)
         textElement.textContent = textsObj[name];
     }
-    var titleObjs = itemObj.titles;
-    for (var title in titleObjs)
+    const titleObjs = itemObj.titles;
+    for (const title in titleObjs)
     {
-      var titleElement = listElem.querySelector("[data-text='"+ title +"']");
+      const titleElement = listElem.querySelector("[data-text='"+ title +"']");
       if (titleElement)
         titleElement.title = titleObjs[title];
     }
@@ -155,11 +157,6 @@ class SettingList extends HTMLElement {
       listElem.setAttribute("tabindex", "0");
     else
       listElem.setAttribute("tabindex", "-1");
-  }
-
-  removeItem(accessor)
-  {
-
   }
 
   _render() {

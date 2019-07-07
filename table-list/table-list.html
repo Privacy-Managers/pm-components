@@ -8,7 +8,7 @@
   <script src="table-list.js"></script>
 </head>
 <body>
-  <div style="width: 200px">
+  <div style="display: flex;">
       <template id="cookiesListTemplate">
           <li data-action="get-cookies" 
               data-key-action="get-cookies" 
@@ -48,19 +48,19 @@
     <table-list></table-list>
   </div>
   <script>
-    document.querySelector("table-list").addItems([{
-      dataset:  { access: "example.com", datasetname: "/" },
-      texts: {"domain": "example.com", "cookienum": "3 Cookies"}
-  },
-  {
-      dataset:  { access: "example.com1", datasetname: "/" },
-      texts: {"domain": "example.com1", "cookienum": "3 Cookies"}
-  },
-  {
-      dataset:  { access: "example.com2", datasetname: "/" },
-      texts: {"domain": "example.com2", "cookienum": "3 Cookies"}
-  }]);
-  document.querySelector("table-list").removeItem("example.com1");
+    const objItems = [];
+    for (let i = 0; i < 300; i++) {
+      objItems.push({
+        dataset:  { access: `example${i}.com`},
+        texts: {"domain": `example${i}.com`, "cookienum": "3 Cookies"}
+      });
+    }
+    document.querySelector("table-list").addItems(objItems);
+    document.querySelector("table-list").addSubItem({
+      dataset:  { access: `subexample.com`},
+        texts: {"name": `subexample.com`, "value": "3 Cookies"}
+    }, "example0.com");
+    document.querySelector("table-list").removeItem("example1.com");
   </script>
 </body>
 </html>

@@ -61,6 +61,69 @@ class SettingList extends HTMLElement {
         {
           display: inline-block;
         }
+        button.icon
+        {
+          background-color: transparent;
+          border: none;
+          width: 20px;
+          padding: 0px;
+          cursor: default;
+        }
+        button.icon:after
+        {
+          display: inline-block;
+          content: "";
+          width: 10px;
+          height: 10px;
+          margin: 0px auto;
+        }
+        button.icon.delete:after
+        {
+          background-image: url(delete.svg);
+        }
+        button.icon.delete:hover:after
+        {
+          background-image: url(delete-hover.svg);
+        }
+        button.icon.edit:after
+        {
+          background-image: url(edit.svg);
+        }
+        button.icon.edit:hover:after
+        {
+          background-image: url(edit-hover.svg);
+        }
+        button.icon.whitelist:after
+        {
+          background-image: url(check-mark.svg);
+        }
+        button.icon.whitelist:hover:after
+        {
+          opacity: .8;
+        }
+        [data-whitelist="true"] button.icon.whitelist:after
+        {
+          background-image: url(check-mark-active.svg);
+        }
+        [data-whitelist="true"] [data-whitelist="true"] button.icon.whitelist:after
+        {
+          background-image: url(check-mark-double-active.svg);
+        }
+        .tableList .domainName
+        {
+          width: 300px
+        }
+        .tableList .cookieName
+        {
+          width: 280px;
+        }
+        .tableList .cookieValue
+        {
+          width: 100px;
+          white-space: pre;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       </style>
       <ul class="tableList "></ul>
     `;
@@ -71,9 +134,9 @@ class SettingList extends HTMLElement {
     this.listItemTemplate = document.querySelector("#cookiesListTemplate"); // TODO: make this dynamic
     this.listSubItemTemplate = document.querySelector("#cookiesSubListTemplate");
     this.listElem = this.shadowRoot.querySelector("ul");
+    this.listElem.addEventListener("scroll", this._onScroll.bind(this), false);
 
-    /*
-    listElem.addEventListener("keydown", function(ev)
+    this.listElem.addEventListener("keydown", function(ev)
     {
       // Prevent the scrollable list from scrolling
       if (ev.key == "ArrowDown" || ev.key == "ArrowUp")
@@ -82,8 +145,7 @@ class SettingList extends HTMLElement {
       }
     }, false);
 
-    this.listElem.addEventListener("scroll", this._onScroll.bind(this), false);
-    registerActionListener(this.listElem, this.onAction.bind(this));*/
+    // registerActionListener(this.listElem, this.onAction.bind(this));
     this._render();
   }
 
@@ -394,7 +456,7 @@ class SettingList extends HTMLElement {
   focusEdgeElem(parentElement, isFirst)
   {
     //TODO: use utils method instead 
-    const childElem = isFirst ? parentElement.firstChild : parentElement.lastChild;
+    let childElem = isFirst ? parentElement.firstChild : parentElement.lastChild;
     while(childElem != null && childElem.nodeType == 3)
       childElem = isFirst ? childElem.nextSibling : childElem.previousSibling;
 

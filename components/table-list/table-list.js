@@ -1,3 +1,5 @@
+import {registerActionListener} from "./utils.js";
+
 class SettingList extends HTMLElement {
   constructor() {
     super();
@@ -145,17 +147,8 @@ class SettingList extends HTMLElement {
       }
     }, false);
 
-    // registerActionListener(this.listElem, this.onAction.bind(this));
+    registerActionListener(this, this.onAction);
     this._render();
-  }
-
-  attributeChangedCallback(name, oldValue, newValue)
-  {
-  }
-
-  static get observedAttributes()
-  {
-    return [];
   }
 
   /**
@@ -474,7 +467,7 @@ class SettingList extends HTMLElement {
     switch (action)
     {
       case "next-sibling":
-        const isNext = true;
+        var isNext = true;
         break;
       case "previouse-sibling":
         let sibling = isNext ? element.nextSibling : element.previousSibling;

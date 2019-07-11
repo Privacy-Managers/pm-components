@@ -147,7 +147,7 @@ class SettingList extends HTMLElement {
       }
     }, false);
 
-    registerActionListener(this, this.onAction);
+    registerActionListener(this, this._onAction);
     this._render();
   }
 
@@ -231,7 +231,7 @@ class SettingList extends HTMLElement {
       this.items.splice(itemIndex, 1);
       if (this.loaded >= itemIndex)
       {
-        this.onAction("next-sibling", this.listElem.children[itemIndex]);
+        this._onAction("next-sibling", this.listElem.children[itemIndex]);
         this.listElem.removeChild(this.listElem.children[itemIndex]);
       }
       return true;
@@ -291,7 +291,7 @@ class SettingList extends HTMLElement {
       {
         if (item.subItems.length == 1)
         {
-          this.onAction("next-sibling", listItemElem);
+          this._onAction("next-sibling", listItemElem);
           listItemElem.removeChild(subListItemElem);
         }
         else
@@ -458,26 +458,58 @@ class SettingList extends HTMLElement {
   }
 
   /**
+   * Managing focus of the element, can select item by ID or switch selection
+   * @param {String} accessor Item to select ID, or currently selected ID
+   * @param {String} type possible values "next", "previous", "end", "start"
+   */
+  selectItem(accessor, type)
+  {
+    const itemIndex = this.indexOfAccessor(accessor);
+    this.getItem(accessor);
+    const listElems = this.listElem.children;
+    if (!type)
+      listElems[itemIndex].focus();
+
+    switch (type)
+    {
+      case "next":
+        const nextElem = listElems[itemIndex + 1];
+        if (!nextElem)
+          this.selectItem(null, "start");
+        else
+          nextElem.focus();
+        break;
+      case "previous":
+        const previousElem = listElems[itemIndex - 1];
+        console.log(previousElem);
+        if (!previousElem)
+          this.selectItem(null, "end");
+        else
+          previousElem.focus();
+        break;
+      case "start":
+        listElems[0].focus();
+        break;
+      case "end":
+        listElems[listElems.length - 1].focus();
+        break;
+    }
+  }
+
+  /**
    * Action listener
    * @param {String} action
    * @param {Node} element target
    */
-  onAction(action, element)
+  _onAction(action, element)
   {
     switch (action)
     {
       case "next-sibling":
-        var isNext = true;
+        this.selectItem(element.dataset.access, "next");
         break;
       case "previouse-sibling":
-        let sibling = isNext ? element.nextSibling : element.previousSibling;
-        while (sibling && sibling.nodeType != 1)
-          sibling = isNext ? sibling.nextSibling : sibling.previousSibling;
-
-        if (sibling)
-          sibling.focus();
-        else
-          this.focusEdgeElem(element.parentNode, isNext);
+        this.selectItem(element.dataset.access, "previous");
         break;
     }
   }

@@ -11,7 +11,7 @@ before(async () => {
   browser = await puppeteer.launch({headless: true});
   page = await browser.newPage()
   await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3419.0 Safari/537.36');
-  const pathToComponent = resolve("components/setting-list/setting-list.html");
+  const pathToComponent = resolve("./puppeteer/setting-list.html");
   await page.goto(`file://${pathToComponent}`);
   settingListHandle = await page.$('setting-list');
   buttonHandle = await page.evaluateHandle(`document.querySelector('setting-list').shadowRoot.querySelector('button')`);

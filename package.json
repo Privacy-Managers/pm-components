@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha tests/setting-list.js",
     "start": "http-server components -p 3000",
-    "test:puppeteer": "mocha puppeteer/index.js"
+    "test:puppeteer": "mocha puppeteer/*.js"
   },
   "repository": {
     "type": "git",

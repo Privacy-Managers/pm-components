@@ -6,7 +6,6 @@
   "scripts": {
     "test": "mocha tests/setting-list.js",
     "start": "http-server components -p 3000",
-    "test:cypress": "npm run start & cypress open",
     "test:puppeteer": "mocha puppeteer/index.js"
   },
   "repository": {

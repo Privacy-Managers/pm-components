@@ -8,7 +8,7 @@ let settingListHandle;
 let buttonHandle;
 
 before(async () => {
-  browser = await puppeteer.launch({headless: false});
+  browser = await puppeteer.launch({headless: true});
   page = await browser.newPage()
   await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3419.0 Safari/537.36');
   const pathToComponent = resolve("./puppeteer/setting-list.html");

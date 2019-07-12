@@ -6,7 +6,7 @@ let browser;
 let page;
 
 before(async () => {
-  browser = await puppeteer.launch({headless: false});
+  browser = await puppeteer.launch({headless: true});
   page = await browser.newPage();
   await page.setContent(readFileSync("./puppeteer/table-list.html", "utf-8"));
 });

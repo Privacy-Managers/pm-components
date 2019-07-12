@@ -58,11 +58,16 @@
         });
       }
       document.querySelector("table-list").addItems(objItems);
-      document.querySelector("table-list").addSubItem({
-        dataset:  { access: `subexample.com`},
-          texts: {"name": `subexample.com`, "value": "3 Cookies"}
-      }, "example0.com");
+      console.log(document.querySelector("table-list").indexOfAccessor("example0.com"));
+      for (let i = 0; i < 5; i++) {
+        document.querySelector("table-list").addSubItem({
+          dataset:  { access: `subexample.com${i}`},
+            texts: {"name": `subexample.com${i}`, "value": "3 Cookies"}
+        }, "example0.com");
+      }
+      
       document.querySelector("table-list").removeItem("example1.com");
+      
     });
   </script>
 </body>

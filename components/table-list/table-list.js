@@ -225,14 +225,14 @@ class SettingList extends HTMLElement {
    */
   removeItem(accessor)
   {
-    const itemIndex = this.indexOfAccessor(accessor);
-    if (itemIndex >= 0)
+    const {index} = this.indexOfAccessor(accessor);
+    if (index >= 0)
     {
-      this.items.splice(itemIndex, 1);
-      if (this.loaded >= itemIndex)
+      this.items.splice(index, 1);
+      if (this.loaded >= index)
       {
-        this._onAction("next-sibling", this.listElem.children[itemIndex]);
-        this.listElem.removeChild(this.listElem.children[itemIndex]);
+        this._onAction("next-sibling", this.listElem.children[index]);
+        this.listElem.removeChild(this.listElem.children[index]);
       }
       return true;
     }
@@ -246,13 +246,13 @@ class SettingList extends HTMLElement {
    */
   addSubItem(itemObj, accessor)
   {
-    const itemIndex = this.indexOfAccessor(accessor);
-    if (itemIndex === false)
+    const {index} = this.indexOfAccessor(accessor);
+    if (index === false)
       return false;
 
     const subListItemElem = this._itemFromTmpl(itemObj, this.listSubItemTemplate);
-    const item = this.items[itemIndex];
-    const listItemElem = this.listElem.children[itemIndex];
+    const item = this.items[index];
+    const listItemElem = this.listElem.children[index];
 
     if (!item.subItems || item.subItems.length == 0)
     {
@@ -261,6 +261,7 @@ class SettingList extends HTMLElement {
       const subListElem = document.createElement("ul");
       subListElem.appendChild(subListItemElem);
       listItemElem.appendChild(subListElem);
+      //TODO: Update selectItem() method to handle current casse
       this.focusEdgeElem(subListElem, true);
     }
     else
@@ -277,12 +278,12 @@ class SettingList extends HTMLElement {
    */
   removeSubItem(parentAccessor, accessor)
   {
-    const itemIndex = this.indexOfAccessor(parentAccessor);
-    if (itemIndex === false)
+    const {index} = this.indexOfAccessor(parentAccessor);
+    if (index === false)
       return false;
 
-    const item = this.items[itemIndex];
-    const listItemElem = this.listElem.children[itemIndex];
+    const item = this.items[index];
+    const listItemElem = this.listElem.children[index];
     const subListItemElem = listItemElem.querySelector("ul");
 
     for (let i = 0; i < item.subItems.length; i++)
@@ -403,14 +404,25 @@ class SettingList extends HTMLElement {
    * @param {String} accessor
    * @return {Number} index of the item or false if can't find
    */
-  indexOfAccessor(accessor)
+  indexOfAccessor(accessor, _items)
   {
-    for (let i = 0; i < this.items.length; i++)
+    if (!_items)
+      _items = this.items;
+    let index = -1;
+    let subIndex = -1;
+    for (let i = 0; i < _items.length; i++)
     {
-      if (this.items[i].dataset.access == accessor)
-        return i;
+      if (_items[i].dataset.subItems)
+        subIndex = findItem(accessor, _items[i].dataset.subItems)
+      if (_items[i].dataset.access == accessor)
+        index = i;
+      if (subIndex >= 0 || index >= 0)
+        return {index, subIndex} // break?
     }
-    return false;
+    if (!_items)
+      return {index, subIndex};
+
+    return -1;
   }
 
   /**
@@ -420,9 +432,9 @@ class SettingList extends HTMLElement {
    */
   getItem(accessor)
   {
-    const itemIndex = this.indexOfAccessor(accessor);
-    if (itemIndex >= 0)
-      return this.items[itemIndex];
+    const {index} = this.indexOfAccessor(accessor);
+    if (index >= 0)
+      return this.items[index];
     else
       return false;
   }
@@ -434,11 +446,11 @@ class SettingList extends HTMLElement {
    */
   updateItem(newItemObj, accessor)
   {
-    const itemIndex = this.indexOfAccessor(accessor);
-    this.items[itemIndex] = newItemObj;
+    const {index} = this.indexOfAccessor(accessor);
+    this.items[index] = newItemObj;
 
-    if (this.loaded >= itemIndex)
-      this._updateListElem(newItemObj, this.listElem.children[itemIndex]);
+    if (this.loaded >= index)
+      this._updateListElem(newItemObj, this.listElem.children[index]);
   }
 
   /**
@@ -464,24 +476,23 @@ class SettingList extends HTMLElement {
    */
   selectItem(accessor, type)
   {
-    const itemIndex = this.indexOfAccessor(accessor);
+    const {index} = this.indexOfAccessor(accessor);
     this.getItem(accessor);
     const listElems = this.listElem.children;
     if (!type)
-      listElems[itemIndex].focus();
+      listElems[index].focus();
 
     switch (type)
     {
       case "next":
-        const nextElem = listElems[itemIndex + 1];
+        const nextElem = listElems[index + 1];
         if (!nextElem)
           this.selectItem(null, "start");
         else
           nextElem.focus();
         break;
       case "previous":
-        const previousElem = listElems[itemIndex - 1];
-        console.log(previousElem);
+        const previousElem = listElems[index - 1];
         if (!previousElem)
           this.selectItem(null, "end");
         else

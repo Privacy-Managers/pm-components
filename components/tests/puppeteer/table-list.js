@@ -43,7 +43,7 @@ describe("Table-list component", () =>
   it("Populating Table with 300 items should load first 50 items by default", async() =>
   {
     const loaded =  await populateItemsGetLoadedLength();
-    assert.equal(children, loaded);
+    assert.equal(loaded, 50);
   });
   it("indexOfAccessor() method should return index for accessor", async() =>
   {

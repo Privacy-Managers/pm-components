@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <script>
-    class SettingList extends HTMLElement {
+class SettingList extends HTMLElement {
   constructor() {
     super();
     this.text = "btn-txt";
@@ -47,7 +39,7 @@
           display: inline-block;
           width: 12px;
           height: 12px;
-          background: url(info.svg) center no-repeat transparent;
+          background: url(../../../img/setting-list/info.svg) center no-repeat transparent;
           margin: 0px 3px;
         }
         button[role="checkbox"]
@@ -99,15 +91,15 @@
     `;
   }
 
-  connectedCallback() {
+  /**
+   * Invoked each time the custom element is appended into a DOM element
+   */
+  connectedCallback()
+  {
     this.connected = true;
     this.toggleElem = this.shadowRoot.querySelector("button");
     this.containerElem = this.shadowRoot.querySelector("div");
     this.labelElem = this.shadowRoot.querySelector("#label");
-    if (this.dataset.msg)
-      this.text = this.dataset.msg;
-    if (this.dataset.desc)
-      this.description = this.dataset.desc;
 
     this.toggleElem.addEventListener("click", this.toggle.bind(this));
     this.labelElem.addEventListener("click", this._requestInfo.bind(this));
@@ -118,7 +110,14 @@
     this._render();
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  /**
+   * Called each time an attribute on the custom element is changed
+   * @param {String} name attribute name
+   * @param {String} oldValue Old value of the attribute
+   * @param {String} newValue New value of the attribute
+   */
+  attributeChangedCallback(name, oldValue, newValue)
+  {
     if (oldValue === newValue) {
       return;
     }
@@ -148,11 +147,17 @@
     return data[id] || id;
   }
 
+  /**
+   * Called when the info(description) is requested
+   */
   _requestInfo()
   {
     alert(this.description);
   }
 
+  /**
+   * Dipatches custom change event
+   */
   _onChanged()
   {
     const changed = new CustomEvent("change");
@@ -160,6 +165,10 @@
     this._render();
   }
 
+  /**
+   * Check if the component is toggled or not
+   * @return {Boolean} state
+   */
   isEnabled()
   {
     if (this.getAttribute("checked") == "true")
@@ -167,21 +176,31 @@
     return false;
   }
 
+  /**
+   * Enable/Dissable toggle
+   * @param {boolen} status set the state of the toggle
+   */
   setEnabled(status)
   {
     this.setAttribute("checked", status);
-    if (isEnabled() != status)
+    if (this.isEnabled() != status)
     {
       this._onChanged();
     }
   }
 
+  /**
+   * Toggles the state of the component
+   */
   toggle()
   {
     this.setAttribute("checked", !this.isEnabled());
     this._onChanged();
   }
 
+  /**
+   * Render method to be called after each state change
+   */
   _render() {
     this.toggleElem.setAttribute("aria-checked", this.isEnabled());
     this.labelElem.textContent = this._getMsg(this.text);
@@ -190,14 +209,3 @@
 }
 
 customElements.define('setting-list', SettingList);
-
-  </script>
-</head>
-<body>
-  <div style="width: 200px">
-    <setting-list text="My text" description="Description of the element goes here">
-      Text goes here
-    </setting-list>
-  </div>
-</body>
-</html>

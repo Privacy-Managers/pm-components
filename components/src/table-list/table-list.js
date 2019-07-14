@@ -81,23 +81,23 @@ class SettingList extends HTMLElement {
         }
         button.icon.delete:after
         {
-          background-image: url(img/delete.svg);
+          background-image: url(../../../img/table-list/delete.svg);
         }
         button.icon.delete:hover:after
         {
-          background-image: url(img/delete-hover.svg);
+          background-image: url(../../../img/table-list//delete-hover.svg);
         }
         button.icon.edit:after
         {
-          background-image: url(img/edit.svg);
+          background-image: url(../../../img/table-list//edit.svg);
         }
         button.icon.edit:hover:after
         {
-          background-image: url(img/edit-hover.svg);
+          background-image: url(../../../img/table-list//edit-hover.svg);
         }
         button.icon.whitelist:after
         {
-          background-image: url(img/check-mark.svg);
+          background-image: url(../../../img/table-list//check-mark.svg);
         }
         button.icon.whitelist:hover:after
         {
@@ -105,11 +105,11 @@ class SettingList extends HTMLElement {
         }
         [data-whitelist="true"] button.icon.whitelist:after
         {
-          background-image: url(img/check-mark-active.svg);
+          background-image: url(../../../img/table-list//check-mark-active.svg);
         }
         [data-whitelist="true"] [data-whitelist="true"] button.icon.whitelist:after
         {
-          background-image: url(img/check-mark-double-active.svg);
+          background-image: url(../../../img/table-list//check-mark-double-active.svg);
         }
         .tableList .domainName
         {

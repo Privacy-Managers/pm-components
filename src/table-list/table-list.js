@@ -171,7 +171,7 @@ class SettingList extends HTMLElement {
       const itemObj = itemObjs[i];
       const itemIndex = this.items.indexOf(itemObj);
   
-      if (itemIndex < this.loaded || itemIndex <= this.loadAmount)
+      if (itemIndex < this.loaded || itemIndex < this.loadAmount)
         this._loadItem(itemObj);
     }
   }

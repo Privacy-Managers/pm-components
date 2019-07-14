@@ -16,18 +16,36 @@ before(async () =>
   tableListHandle = await page.$('table-list');
 });
 
+function populateItemsGetLoadedLength()
+{
+  return page.evaluate((tableListHandle) => {
+    const objItems = [];
+    for (let i = 0; i < 300; i++) {
+      objItems.push({
+        dataset:  { access: `example${i}.com`},
+        texts: {"domain": `example${i}.com`, "cookienum": "3 Cookies"}
+      });
+    }
+    tableListHandle.addItems(objItems);
+    return tableListHandle.shadowRoot.querySelector("ul").children.length;
+  }, tableListHandle);
+}
+
 function indexOfAccessor(accessor)
 {
   return page.evaluate((tableListHandle, accessor) => {
-    console.log("tableListHandle");
-    console.log(tableListHandle);
     return tableListHandle.indexOfAccessor(accessor);
   }, tableListHandle, accessor);
 }
 
 describe("Table-list component", () =>
 {
-  it("indexOfAccessor method should return index for accessor", async() =>
+  it("Populating Table with 300 items should load first 50 items by default", async() =>
+  {
+    const loaded =  await populateItemsGetLoadedLength();
+    assert.equal(children, loaded);
+  });
+  it("indexOfAccessor() method should return index for accessor", async() =>
   {
     const {index, subIndex} = await indexOfAccessor("example0.com");
     assert.equal(index, 0);

@@ -38,6 +38,13 @@ function indexOfAccessor(accessor)
   }, tableListHandle, accessor);
 }
 
+function removeItem(accessor)
+{
+  return page.evaluate((tableListHandle, accessor) => {
+    return tableListHandle.removeItem(accessor);
+  }, tableListHandle, accessor);
+}
+
 describe("Table-list component", () =>
 {
   it("Populating Table with 300 items should load first 50 items by default", async() =>
@@ -49,6 +56,13 @@ describe("Table-list component", () =>
   {
     const {index, subIndex} = await indexOfAccessor("example0.com");
     assert.equal(index, 0);
+    assert.equal(subIndex, -1);
+  });
+  it("removeItem() method should remove item and from the table list", async() =>
+  {
+    await removeItem("example1.com");
+    const {index, subIndex} = await indexOfAccessor("example1.com");
+    assert.equal(index, -1);
     assert.equal(subIndex, -1);
   });
 });

@@ -413,16 +413,13 @@ class SettingList extends HTMLElement {
     for (let i = 0; i < _items.length; i++)
     {
       if (_items[i].dataset.subItems)
-        subIndex = findItem(accessor, _items[i].dataset.subItems)
+        subIndex = findItem(accessor, _items[i].dataset.subItems).index;
       if (_items[i].dataset.access == accessor)
         index = i;
       if (subIndex >= 0 || index >= 0)
         return {index, subIndex} // break?
     }
-    if (!_items)
-      return {index, subIndex};
-
-    return -1;
+    return {index, subIndex};
   }
 
   /**

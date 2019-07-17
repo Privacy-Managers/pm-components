@@ -87,16 +87,21 @@ describe("Table-list component", () =>
     assert.equal(index, -1);
     assert.equal(subIndex, -1);
   });
-
   it("addSubItem() method should add subitems to the item with specified accessor", async() =>
   {
     for (let i = 0; i < 5; i++) {
       addSubItem({
-        dataset:  { access: `subexample.com${i}`},
-          texts: {"name": `subexample.com${i}`, "value": "3 Cookies"}
+        dataset:  { access: `subexample${i}.com`},
+          texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
       }, "example0.com");
     }
     assert.equal(await getLoadedAmount("example0.com"), 5);
+  });
+  it("indexOfAccessor() method should return index and subIndex", async() =>
+  {
+    const {index, subIndex} = await indexOfAccessor("subexample3.com");
+    assert.equal(index, 0);
+    assert.equal(subIndex, 3);
   });
 });
 

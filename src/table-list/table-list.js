@@ -6,7 +6,7 @@ class SettingList extends HTMLElement {
 
     this.items = [];
     // TODO: add setSort method.
-    this.sort = (a, b) => a.dataset.access.localeCompare(b.dataset.access);
+    this.sort = (a, b) => a.dataset.access.localeCompare(b.dataset.access, undefined, {numeric: true});
     this.listElem = null;
     this.listItemTemplate = null;
     this.listSubItemTemplate = null;
@@ -211,7 +211,7 @@ class SettingList extends HTMLElement {
     if (percentage > this.scrollLoadPercentage && this.loaded < this.items.length)
     {
       const loadLimit = this.loaded + this.loadAmount;
-      for (let i = this.loaded; i < loadLimit && i < this.items.length; i++)
+      for (let i = this.loaded -1; i < loadLimit && i < this.items.length; i++)
       {
         this._loadItem(this.items[i]);
       }

@@ -477,25 +477,30 @@ class SettingList extends HTMLElement {
    */
   selectItem(accessor, type)
   {
-    const {index} = this.indexOfAccessor(accessor);
-    this.getItem(accessor);
-    const listElems = this.listElem.children;
+    const {index, subIndex} = this.indexOfAccessor(accessor);
+    let listElems = this.listElem.children;
+    let currentIndex = index;
+    if (subIndex >= 0)
+    {
+      listElems = listElems[index].querySelector("ul").children;
+      currentIndex = subIndex;
+    }
     if (!type)
-      listElems[index].focus();
+      listElems[currentIndex].focus();
 
     switch (type)
     {
       case "next":
-        const nextElem = listElems[index + 1];
+        const nextElem = listElems[currentIndex + 1];
         if (!nextElem)
-          this.selectItem(null, "start");
+          this.selectItem(accessor, "start");
         else
           nextElem.focus();
         break;
       case "previous":
-        const previousElem = listElems[index - 1];
+        const previousElem = listElems[currentIndex - 1];
         if (!previousElem)
-          this.selectItem(null, "end");
+          this.selectItem(accessor, "end");
         else
           previousElem.focus();
         break;

@@ -48,6 +48,7 @@
     <table-list></table-list>
   </div>
   <script>
+    const tableList = document.querySelector("table-list");
     document.addEventListener("DOMContentLoaded", () =>
     {
       const objItems = [];
@@ -57,16 +58,16 @@
           texts: {"domain": `example${i}.com`, "cookienum": "3 Cookies"}
         });
       }
-      document.querySelector("table-list").addItems(objItems);
-      console.log(document.querySelector("table-list").indexOfAccessor("example0.com"));
+      tableList.addItems(objItems);
+      console.log(tableList.indexOfAccessor("example0.com"));
       for (let i = 0; i < 5; i++) {
-        document.querySelector("table-list").addSubItem({
-          dataset:  { access: `subexample.com${i}`},
-            texts: {"name": `subexample.com${i}`, "value": "3 Cookies"}
-        }, "example0.com");
+        tableList.addSubItem({
+          dataset:  { access: `subexample${i}.com`},
+            texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
+        }, "example3.com");
       }
-      
-      document.querySelector("table-list").removeItem("example1.com");
+      console.log(tableList.indexOfAccessor("subexample3.com"));
+      tableList.removeItem("example1.com");
       
     });
   </script>

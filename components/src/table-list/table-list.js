@@ -428,6 +428,28 @@ class SettingList extends HTMLElement {
   }
 
   /**
+   * Getting the item element using accessor
+   * @param {String} accessor main item ID
+   * @return {Node} Get actual DOM node of the item or null if can't find
+   */
+  getItemElem(accessor)
+  {
+    const {index, parentIndex} = this.indexOfAccessor(accessor);
+    let parentElem = this.listElem;
+    if (parentIndex >= 0)
+    {
+      parentElem = this.listElem.children[parentIndex].querySelector("ul");
+      if (!parentElem)
+        return null;
+    }
+    const itemElem = parentElem.children[index];
+    if (itemElem)
+      return itemElem;
+    else
+      return null;
+  }
+
+  /**
    * Getting the item
    * @param {String} accessor main item ID
    * @return {JSON} itemObj or false if doesn't exist

@@ -409,21 +409,22 @@ class SettingList extends HTMLElement {
     if (!_items)
       _items = this.items;
     let index = -1;
-    let subIndex = -1;
+    let parentIndex = -1;
     for (let i = 0; i < _items.length; i++)
     {
       if (_items[i].subItems)
       {
-        subIndex = this.indexOfAccessor(accessor, _items[i].subItems).index;
-        if (subIndex >= 0)
-          index = i;
+        index = this.indexOfAccessor(accessor, _items[i].subItems).index;
+        if (index >= 0)
+        {
+          parentIndex = i;
+          break;
+        }
       }
-      if (_items[i].dataset.access == accessor)
-        index = i;
-      if (index >= 0)
-        return {index, subIndex}
+      if (_items[i].dataset.access === accessor)
+        return {index: i, parentIndex}
     }
-    return {index, subIndex};
+    return {index, parentIndex};
   }
 
   /**
@@ -477,28 +478,24 @@ class SettingList extends HTMLElement {
    */
   selectItem(accessor, type)
   {
-    const {index, subIndex} = this.indexOfAccessor(accessor);
+    const {index, parentIndex} = this.indexOfAccessor(accessor);
     let listElems = this.listElem.children;
-    let currentIndex = index;
-    if (subIndex >= 0)
-    {
-      listElems = listElems[index].querySelector("ul").children;
-      currentIndex = subIndex;
-    }
+    if (parentIndex >= 0)
+      listElems = listElems[parentIndex].querySelector("ul").children;
     if (!type)
-      listElems[currentIndex].focus();
+      listElems[index].focus();
 
     switch (type)
     {
       case "next":
-        const nextElem = listElems[currentIndex + 1];
+        const nextElem = listElems[index + 1];
         if (!nextElem)
           this.selectItem(accessor, "start");
         else
           nextElem.focus();
         break;
       case "previous":
-        const previousElem = listElems[currentIndex - 1];
+        const previousElem = listElems[index - 1];
         if (!previousElem)
           this.selectItem(accessor, "end");
         else

@@ -24,6 +24,16 @@ function addItems(objItems)
   }, tableListHandle, objItems);
 }
 
+function getItemElemAccess(accessor)
+{
+  return page.evaluate((tableListHandle, accessor) =>
+  {
+    if (tableListHandle.getItemElem(accessor))
+      return tableListHandle.getItemElem(accessor).dataset.access;
+    return tableListHandle.getItemElem(accessor);
+  }, tableListHandle, accessor);
+}
+
 function getLoadedAmount(accessor)
 {
   return page.evaluate((tableListHandle, accessor) => {
@@ -76,16 +86,16 @@ describe("Table-list component", () =>
   });
   it("indexOfAccessor() method should return index for accessor", async() =>
   {
-    const {index, subIndex} = await indexOfAccessor("example0.com");
+    const {index, parentIndex} = await indexOfAccessor("example0.com");
     assert.equal(index, 0);
-    assert.equal(subIndex, -1);
+    assert.equal(parentIndex, -1);
   });
   it("removeItem() method should remove item and from the table list", async() =>
   {
     await removeItem("example1.com");
-    const {index, subIndex} = await indexOfAccessor("example1.com");
+    const {index, parentIndex} = await indexOfAccessor("example1.com");
     assert.equal(index, -1);
-    assert.equal(subIndex, -1);
+    assert.equal(parentIndex, -1);
   });
   it("addSubItem() method should add subitems to the item with specified accessor", async() =>
   {
@@ -99,9 +109,19 @@ describe("Table-list component", () =>
   });
   it("indexOfAccessor() method should return index and subIndex", async() =>
   {
-    const {index, subIndex} = await indexOfAccessor("subexample3.com");
-    assert.equal(index, 0);
-    assert.equal(subIndex, 3);
+    const {index, parentIndex} = await indexOfAccessor("subexample3.com");
+    assert.equal(parentIndex, 0);
+    assert.equal(index, 3);
+  });
+  it("getItemElem() should return the node element for accessor if loaded", async() =>
+  {
+    assert.equal(await getItemElemAccess("example0.com"), "example0.com");
+    assert.equal(await getItemElemAccess("subexample3.com"), "subexample3.com");
+    assert.equal(await getItemElemAccess("example100.com"), null);
+  });
+  it("ArrowDown and ArrowUp should select sibling items also first and last when reaching the end", () =>
+  {
+
   });
 });
 

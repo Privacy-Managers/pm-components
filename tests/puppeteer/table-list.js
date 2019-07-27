@@ -34,6 +34,13 @@ function getItemElemAccess(accessor)
   }, tableListHandle, accessor);
 }
 
+function getItem(accessor)
+{
+  return page.evaluate((tableListHandle, accessor) => {
+    return tableListHandle.getItem(accessor);
+  }, tableListHandle, accessor);
+}
+
 function getLoadedAmount(accessor)
 {
   return page.evaluate((tableListHandle, accessor) => {
@@ -118,11 +125,23 @@ describe("Table-list component", () =>
     assert.equal(await getItemElemAccess("example0.com"), "example0.com");
     assert.equal(await getItemElemAccess("subexample3.com"), "subexample3.com");
     assert.equal(await getItemElemAccess("example100.com"), null);
+    assert.equal(await getItemElemAccess("subexample100.com"), null);
   });
-  it("ArrowDown and ArrowUp should select sibling items also first and last when reaching the end", () =>
+  it("getItem() method returns item and parentItem", async() =>
   {
+    let accessor, result;
 
+    accessor = "subexample3.com";
+    result = await getItem(accessor);
+    assert.equal(result.item.dataset.access, accessor);
+    assert.equal(result.parentItem.dataset.access, "example0.com");
+
+    accessor = "example4.com";
+    result = await getItem(accessor);
+    assert.equal(result.item.dataset.access, accessor);
+    assert.equal(result.parentItem, null);
   });
+  it("ArrowDown and ArrowUp should select sibling items also first and last when reaching the end");
 });
 
 after(async () =>

@@ -311,7 +311,7 @@ class SettingList extends HTMLElement {
    */
   removeAllSubItems(accessor)
   {
-    const item = this.getItem(accessor);
+    const {item} = this.getItem(accessor);
     if (!item)
       return false;
 
@@ -323,6 +323,7 @@ class SettingList extends HTMLElement {
   }
 
   /**
+   * DEPRECTATED
    * Check for subItem existance
    * @param {String} accessor main item ID
    * @param {String} accessor subItem ID
@@ -330,7 +331,7 @@ class SettingList extends HTMLElement {
    */
   hasSubItem(parentAccessor, accessor)
   {
-    const parentItem = this.getItem(parentAccessor);
+    const {parentItem} = this.getItem(parentAccessor);
     if (!parentItem || !parentItem.subItems)
       return false;
 
@@ -402,7 +403,7 @@ class SettingList extends HTMLElement {
   /**
    * Get the index (position) of the item
    * @param {String} accessor
-   * @return {Number} index of the item or false if can't find
+   * @return {Number} index of the item or -1 if can't find
    */
   indexOfAccessor(accessor, _items)
   {
@@ -452,15 +453,22 @@ class SettingList extends HTMLElement {
   /**
    * Getting the item
    * @param {String} accessor main item ID
-   * @return {JSON} itemObj or false if doesn't exist
+   * @return {JSON} object of itemItems {item, parentItem}
    */
   getItem(accessor)
   {
-    const {index} = this.indexOfAccessor(accessor);
-    if (index >= 0)
-      return this.items[index];
-    else
-      return false;
+    let {index, parentIndex} = this.indexOfAccessor(accessor);
+    let item = null;
+    let parentItem = null;
+    if (parentIndex  >= 0)
+    {
+      parentItem = this.items[parentIndex];
+      item = this.items[parentIndex].subItems[index];
+    }
+    else if (index >= 0)
+      item = this.items[index];
+
+    return {item, parentItem};
   }
 
   /**

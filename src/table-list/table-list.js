@@ -159,20 +159,31 @@ class SettingList extends HTMLElement {
    *   texts: {data-text-value: "example.com", data-text-value: "3 Cookies"}
    * }
    */
-  addItems(itemObjs)
+  addItems(itemObjs, access)
   {
-    this.items = this.items.concat(itemObjs);
+    const parentItem = this.getItem(access).item;
+    if (parentItem && !parentItem.subItems)
+      parentItem.subItems = [];
+    const items = parentItem ? parentItem.subItems : this.items;
 
+    items.push(...itemObjs);
+
+    // TODO: Sort by item names in PM
     if (this.sort)
-      this.items.sort(this.sort);
+      items.sort(this.sort);
 
-    for (let i = 0; i < itemObjs.length; i++)
+    for (const itemObj of itemObjs)
     {
-      const itemObj = itemObjs[i];
-      const itemIndex = this.items.indexOf(itemObj);
-  
-      if (itemIndex < this.loaded || itemIndex < this.loadAmount)
-        this._loadItem(itemObj);
+      if (parentItem)
+      {
+        this._loadSubItem(itemObj, access);
+      }
+      else  // Dynamic load only top level items
+      {
+        const itemIndex = this.items.indexOf(itemObj);
+        if (itemIndex < this.loaded || itemIndex < this.loadAmount)
+          this._loadItem(itemObj);
+      }
     }
   }
 
@@ -244,20 +255,16 @@ class SettingList extends HTMLElement {
    * @param {JSON} itemObj as specified in addItems
    * @param {String} accessor item ID
    */
-  addSubItem(itemObj, accessor)
+  _loadSubItem(itemObj, accessor)
   {
-    const {index} = this.indexOfAccessor(accessor);
-    if (index === false)
-      return false;
-
     const subListItemElem = this._itemFromTmpl(itemObj, this.listSubItemTemplate);
-    const item = this.items[index];
-    const listItemElem = this.listElem.children[index];
+    const {item} = this.getItem(accessor);
+    const listItemElem = this.getItemElem(accessor);
+    const subContainer = listItemElem.querySelector("ul");
 
-    if (!item.subItems || item.subItems.length == 0)
+    if (!subContainer)
     {
       listItemElem.dataset.expanded = true;
-      item.subItems = [];
       const subListElem = document.createElement("ul");
       subListElem.appendChild(subListItemElem);
       listItemElem.appendChild(subListElem);
@@ -266,9 +273,8 @@ class SettingList extends HTMLElement {
     }
     else
     {
-      listItemElem.querySelector("ul").appendChild(subListItemElem);
+      subContainer.appendChild(subListItemElem);
     }
-    item.subItems.push(itemObj);
   }
 
   /**

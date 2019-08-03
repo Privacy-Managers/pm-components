@@ -16,12 +16,12 @@ before(async () =>
   tableListHandle = await page.$('table-list');
 });
 
-function addItems(objItems)
+function addItems(objItems, accessor)
 {
-  return page.evaluate((tableListHandle, objItems) =>
+  return page.evaluate((tableListHandle, objItems, accessor) =>
   {
-    return tableListHandle.addItems(objItems);
-  }, tableListHandle, objItems);
+    return tableListHandle.addItems(objItems, accessor);
+  }, tableListHandle, objItems, accessor);
 }
 
 function getItemElemAccess(accessor)
@@ -52,13 +52,6 @@ function getLoadedAmount(accessor)
     }
     return elements.length;
   }, tableListHandle, accessor);
-}
-
-function addSubItem(objItem, accessor)
-{
-  return page.evaluate((tableListHandle, objItem, accessor) => {
-    return tableListHandle.addSubItem(objItem, accessor);
-  }, tableListHandle, objItem, accessor);
 }
 
 function indexOfAccessor(accessor)
@@ -104,14 +97,23 @@ describe("Table-list component", () =>
     assert.equal(index, -1);
     assert.equal(parentIndex, -1);
   });
-  it("addSubItem() method should add subitems to the item with specified accessor", async() =>
+  it("addItems(items, accessor) method should add subitems to the item when second argument is used", async() =>
   {
+    /*
     for (let i = 0; i < 5; i++) {
-      addSubItem({
+      addItems([{
         dataset:  { access: `subexample${i}.com`},
-          texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
-      }, "example0.com");
+        texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
+      }], "example0.com");
+    }*/
+    const itemObjects = [];
+    for (let i = 0; i < 5; i++) {
+      itemObjects.push({
+        dataset:  { access: `subexample${i}.com`},
+        texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
+      });
     }
+    await addItems(itemObjects, "example0.com");
     assert.equal(await getLoadedAmount("example0.com"), 5);
   });
   it("indexOfAccessor() method should return index and subIndex", async() =>

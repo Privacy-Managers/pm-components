@@ -60,16 +60,18 @@
       }
       tableList.addItems(objItems);
       console.log(tableList.indexOfAccessor("example0.com"));
+
+      const itemObjs = [];
       for (let i = 0; i < 5; i++) {
-        tableList.addSubItem({
+        itemObjs.push({
           dataset:  { access: `subexample${i}.com`},
             texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
-        }, "example3.com");
+        });
       }
+      tableList.addItems(itemObjs, "example3.com");
       console.log(tableList.indexOfAccessor("subexample3.com"));
       tableList.removeItem("example1.com");
       console.log(tableList.getItemElem("example100.com"));
-      
     });
   </script>
 </body>

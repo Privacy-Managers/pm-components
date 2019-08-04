@@ -24,21 +24,20 @@ function addItems(objItems, accessor)
   }, tableListHandle, objItems, accessor);
 }
 
-function getItemElemAccess(accessor)
+function getItemElemAccess(accessor, parentAccessor)
 {
-  return page.evaluate((tableListHandle, accessor) =>
+  return page.evaluate((tableListHandle, accessor, parentAccessor) =>
   {
-    if (tableListHandle.getItemElem(accessor))
-      return tableListHandle.getItemElem(accessor).dataset.access;
-    return tableListHandle.getItemElem(accessor);
-  }, tableListHandle, accessor);
+    if (tableListHandle.getItemElem(accessor, parentAccessor))
+      return tableListHandle.getItemElem(accessor, parentAccessor).dataset.access;
+  }, tableListHandle, accessor, parentAccessor);
 }
 
-function getItem(accessor)
+function getItem(accessor, parentAccessor)
 {
-  return page.evaluate((tableListHandle, accessor) => {
-    return tableListHandle.getItem(accessor);
-  }, tableListHandle, accessor);
+  return page.evaluate((tableListHandle, accessor, parentAccessor) => {
+    return tableListHandle.getItem(accessor, parentAccessor);
+  }, tableListHandle, accessor, parentAccessor);
 }
 
 function getLoadedAmount(accessor)
@@ -47,18 +46,18 @@ function getLoadedAmount(accessor)
     let elements = tableListHandle.shadowRoot.querySelector("ul").children;
     if (accessor)
     {
-      const {index} = tableListHandle.indexOfAccessor(accessor);
+      const index = tableListHandle.indexOfAccessor(accessor);
       elements = elements[index].querySelector("ul").children;
     }
     return elements.length;
   }, tableListHandle, accessor);
 }
 
-function indexOfAccessor(accessor)
+function indexOfAccessor(accessor, parentAccessor)
 {
-  return page.evaluate((tableListHandle, accessor) => {
-    return tableListHandle.indexOfAccessor(accessor);
-  }, tableListHandle, accessor);
+  return page.evaluate((tableListHandle, accessor, parentAccessor) => {
+    return tableListHandle.indexOfAccessor(accessor, parentAccessor);
+  }, tableListHandle, accessor, parentAccessor);
 }
 
 function removeItem(accessor)
@@ -84,28 +83,19 @@ describe("Table-list component", () =>
     const loaded =  await getLoadedAmount();
     assert.equal(loaded, 50);
   });
-  it("indexOfAccessor() method should return index for accessor", async() =>
+  it("indexOfAccessor(access) method should return index for accessor", async() =>
   {
-    const {index, parentIndex} = await indexOfAccessor("example0.com");
-    assert.equal(index, 0);
-    assert.equal(parentIndex, -1);
+    assert.equal(await indexOfAccessor("example0.com"), 0);
+    assert.equal(await indexOfAccessor("example-1.com"), -1);
   });
   it("removeItem() method should remove item and from the table list", async() =>
   {
     await removeItem("example1.com");
-    const {index, parentIndex} = await indexOfAccessor("example1.com");
+    const index = await indexOfAccessor("example1.com");
     assert.equal(index, -1);
-    assert.equal(parentIndex, -1);
   });
   it("addItems(items, accessor) method should add subitems to the item when second argument is used", async() =>
   {
-    /*
-    for (let i = 0; i < 5; i++) {
-      addItems([{
-        dataset:  { access: `subexample${i}.com`},
-        texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
-      }], "example0.com");
-    }*/
     const itemObjects = [];
     for (let i = 0; i < 5; i++) {
       itemObjects.push({
@@ -116,32 +106,28 @@ describe("Table-list component", () =>
     await addItems(itemObjects, "example0.com");
     assert.equal(await getLoadedAmount("example0.com"), 5);
   });
-  it("indexOfAccessor() method should return index and subIndex", async() =>
+  it("indexOfAccessor(access, parentAccess) method should return subIndex if one exist", async() =>
   {
-    const {index, parentIndex} = await indexOfAccessor("subexample3.com");
-    assert.equal(parentIndex, 0);
-    assert.equal(index, 3);
+    assert.equal(await indexOfAccessor("subexample3.com", "example0.com"), 3);
+    assert.equal(await indexOfAccessor("subexample3.com", "example2.com"), -1);
+    assert.equal(await indexOfAccessor("subexample-1.com", "example0.com"), -1);
   });
-  it("getItemElem() should return the node element for accessor if loaded", async() =>
+  it("getItemElem(access, parentAccess) should return the node element for accessor if loaded", async() =>
   {
     assert.equal(await getItemElemAccess("example0.com"), "example0.com");
-    assert.equal(await getItemElemAccess("subexample3.com"), "subexample3.com");
+    assert.equal(await getItemElemAccess("subexample3.com", "example0.com"), "subexample3.com");
     assert.equal(await getItemElemAccess("example100.com"), null);
-    assert.equal(await getItemElemAccess("subexample100.com"), null);
+    assert.equal(await getItemElemAccess("subexample100.com", "example0.com"), null);
   });
-  it("getItem() method returns item and parentItem", async() =>
+  it("getItem(access, parentAccess) method returns item or subItem if parentAccess is specified", async() =>
   {
-    let accessor, result;
+    let item;
 
-    accessor = "subexample3.com";
-    result = await getItem(accessor);
-    assert.equal(result.item.dataset.access, accessor);
-    assert.equal(result.parentItem.dataset.access, "example0.com");
+    item = await getItem("subexample3.com", "example0.com");
+    assert.equal(item.dataset.access, "subexample3.com");
 
-    accessor = "example4.com";
-    result = await getItem(accessor);
-    assert.equal(result.item.dataset.access, accessor);
-    assert.equal(result.parentItem, null);
+    item = await getItem("example4.com");
+    assert.equal(item.dataset.access, "example4.com");
   });
   it("ArrowDown and ArrowUp should select sibling items also first and last when reaching the end");
 });

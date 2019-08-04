@@ -152,16 +152,18 @@ class SettingList extends HTMLElement {
   }
 
   /**
-   * Add items to the Table list
+   * Add item and subItem to the Table list
    * @param {Array} itemObjs array of itemObj:
    * {
-   *   dataset:  { access: "example.com", datasetname: "/" },
-   *   texts: {data-text-value: "example.com", data-text-value: "3 Cookies"}
+   *   dataset:  { access: "example.com", datasetname: "/" }, texts:
+   *   {data-text-value: "example.com", data-text-value: "3 Cookies"}
    * }
+   * @param {String} access parent item accessor, if skipped top level item is
+   * added
    */
   addItems(itemObjs, access)
   {
-    const parentItem = this.getItem(access).item;
+    const parentItem = this.getItem(access);
     if (parentItem && !parentItem.subItems)
       parentItem.subItems = [];
     const items = parentItem ? parentItem.subItems : this.items;
@@ -236,7 +238,7 @@ class SettingList extends HTMLElement {
    */
   removeItem(accessor)
   {
-    const {index} = this.indexOfAccessor(accessor);
+    const index = this.indexOfAccessor(accessor);
     if (index >= 0)
     {
       this.items.splice(index, 1);
@@ -258,7 +260,6 @@ class SettingList extends HTMLElement {
   _loadSubItem(itemObj, accessor)
   {
     const subListItemElem = this._itemFromTmpl(itemObj, this.listSubItemTemplate);
-    const {item} = this.getItem(accessor);
     const listItemElem = this.getItemElem(accessor);
     const subContainer = listItemElem.querySelector("ul");
 
@@ -409,72 +410,65 @@ class SettingList extends HTMLElement {
   /**
    * Get the index (position) of the item
    * @param {String} accessor
+   * @param {String} parentAccessor used for getting subItems
    * @return {Number} index of the item or -1 if can't find
    */
-  indexOfAccessor(accessor, _items)
+  indexOfAccessor(accessor, parentAccessor)
   {
-    if (!_items)
-      _items = this.items;
-    let index = -1;
-    let parentIndex = -1;
-    for (let i = 0; i < _items.length; i++)
+    let items = this.items;
+    if (parentAccessor)
     {
-      if (_items[i].subItems)
-      {
-        index = this.indexOfAccessor(accessor, _items[i].subItems).index;
-        if (index >= 0)
-        {
-          parentIndex = i;
-          break;
-        }
-      }
-      if (_items[i].dataset.access === accessor)
-        return {index: i, parentIndex}
+      const item = this.getItem(parentAccessor);
+      if (item && item.subItems)
+        items = item.subItems;
+      else
+        return -1
     }
-    return {index, parentIndex};
+
+    if (!items)
+      return -1;
+
+    for (let i = 0; i < items.length; i++)
+      if (items[i].dataset.access === accessor)
+        return i;
+    return -1;
   }
 
   /**
-   * Getting the item element using accessor
+   * Getting the DOM Element that corresponds to the item using accessor
    * @param {String} accessor main item ID
-   * @return {Node} Get actual DOM node of the item or null if can't find
+   * @param {String} parentAccessor used for getting subItems
+   * @return {Node} DOM Element
    */
-  getItemElem(accessor)
+  getItemElem(accessor, parentAccessor)
   {
-    const {index, parentIndex} = this.indexOfAccessor(accessor);
-    let parentElem = this.listElem;
-    if (parentIndex >= 0)
-    {
-      parentElem = this.listElem.children[parentIndex].querySelector("ul");
-      if (!parentElem)
-        return null;
-    }
-    const itemElem = parentElem.children[index];
-    if (itemElem)
-      return itemElem;
-    else
+    const index = this.indexOfAccessor(accessor, parentAccessor);
+    if (index === -1)
       return null;
+    let parentElem = this.listElem;
+    if (parentAccessor)
+    {
+      const parentIndex = this.indexOfAccessor(parentAccessor);
+      parentElem = parentElem.children[parentIndex].querySelector("ul");
+    }
+    return parentElem.children[index];
   }
 
   /**
    * Getting the item
    * @param {String} accessor main item ID
-   * @return {JSON} object of itemItems {item, parentItem}
+   * @param {String} parentAccessor used for getting subItems
+   * @return {JSON} object of the item or null if can't find
    */
-  getItem(accessor)
+  getItem(accessor, parentAccessor)
   {
-    let {index, parentIndex} = this.indexOfAccessor(accessor);
-    let item = null;
-    let parentItem = null;
-    if (parentIndex  >= 0)
-    {
-      parentItem = this.items[parentIndex];
-      item = this.items[parentIndex].subItems[index];
-    }
-    else if (index >= 0)
-      item = this.items[index];
-
-    return {item, parentItem};
+    const index = this.indexOfAccessor(accessor, parentAccessor);
+    if (index === -1)
+      return null;
+    let items = this.items;
+    if (parentAccessor)
+      items = items[this.indexOfAccessor(parentAccessor)].subItems;
+    return items[index];
   }
 
   /**
@@ -484,7 +478,7 @@ class SettingList extends HTMLElement {
    */
   updateItem(newItemObj, accessor)
   {
-    const {index} = this.indexOfAccessor(accessor);
+    const index = this.indexOfAccessor(accessor);
     this.items[index] = newItemObj;
 
     if (this.loaded >= index)
@@ -509,15 +503,19 @@ class SettingList extends HTMLElement {
 
   /**
    * Managing focus of the element, can select item by ID or switch selection
-   * @param {String} accessor Item to select ID, or currently selected ID
+   * @param {String} accessor Item
+   * @param {String} parentAccessor used for accessing sub item
    * @param {String} type possible values "next", "previous", "end", "start"
    */
-  selectItem(accessor, type)
+  selectItem(accessor, parentAccessor, type)
   {
-    const {index, parentIndex} = this.indexOfAccessor(accessor);
+    const index = this.indexOfAccessor(accessor, parentAccessor);
+    if (index === -1)
+      return;
+
     let listElems = this.listElem.children;
-    if (parentIndex >= 0)
-      listElems = listElems[parentIndex].querySelector("ul").children;
+    if (parentAccessor)
+      listElems = getItemElem(parentAccessor).children;
     if (!type)
       listElems[index].focus();
 
@@ -526,14 +524,14 @@ class SettingList extends HTMLElement {
       case "next":
         const nextElem = listElems[index + 1];
         if (!nextElem)
-          this.selectItem(accessor, "start");
+          this.selectItem(accessor, parentAccessor, "start");
         else
           nextElem.focus();
         break;
       case "previous":
         const previousElem = listElems[index - 1];
         if (!previousElem)
-          this.selectItem(accessor, "end");
+          this.selectItem(accessor, parentAccessor, "end");
         else
           previousElem.focus();
         break;

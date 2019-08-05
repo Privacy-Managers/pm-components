@@ -515,7 +515,7 @@ class SettingList extends HTMLElement {
 
     let listElems = this.listElem.children;
     if (parentAccessor)
-      listElems = getItemElem(parentAccessor).children;
+      listElems = this.getItemElem(parentAccessor).querySelector("ul").children;
     if (!type)
       listElems[index].focus();
 
@@ -544,6 +544,19 @@ class SettingList extends HTMLElement {
     }
   }
 
+  _getParentItemElemAccess(element)
+  {
+    while(element)
+    {
+      element = element.parentElement;
+      if (element && element.tagName === "LI" && element.dataset.access)
+      {
+        return element.dataset.access;
+      }
+    }
+    return null;
+  }
+
   /**
    * Action listener
    * @param {String} action
@@ -554,10 +567,10 @@ class SettingList extends HTMLElement {
     switch (action)
     {
       case "next-sibling":
-        this.selectItem(element.dataset.access, "next");
+        this.selectItem(element.dataset.access, this._getParentItemElemAccess(element), "next");
         break;
       case "previouse-sibling":
-        this.selectItem(element.dataset.access, "previous");
+        this.selectItem(element.dataset.access, this._getParentItemElemAccess(element), "previous");
         break;
     }
   }

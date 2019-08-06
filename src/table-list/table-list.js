@@ -544,6 +544,11 @@ class SettingList extends HTMLElement {
     }
   }
 
+  /**
+   * Get parent element accessor
+   * @param  {Node} element DOM Node child of table list item
+   * @return {String} accessor or null if can't find
+   */
   _getParentItemElemAccess(element)
   {
     while(element)

@@ -16,12 +16,21 @@ before(async () =>
   tableListHandle = await page.$('table-list');
 });
 
-function addItems(objItems, accessor)
+const tableList = {};
+const methods = ["indexOfAccessor", "addItems", "getItemElemAccess", "getItem",
+                 "removeItem"];
+methods.forEach((methodName) => {
+  tableList[methodName] = (...args) => runComponentMethod(methodName, ...args);
+});
+
+function runComponentMethod()
 {
-  return page.evaluate((tableListHandle, objItems, accessor) =>
+  const functionName = arguments[0];
+  const args = Array.prototype.slice.call(arguments, 1);
+  return page.evaluate((tableListHandle, functionName, args) =>
   {
-    return tableListHandle.addItems(objItems, accessor);
-  }, tableListHandle, objItems, accessor);
+    return tableListHandle[functionName](...args);
+  }, tableListHandle, functionName, args);
 }
 
 function getItemElemAccess(accessor, parentAccessor)
@@ -30,13 +39,6 @@ function getItemElemAccess(accessor, parentAccessor)
   {
     if (tableListHandle.getItemElem(accessor, parentAccessor))
       return tableListHandle.getItemElem(accessor, parentAccessor).dataset.access;
-  }, tableListHandle, accessor, parentAccessor);
-}
-
-function getItem(accessor, parentAccessor)
-{
-  return page.evaluate((tableListHandle, accessor, parentAccessor) => {
-    return tableListHandle.getItem(accessor, parentAccessor);
   }, tableListHandle, accessor, parentAccessor);
 }
 
@@ -53,20 +55,6 @@ function getLoadedAmount(accessor)
   }, tableListHandle, accessor);
 }
 
-function indexOfAccessor(accessor, parentAccessor)
-{
-  return page.evaluate((tableListHandle, accessor, parentAccessor) => {
-    return tableListHandle.indexOfAccessor(accessor, parentAccessor);
-  }, tableListHandle, accessor, parentAccessor);
-}
-
-function removeItem(accessor)
-{
-  return page.evaluate((tableListHandle, accessor) => {
-    return tableListHandle.removeItem(accessor);
-  }, tableListHandle, accessor);
-}
-
 describe("Table-list component", () =>
 {
   it("Populating Table with 300 items should load first 50 items by default", async() =>
@@ -79,19 +67,19 @@ describe("Table-list component", () =>
       });
     }
 
-    await addItems(objItems);
+    await tableList.addItems(objItems);
     const loaded =  await getLoadedAmount();
     assert.equal(loaded, 50);
   });
   it("indexOfAccessor(access) method should return index for accessor", async() =>
   {
-    assert.equal(await indexOfAccessor("example0.com"), 0);
-    assert.equal(await indexOfAccessor("example-1.com"), -1);
+    assert.equal(await tableList.indexOfAccessor("example0.com"), 0);
+    assert.equal(await tableList.indexOfAccessor("example-1.com"), -1);
   });
   it("removeItem() method should remove item and from the table list", async() =>
   {
-    await removeItem("example1.com");
-    const index = await indexOfAccessor("example1.com");
+    await tableList.removeItem("example1.com");
+    const index = await tableList.indexOfAccessor("example1.com");
     assert.equal(index, -1);
   });
   it("addItems(items, accessor) method should add subitems to the item when second argument is used", async() =>
@@ -103,14 +91,14 @@ describe("Table-list component", () =>
         texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
       });
     }
-    await addItems(itemObjects, "example0.com");
+    await tableList.addItems(itemObjects, "example0.com");
     assert.equal(await getLoadedAmount("example0.com"), 5);
   });
   it("indexOfAccessor(access, parentAccess) method should return subIndex if one exist", async() =>
   {
-    assert.equal(await indexOfAccessor("subexample3.com", "example0.com"), 3);
-    assert.equal(await indexOfAccessor("subexample3.com", "example2.com"), -1);
-    assert.equal(await indexOfAccessor("subexample-1.com", "example0.com"), -1);
+    assert.equal(await tableList.indexOfAccessor("subexample3.com", "example0.com"), 3);
+    assert.equal(await tableList.indexOfAccessor("subexample3.com", "example2.com"), -1);
+    assert.equal(await tableList.indexOfAccessor("subexample-1.com", "example0.com"), -1);
   });
   it("getItemElem(access, parentAccess) should return the node element for accessor if loaded", async() =>
   {
@@ -123,10 +111,10 @@ describe("Table-list component", () =>
   {
     let item;
 
-    item = await getItem("subexample3.com", "example0.com");
+    item = await tableList.getItem("subexample3.com", "example0.com");
     assert.equal(item.dataset.access, "subexample3.com");
 
-    item = await getItem("example4.com");
+    item = await tableList.getItem("example4.com");
     assert.equal(item.dataset.access, "example4.com");
   });
   it("ArrowDown and ArrowUp should select sibling items also first and last when reaching the end");

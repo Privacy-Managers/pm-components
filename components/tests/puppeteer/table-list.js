@@ -1,7 +1,5 @@
 const puppeteer = require('puppeteer');
-const {readFileSync} = require("fs");
 const assert = require('assert');
-const {resolve} = require("path");
 let tableListHandle;
 
 let browser;
@@ -18,7 +16,7 @@ before(async () =>
 
 const tableList = {};
 const methods = ["indexOfAccessor", "addItems", "getItemElemAccess", "getItem",
-                 "removeItem"];
+                 "removeItem", "selectItem"];
 methods.forEach((methodName) => {
   tableList[methodName] = (...args) => runComponentMethod(methodName, ...args);
 });
@@ -40,6 +38,14 @@ function getItemElemAccess(accessor, parentAccessor)
     if (tableListHandle.getItemElem(accessor, parentAccessor))
       return tableListHandle.getItemElem(accessor, parentAccessor).dataset.access;
   }, tableListHandle, accessor, parentAccessor);
+}
+
+function getSelectedAccess()
+{
+  return page.evaluate((tableListHandle) =>
+  {
+    return tableListHandle.shadowRoot.activeElement.dataset.access;
+  }, tableListHandle);
 }
 
 function getLoadedAmount(accessor)
@@ -117,7 +123,23 @@ describe("Table-list component", () =>
     item = await tableList.getItem("example4.com");
     assert.equal(item.dataset.access, "example4.com");
   });
-  it("ArrowDown and ArrowUp should select sibling items also first and last when reaching the end");
+  it("ArrowDown and ArrowUp should select sibling items also first and last when reaching the end", async() => 
+  {
+    await tableList.selectItem("example5.com");
+    assert.equal(await getSelectedAccess(), "example5.com");
+    await page.keyboard.press("ArrowDown");
+    assert.equal(await getSelectedAccess(), "example6.com");
+    await page.keyboard.press("ArrowUp");
+    await page.keyboard.press("ArrowUp");
+    assert.equal(await getSelectedAccess(), "example4.com");
+    await tableList.selectItem("subexample3.com", "example0.com");
+    assert.equal(await getSelectedAccess(), "subexample3.com");
+    await page.keyboard.press("ArrowDown");
+    assert.equal(await getSelectedAccess(), "subexample4.com");
+    await page.keyboard.press("ArrowUp");
+    await page.keyboard.press("ArrowUp");
+    assert.equal(await getSelectedAccess(), "subexample2.com");
+  });
 });
 
 after(async () =>

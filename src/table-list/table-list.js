@@ -269,8 +269,7 @@ class SettingList extends HTMLElement {
       const subListElem = document.createElement("ul");
       subListElem.appendChild(subListItemElem);
       listItemElem.appendChild(subListElem);
-      //TODO: Update selectItem() method to handle current casse
-      this.focusEdgeElem(subListElem, true);
+      this.selectItem(itemObj.dataset.access, accessor, "start");
     }
     else
     {
@@ -486,6 +485,7 @@ class SettingList extends HTMLElement {
   }
 
   /**
+   * Deprecated
    * Reverse focus first or last list item
    * @param {Node} parentElement list item parent element
    * @param {Boolean} isFirst focus first if true otherwise last element
@@ -518,7 +518,6 @@ class SettingList extends HTMLElement {
       listElems = this.getItemElem(parentAccessor).querySelector("ul").children;
     if (!type)
       listElems[index].focus();
-
     switch (type)
     {
       case "next":

@@ -232,24 +232,65 @@ class SettingList extends HTMLElement {
   }
 
   /**
-   * Remove main item by ID
-   * @param {String} accessor main item ID
+   * Remove item or subItem from the list
+   * @param {String} accessor item ID
+   * @param {String} parentAccessor Parent item accessor ID, used to remove
+   *                                subItem if specified(optional)
    * @param {Boolean} result
    */
-  removeItem(accessor)
+  removeItem(accessor, parentAccessor)
   {
-    const index = this.indexOfAccessor(accessor);
+    const index = this.indexOfAccessor(accessor, parentAccessor);
     if (index >= 0)
     {
-      this.items.splice(index, 1);
-      if (this.loaded >= index)
+      if (parentAccessor)
       {
-        this._onAction("next-sibling", this.listElem.children[index]);
-        this.listElem.removeChild(this.listElem.children[index]);
+        this._unloadSubItem(accessor, parentAccessor);
+        const parentItem = this.getItem(parentAccessor);
+        parentItem.subItems.splice(index, 1);
+        const hasSubitems = parentItem.subItems.length;
+        if (!hasSubitems)
+          delete parentItem.subItems;
+      }
+      else
+      {
+        this._unloadItem(accessor);
+        this.items.splice(index, 1);
       }
       return true;
     }
     return false;
+  }
+
+  /**
+   * Remove item Node from the DOM
+   * @param {String} accessor item ID 
+   */
+  _unloadItem(accessor)
+  {
+    const itemElem = this.getItemElem(accessor);
+    if (itemElem.isSameNode(this.shadowRoot.activeElement))
+      this.selectItem(accessor, null, "next");
+    this.listElem.removeChild(itemElem);
+  }
+
+  /**
+   * Remove sub item Node from the DOM
+   * @param {String} accessor       item ID 
+   * @param {String} parentAccessor parent item accessor ID
+   */
+  _unloadSubItem(accessor, parentAccessor)
+  {
+    const activeElement = this.shadowRoot.activeElement;
+    const itemElem = this.getItemElem(accessor, parentAccessor);
+    if (activeElement.isSameNode(itemElem))
+      this.selectItem(accessor, parentAccessor, "next");
+
+    const subListContainerElem = this.getItemElem(parentAccessor);
+    const subListElems = subListContainerElem.querySelector("ul");
+    subListElems.removeChild(itemElem);
+    if (!subListElems.children.length)
+      subListContainerElem.removeChild(subListElems);
   }
 
   /**

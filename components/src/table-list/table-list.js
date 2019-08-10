@@ -269,6 +269,9 @@ class SettingList extends HTMLElement {
   _unloadItem(accessor)
   {
     const itemElem = this.getItemElem(accessor);
+    if (!itemElem)
+      return;
+
     if (itemElem.isSameNode(this.shadowRoot.activeElement))
       this.selectItem(accessor, null, "next");
     this.listElem.removeChild(itemElem);
@@ -281,8 +284,11 @@ class SettingList extends HTMLElement {
    */
   _unloadSubItem(accessor, parentAccessor)
   {
-    const activeElement = this.shadowRoot.activeElement;
     const itemElem = this.getItemElem(accessor, parentAccessor);
+    if (!itemElem)
+      return;
+
+    const activeElement = this.shadowRoot.activeElement;
     if (activeElement.isSameNode(itemElem))
       this.selectItem(accessor, parentAccessor, "next");
 
@@ -319,6 +325,7 @@ class SettingList extends HTMLElement {
   }
 
   /**
+   * DEPRECATED use removeItem(access, parentAccess) instead
    * Remove subitem
    * @param {String} parentAccessor main item ID
    * @param {String} accessor subItem ID

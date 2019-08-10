@@ -15,8 +15,8 @@ before(async () =>
 });
 
 const tableList = {};
-const methods = ["indexOfAccessor", "addItems", "getItemElemAccess", "getItem",
-                 "removeItem", "selectItem"];
+const methods = ["indexOfAccessor", "addItems", "getItem", "removeItem",
+                 "selectItem", "removeItem"];
 methods.forEach((methodName) => {
   tableList[methodName] = (...args) => runComponentMethod(methodName, ...args);
 });
@@ -99,6 +99,8 @@ describe("Table-list component", () =>
     }
     await tableList.addItems(itemObjects, "example0.com");
     assert.equal(await getLoadedAmount("example0.com"), 5);
+    await tableList.addItems(itemObjects, "example5.com");
+    assert.equal(await getLoadedAmount("example5.com"), 5);
   });
   it("indexOfAccessor(access, parentAccess) method should return subIndex if one exist", async() =>
   {
@@ -138,6 +140,25 @@ describe("Table-list component", () =>
     assert.equal(await getSelectedAccess(), "subexample4.com");
     await page.keyboard.press("ArrowUp");
     await page.keyboard.press("ArrowUp");
+    assert.equal(await getSelectedAccess(), "subexample2.com");
+  });
+  it("removeItem(access, parentAccess) method should remove item or subItem", async() =>
+  {
+    const ensureItem = async(accessor, parentAccessor) =>
+    {
+      return !!(await getItemElemAccess(accessor, parentAccessor) ||
+                await tableList.getItem(accessor, parentAccessor));
+    };
+    assert.equal(await ensureItem("example4.com"), true);
+    await tableList.removeItem("example4.com");
+    assert.equal(await ensureItem("example4.com"), false);
+
+    assert.equal(await ensureItem("subexample0.com", "example5.com"), true);
+    await tableList.removeItem("subexample0.com", "example5.com");
+    assert.equal(await ensureItem("subexample0.com", "example5.com"), false);
+
+    await tableList.selectItem("subexample1.com", "example5.com");
+    await tableList.removeItem("subexample1.com", "example5.com");
     assert.equal(await getSelectedAccess(), "subexample2.com");
   });
 });

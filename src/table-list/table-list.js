@@ -360,6 +360,7 @@ class SettingList extends HTMLElement {
   }
 
   /**
+   * Deprecated use empty(access) instead
    * Remove All sub items
    * @param {String} accessor main item ID
    */
@@ -446,12 +447,26 @@ class SettingList extends HTMLElement {
   }
 
   /**
-   * Empty data and view
+   * Empty list or sublist
+   * @param {String} accessor item ID, if specified all subitems are
+   *                          emptied(optional)
    */
-  empty()
+  empty(access)
   {
-    this.items = [];
-    this.listElem.innerHTML = "";
+    if (access)
+    {
+      const item = this.getItem(access);
+      const element = this.getItemElem(access);
+      if (item)
+        delete item.subItems;
+      if (element)
+        element.removeChild(element.querySelector("ul"));
+    }
+    else
+    {
+      this.items = [];
+      this.listElem.innerHTML = "";
+    }
   }
 
   /**

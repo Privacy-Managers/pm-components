@@ -16,7 +16,7 @@ before(async () =>
 
 const tableList = {};
 const methods = ["indexOfAccessor", "addItems", "getItem", "removeItem",
-                 "selectItem", "removeItem"];
+                 "selectItem", "removeItem", "empty"];
 methods.forEach((methodName) => {
   tableList[methodName] = (...args) => runComponentMethod(methodName, ...args);
 });
@@ -59,6 +59,12 @@ function getLoadedAmount(accessor)
     }
     return elements.length;
   }, tableListHandle, accessor);
+}
+
+async function ensureItem(accessor, parentAccessor)
+{
+  return !!(await getItemElemAccess(accessor, parentAccessor) ||
+            await tableList.getItem(accessor, parentAccessor));
 }
 
 describe("Table-list component", () =>
@@ -144,11 +150,6 @@ describe("Table-list component", () =>
   });
   it("removeItem(access, parentAccess) method should remove item or subItem", async() =>
   {
-    const ensureItem = async(accessor, parentAccessor) =>
-    {
-      return !!(await getItemElemAccess(accessor, parentAccessor) ||
-                await tableList.getItem(accessor, parentAccessor));
-    };
     assert.equal(await ensureItem("example4.com"), true);
     await tableList.removeItem("example4.com");
     assert.equal(await ensureItem("example4.com"), false);
@@ -160,6 +161,15 @@ describe("Table-list component", () =>
     await tableList.selectItem("subexample1.com", "example5.com");
     await tableList.removeItem("subexample1.com", "example5.com");
     assert.equal(await getSelectedAccess(), "subexample2.com");
+  });
+  it("empty(access) should remove all items or subitems", async() =>
+  {
+    assert.equal(await ensureItem("subexample2.com", "example5.com"), true);
+    await tableList.empty("example5.com");
+    assert.equal(await ensureItem("subexample2.com", "example5.com"), false);
+    assert.equal(await ensureItem("example5.com"), true);
+    await tableList.empty();
+    assert.equal(await ensureItem("example5.com"), false);
   });
 });
 

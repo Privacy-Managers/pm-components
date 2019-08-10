@@ -79,6 +79,10 @@
         });
       }
       tableList.addItems(itemObjs, parentAccess);
+
+      tableList.removeItem("example4.com");
+      tableList.removeItem("subexample0.com", "example5.com");
+      tableList.removeItem("subexample1.com", "example5.com");
     }
   </script>
 </body>

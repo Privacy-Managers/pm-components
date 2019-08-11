@@ -1,0 +1,13 @@
+#documentation
+{
+  font-family: sans-serif;
+}
+#documentation pre
+{
+  padding: 10px;
+  border: 1px solid grey;
+}
+body > div
+{
+  display: inline-block;
+}

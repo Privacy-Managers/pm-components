@@ -16,7 +16,7 @@ before(async () =>
 
 const tableList = {};
 const methods = ["indexOfAccessor", "addItems", "getItem", "removeItem",
-                 "selectItem", "removeItem", "empty"];
+                 "selectItem", "removeItem", "empty", "updateItem"];
 methods.forEach((methodName) => {
   tableList[methodName] = (...args) => runComponentMethod(methodName, ...args);
 });
@@ -161,6 +161,35 @@ describe("Table-list component", () =>
     await tableList.selectItem("subexample1.com", "example5.com");
     await tableList.removeItem("subexample1.com", "example5.com");
     assert.equal(await getSelectedAccess(), "subexample2.com");
+  });
+  it("updateItem(access, parentAccess) method should updated item or subItem", async() =>
+  {
+    const updatableParent = "example1.com";
+    const updatableSubitem = "subexample1.com";
+    const updatedParent = "example4.com";
+    const updatedSubitem = "subexample2.com";
+    await tableList.removeItem(updatedParent);
+    await tableList.removeItem(updatableParent);
+    const itemObject = {
+      dataset:  { access: updatableParent},
+      texts: {"domain": "example.com", "cookienum": "3 Cookies"}
+    };
+    const subItemObject = {
+      dataset:  { access: updatableSubitem},
+      texts: {"domain": "example.com", "cookienum": "3 Cookies"}
+    };
+    await tableList.addItems([itemObject]);
+    assert.equal(await ensureItem(updatableParent), true);
+    await tableList.selectItem(updatableParent);
+    itemObject.dataset.access = updatedParent;
+    await tableList.updateItem(itemObject, updatableParent);
+    assert.equal(await ensureItem(updatableParent), false);
+    assert.equal(await ensureItem(updatedParent), true);
+    assert.equal(await getSelectedAccess(), updatedParent);
+    await tableList.addItems([subItemObject], updatableSubitem);
+    subItemObject.dataset.access = updatedSubitem;
+    await tableList.updateItem(subItemObject, updatableSubitem, updatedParent);
+    assert.equal(await ensureItem(updatedSubitem, updatedParent), true);
   });
   it("empty(access) should remove all items or subitems", async() =>
   {

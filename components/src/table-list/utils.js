@@ -85,4 +85,9 @@ function onClick(ev, listenerElem, callback)
   });
 }
 
-export {registerActionListener};
+function deepCopy(object)
+{
+  return JSON.parse(JSON.stringify(object));
+}
+
+export {registerActionListener, deepCopy};

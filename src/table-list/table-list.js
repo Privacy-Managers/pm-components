@@ -1,4 +1,4 @@
-import {registerActionListener} from "./utils.js";
+import {registerActionListener, deepCopy} from "./utils.js";
 
 class SettingList extends HTMLElement {
   constructor() {
@@ -160,21 +160,25 @@ class SettingList extends HTMLElement {
    * }
    * @param {String} access parent item accessor, if skipped top level item is
    * added
+   * @param {Boolean} _deepCopy uses shallow copy when false (default: true)
    */
-  addItems(itemObjs, access)
+  addItems(itemObjs, access, _deepCopy = true)
   {
-    const parentItem = this.getItem(access);
+    // If we don't deep copy the added items modification of the items on the
+    // user side might affect actual data used for table-list
+    const itemObjCopy = _deepCopy ? deepCopy(itemObjs) : itemObjs;
+    const parentItem = this.getItem(access, null, false);
     if (parentItem && !parentItem.subItems)
       parentItem.subItems = [];
     const items = parentItem ? parentItem.subItems : this.items;
 
-    items.push(...itemObjs);
+    items.push(...itemObjCopy);
 
     // TODO: Sort by item names in PM
     if (this.sort)
       items.sort(this.sort);
 
-    for (const itemObj of itemObjs)
+    for (const itemObj of itemObjCopy)
     {
       if (parentItem)
       {
@@ -246,7 +250,7 @@ class SettingList extends HTMLElement {
       if (parentAccessor)
       {
         this._unloadSubItem(accessor, parentAccessor);
-        const parentItem = this.getItem(parentAccessor);
+        const parentItem = this.getItem(parentAccessor, null, false);
         parentItem.subItems.splice(index, 1);
         const hasSubitems = parentItem.subItems.length;
         if (!hasSubitems)
@@ -366,7 +370,7 @@ class SettingList extends HTMLElement {
    */
   removeAllSubItems(accessor)
   {
-    const {item} = this.getItem(accessor);
+    const {item} = this.getItem(accessor, null, false);
     if (!item)
       return false;
 
@@ -455,7 +459,7 @@ class SettingList extends HTMLElement {
   {
     if (access)
     {
-      const item = this.getItem(access);
+      const item = this.getItem(access, null, false);
       const element = this.getItemElem(access);
       if (item)
         delete item.subItems;
@@ -480,7 +484,7 @@ class SettingList extends HTMLElement {
     let items = this.items;
     if (parentAccessor)
     {
-      const item = this.getItem(parentAccessor);
+      const item = this.getItem(parentAccessor, null, false);
       if (item && item.subItems)
         items = item.subItems;
       else
@@ -518,11 +522,12 @@ class SettingList extends HTMLElement {
 
   /**
    * Getting the item
-   * @param {String} accessor main item ID
-   * @param {String} parentAccessor used for getting subItems
-   * @return {JSON} object of the item or null if can't find
+   * @param {String}  accessor main item ID
+   * @param {String}  parentAccessor used for getting subItems
+   * @param {Boolean} _deepCopy if false returns shallow copy (default: true)
+   * @return {JSON}   object of the item or null if can't find
    */
-  getItem(accessor, parentAccessor)
+  getItem(accessor, parentAccessor, _deepCopy = true)
   {
     const index = this.indexOfAccessor(accessor, parentAccessor);
     if (index === -1)
@@ -530,21 +535,30 @@ class SettingList extends HTMLElement {
     let items = this.items;
     if (parentAccessor)
       items = items[this.indexOfAccessor(parentAccessor)].subItems;
-    return items[index];
+    const item = items[index];
+    if (_deepCopy)
+      return deepCopy(item);
+
+    return item;
   }
 
   /**
    * Update the item and DOM
-   * @param {JSON} newItemObj
-   * @param {String} accessor ID of the main Item
+   * @param {JSON}    newItemObj
+   * @param {String}  accessor ID of the main Item
+   * @param {String}  parentAccessor used for updating subitems
+   * @param {Boolean} _deepCopy uses shallow copy when false (default: true)
    */
-  updateItem(newItemObj, accessor)
+  updateItem(newItemObj, accessor, parentAccessor, _deepCopy=true)
   {
-    const index = this.indexOfAccessor(accessor);
-    this.items[index] = newItemObj;
-
-    if (this.loaded >= index)
-      this._updateListElem(newItemObj, this.listElem.children[index]);
+    const itemCopy = _deepCopy ? deepCopy(newItemObj) : newItemObj;
+    const itemElem = this.getItemElem(accessor, parentAccessor);
+    const wasFocused = itemElem ?
+                       itemElem.isSameNode(this._getActiveElement()) : false;
+    this.removeItem(accessor, parentAccessor);
+    this.addItems([itemCopy], parentAccessor);
+    if (wasFocused)
+      this.selectItem(itemCopy.dataset.access, parentAccessor);
   }
 
   /**
@@ -564,6 +578,11 @@ class SettingList extends HTMLElement {
       childElem.focus();
   }
 
+  _getActiveElement()
+  {
+    return this.shadowRoot.activeElement;
+  }
+
   /**
    * Managing focus of the element, can select item by ID or switch selection
    * @param {String} accessor Item
@@ -579,7 +598,7 @@ class SettingList extends HTMLElement {
     let listElems = this.listElem.children;
     if (parentAccessor)
       listElems = this.getItemElem(parentAccessor).querySelector("ul").children;
-    if (!type)
+    if (!type && listElems[index])
       listElems[index].focus();
     switch (type)
     {

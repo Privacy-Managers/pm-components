@@ -591,36 +591,44 @@ class SettingList extends HTMLElement {
    */
   selectItem(accessor, parentAccessor, type)
   {
-    const index = this.indexOfAccessor(accessor, parentAccessor);
-    if (index === -1)
+    const relativeElement = this.getItemElem(accessor, parentAccessor);
+    const parentItemElement = this.getItemElem(parentAccessor);
+    const isEdgeRequest = type === "start" || type === "end";
+    if (!relativeElement && !isEdgeRequest)
       return;
 
-    let listElems = this.listElem.children;
-    if (parentAccessor)
-      listElems = this.getItemElem(parentAccessor).querySelector("ul").children;
-    if (!type && listElems[index])
-      listElems[index].focus();
+    if (!type && relativeElement)
+    {
+      relativeElement.focus();
+      return;
+    }
     switch (type)
     {
       case "next":
-        const nextElem = listElems[index + 1];
+        const nextElem = relativeElement.nextElementSibling;
         if (!nextElem)
           this.selectItem(accessor, parentAccessor, "start");
         else
           nextElem.focus();
         break;
       case "previous":
-        const previousElem = listElems[index - 1];
+        const previousElem = relativeElement.previousElementSibling;
         if (!previousElem)
           this.selectItem(accessor, parentAccessor, "end");
         else
           previousElem.focus();
         break;
       case "start":
-        listElems[0].focus();
+        if (parentItemElement)
+          parentItemElement.querySelector("ul").firstElementChild.focus();
+        else
+          this.listElem.firstElementChild.focus();
         break;
       case "end":
-        listElems[listElems.length - 1].focus();
+        if (parentItemElement)
+          parentItemElement.querySelector("ul").lastElementChild.focus();
+        else
+          this.listElem.lastElementChild.focus();
         break;
     }
   }

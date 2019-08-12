@@ -133,8 +133,7 @@ class SettingList extends HTMLElement {
 
   connectedCallback()
   {
-    this.listItemTemplate = document.querySelector("#cookiesListTemplate"); // TODO: make this dynamic
-    this.listSubItemTemplate = document.querySelector("#cookiesSubListTemplate");
+    [this.listItemTemplate, this.listSubItemTemplate] = this.querySelectorAll("template");
     this.listElem = this.shadowRoot.querySelector("ul");
     this.listElem.addEventListener("scroll", this._onScroll.bind(this), false);
 
@@ -148,7 +147,6 @@ class SettingList extends HTMLElement {
     }, false);
 
     registerActionListener(this, this._onAction);
-    this._render();
   }
 
   /**
@@ -667,9 +665,6 @@ class SettingList extends HTMLElement {
         this.selectItem(element.dataset.access, this._getParentItemElemAccess(element), "previous");
         break;
     }
-  }
-
-  _render() {
   }
 }
 

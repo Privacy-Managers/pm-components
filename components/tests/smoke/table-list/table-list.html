@@ -12,49 +12,56 @@
   <h1>Table list</h1>
   <div>
       <div>
-      <template id="cookiesListTemplate">
-          <li data-action="get-cookies" 
-              data-key-action="get-cookies" 
-              data-key-down="next-sibling"
-              data-key-up="previouse-sibling" 
-              data-key-delete="delete-domain-cookies">
-          <div>
-            <div class="data-container">
-              <span data-text="domain" class="domainName"></span>
-              <span data-text="cookienum" class="cookiesNumber"></span>
-            </div>
-            <button role="checkbox" data-action="whitelist-cookie-domain" data-text="whitelist" class="icon whitelist"></button>
-            <button class="icon delete" data-action="delete-domain-cookies" tabindex="-1"></button>
-          </div>
-          </li>
-        </template>
-        <template id="cookiesSubListTemplate">
-          <li tabindex="-1"
-              data-key-down="next-sibling"
-              data-key-up="previouse-sibling"
-              data-key-action="open-dialog,edit-cookie"
-              data-key-delete="delete-sublist-cookie"
-              data-key-quite="close-expanded-domain"
-              data-action=""
-              data-dialog="cookie-edit">
-            <div>
-              <button class="icon edit" data-action="open-dialog,edit-cookie" data-dialog="cookie-edit"></button>
-              <div class="data-container">
-                <span data-text="name" class="cookieName"></span>
-                <span data-text="value" class="cookieValue"></span>
-              </div>
-              <button role="checkbox" data-action="whitelist-sublist-cookie"  data-text="whitelist" class="icon whitelist"></button>
-              <button class="icon delete" data-action="delete-sublist-cookie"></button>
-            </div>
-          </li>
-        </template>
-      <table-list></table-list>
+      <table-list>
+          <template>
+              <li data-action="get-cookies"
+                  data-key-action="get-cookies"
+                  data-key-down="next-sibling"
+                  data-key-up="previouse-sibling"
+                  data-key-delete="delete-domain-cookies">
+                <div>
+                  <div class="data-container">
+                    <span data-text="domain" class="domainName"></span>
+                    <span data-text="cookienum" class="cookiesNumber"></span>
+                  </div>
+                  <button role="checkbox" 
+                          data-action="whitelist-cookie-domain"
+                          data-text="whitelist"
+                          class="icon whitelist"></button>
+                  <button class="icon delete" 
+                          data-action="delete-domain-cookies"
+                          tabindex="-1"></button>
+                </div>
+              </li>
+            </template>
+            <template>
+              <li tabindex="-1"
+                  data-key-down="next-sibling"
+                  data-key-up="previouse-sibling"
+                  data-key-action="open-dialog,edit-cookie"
+                  data-key-delete="delete-sublist-cookie"
+                  data-key-quite="close-expanded-domain"
+                  data-action=""
+                  data-dialog="cookie-edit">
+                <div>
+                  <button class="icon edit"
+                          data-action="open-dialog,edit-cookie"
+                          data-dialog="cookie-edit"></button>
+                  <div class="data-container">
+                    <span data-text="name" class="cookieName"></span>
+                    <span data-text="value" class="cookieValue"></span>
+                  </div>
+                  <button role="checkbox"
+                          data-action="whitelist-sublist-cookie" 
+                          data-text="whitelist"
+                          class="icon whitelist"></button>
+                  <button class="icon delete"
+                          data-action="delete-sublist-cookie"></button>
+                </div>
+              </li>
+            </template>
+      </table-list>
     </div>
-
-
-
-
-
 
     <div id="documentation">
       <h2>Documentation</h2>

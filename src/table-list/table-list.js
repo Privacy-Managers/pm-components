@@ -6,7 +6,7 @@ class SettingList extends HTMLElement {
 
     this.items = [];
     // TODO: add setSort method.
-    this.sort = (a, b) => a.dataset.access.localeCompare(b.dataset.access, undefined, {numeric: true});
+    this.sort = (a, b) => a.id.localeCompare(b.id, undefined, {numeric: true});
     this.listElem = null;
     this.listItemTemplate = null;
     this.listSubItemTemplate = null;
@@ -153,19 +153,20 @@ class SettingList extends HTMLElement {
    * Add item and subItem to the Table list
    * @param {Array} itemObjs array of itemObj:
    * {
-   *   dataset:  { access: "example.com", datasetname: "/" }, texts:
-   *   {data-text-value: "example.com", data-text-value: "3 Cookies"}
+   *   id:       "itemId1",
+   *   dataset:  {datasetname: "/"},
+   *   texts:    {data-text-value: "example.com", data-text-value: "3 Cookies"}
    * }
-   * @param {String} access parent item accessor, if skipped top level item is
+   * @param {String} id parent item id, if skipped top level item is
    * added
    * @param {Boolean} _deepCopy uses shallow copy when false (default: true)
    */
-  addItems(itemObjs, access, _deepCopy = true)
+  addItems(itemObjs, id, _deepCopy = true)
   {
     // If we don't deep copy the added items modification of the items on the
     // user side might affect actual data used for table-list
     const itemObjCopy = _deepCopy ? deepCopy(itemObjs) : itemObjs;
-    const parentItem = this.getItem(access, null, false);
+    const parentItem = this.getItem(id, null, false);
     if (parentItem && !parentItem.subItems)
       parentItem.subItems = [];
     const items = parentItem ? parentItem.subItems : this.items;
@@ -180,7 +181,7 @@ class SettingList extends HTMLElement {
     {
       if (parentItem)
       {
-        this._loadSubItem(itemObj, access);
+        this._loadSubItem(itemObj, id);
       }
       else  // Dynamic load only top level items
       {
@@ -200,8 +201,8 @@ class SettingList extends HTMLElement {
     if (!itemObj.dataset)
       itemObj.dataset = {};
 
-    if (!itemObj.dataset.access)
-      itemObj.dataset.access = this.items.indexOf(itemObj);
+    if (!itemObj.id)
+      itemObj.id = this.items.indexOf(itemObj);
 
     const listItem = this._itemFromTmpl(itemObj, this.listItemTemplate);
     const itemIndex = this.items.indexOf(itemObj);
@@ -235,20 +236,20 @@ class SettingList extends HTMLElement {
 
   /**
    * Remove item or subItem from the list
-   * @param {String} accessor item ID
-   * @param {String} parentAccessor Parent item accessor ID, used to remove
+   * @param {String} id item ID
+   * @param {String} parentId Parent item id ID, used to remove
    *                                subItem if specified(optional)
    * @param {Boolean} result
    */
-  removeItem(accessor, parentAccessor)
+  removeItem(id, parentId)
   {
-    const index = this.indexOfAccessor(accessor, parentAccessor);
+    const index = this.getItemIndex(id, parentId);
     if (index >= 0)
     {
-      if (parentAccessor)
+      if (parentId)
       {
-        this._unloadSubItem(accessor, parentAccessor);
-        const parentItem = this.getItem(parentAccessor, null, false);
+        this._unloadSubItem(id, parentId);
+        const parentItem = this.getItem(parentId, null, false);
         parentItem.subItems.splice(index, 1);
         const hasSubitems = parentItem.subItems.length;
         if (!hasSubitems)
@@ -256,7 +257,7 @@ class SettingList extends HTMLElement {
       }
       else
       {
-        this._unloadItem(accessor);
+        this._unloadItem(id);
         this.items.splice(index, 1);
       }
       return true;
@@ -266,35 +267,35 @@ class SettingList extends HTMLElement {
 
   /**
    * Remove item Node from the DOM
-   * @param {String} accessor item ID 
+   * @param {String} id item ID 
    */
-  _unloadItem(accessor)
+  _unloadItem(id)
   {
-    const itemElem = this.getItemElem(accessor);
+    const itemElem = this.getItemElem(id);
     if (!itemElem)
       return;
 
     if (itemElem.isSameNode(this.shadowRoot.activeElement))
-      this.selectItem(accessor, null, "next");
+      this.selectItem(id, null, "next");
     this.listElem.removeChild(itemElem);
   }
 
   /**
    * Remove sub item Node from the DOM
-   * @param {String} accessor       item ID 
-   * @param {String} parentAccessor parent item accessor ID
+   * @param {String} id       item ID 
+   * @param {String} parentId parent item id ID
    */
-  _unloadSubItem(accessor, parentAccessor)
+  _unloadSubItem(id, parentId)
   {
-    const itemElem = this.getItemElem(accessor, parentAccessor);
+    const itemElem = this.getItemElem(id, parentId);
     if (!itemElem)
       return;
 
     const activeElement = this.shadowRoot.activeElement;
     if (activeElement.isSameNode(itemElem))
-      this.selectItem(accessor, parentAccessor, "next");
+      this.selectItem(id, parentId, "next");
 
-    const subListContainerElem = this.getItemElem(parentAccessor);
+    const subListContainerElem = this.getItemElem(parentId);
     const subListElems = subListContainerElem.querySelector("ul");
     subListElems.removeChild(itemElem);
     if (!subListElems.children.length)
@@ -304,12 +305,12 @@ class SettingList extends HTMLElement {
   /**
    * Add subitem
    * @param {JSON} itemObj as specified in addItems
-   * @param {String} accessor item ID
+   * @param {String} id item ID
    */
-  _loadSubItem(itemObj, accessor)
+  _loadSubItem(itemObj, id)
   {
     const subListItemElem = this._itemFromTmpl(itemObj, this.listSubItemTemplate);
-    const listItemElem = this.getItemElem(accessor);
+    const listItemElem = this.getItemElem(id);
     const subContainer = listItemElem.querySelector("ul");
 
     if (!subContainer)
@@ -318,7 +319,7 @@ class SettingList extends HTMLElement {
       const subListElem = document.createElement("ul");
       subListElem.appendChild(subListItemElem);
       listItemElem.appendChild(subListElem);
-      this.selectItem(itemObj.dataset.access, accessor, "start");
+      this.selectItem(itemObj.id, id, "start");
     }
     else
     {
@@ -327,14 +328,14 @@ class SettingList extends HTMLElement {
   }
 
   /**
-   * DEPRECATED use removeItem(access, parentAccess) instead
+   * DEPRECATED use removeItem(id, parentId) instead
    * Remove subitem
-   * @param {String} parentAccessor main item ID
-   * @param {String} accessor subItem ID
+   * @param {String} parentId main item ID
+   * @param {String} id subItem ID
    */
-  removeSubItem(parentAccessor, accessor)
+  removeSubItem(parentId, id)
   {
-    const {index} = this.indexOfAccessor(parentAccessor);
+    const {index} = this.getItemIndex(parentId);
     if (index === false)
       return false;
 
@@ -344,7 +345,7 @@ class SettingList extends HTMLElement {
 
     for (let i = 0; i < item.subItems.length; i++)
     {
-      if (item.subItems[i].dataset.access == accessor)
+      if (item.subItems[i].id == id)
       {
         if (item.subItems.length == 1)
         {
@@ -362,19 +363,19 @@ class SettingList extends HTMLElement {
   }
 
   /**
-   * Deprecated use empty(access) instead
+   * Deprecated use empty(id) instead
    * Remove All sub items
-   * @param {String} accessor main item ID
+   * @param {String} id main item ID
    */
-  removeAllSubItems(accessor)
+  removeAllSubItems(id)
   {
-    const {item} = this.getItem(accessor, null, false);
+    const {item} = this.getItem(id, null, false);
     if (!item)
       return false;
 
     let i = item.subItems.length;
     while (i--) // Avoide re-indexing
-      this.removeSubItem(item.dataset.access, item.subItems[i].dataset.access);
+      this.removeSubItem(item.id, item.subItems[i].id);
 
     delete item.subItems;
   }
@@ -382,19 +383,19 @@ class SettingList extends HTMLElement {
   /**
    * DEPRECTATED
    * Check for subItem existance
-   * @param {String} accessor main item ID
-   * @param {String} accessor subItem ID
+   * @param {String} id main item ID
+   * @param {String} id subItem ID
    * @return {Boolean} result
    */
-  hasSubItem(parentAccessor, accessor)
+  hasSubItem(parentId, id)
   {
-    const {parentItem} = this.getItem(parentAccessor);
+    const {parentItem} = this.getItem(parentId);
     if (!parentItem || !parentItem.subItems)
       return false;
 
     for (let i = 0; i < parentItem.subItems.length; i++)
     {
-      if (parentItem.subItems[i].dataset.access == accessor)
+      if (parentItem.subItems[i].id == id)
         return true;
     }
     return false;
@@ -408,6 +409,7 @@ class SettingList extends HTMLElement {
   _updateListElem(itemObj, listElem)
   {
     const datasetObj = itemObj.dataset;
+    listElem.dataset.id = itemObj.id;
     for (const name in datasetObj)
       listElem.dataset[name] = datasetObj[name];
 
@@ -450,15 +452,15 @@ class SettingList extends HTMLElement {
 
   /**
    * Empty list or sublist
-   * @param {String} accessor item ID, if specified all subitems are
+   * @param {String} id item ID, if specified all subitems are
    *                          emptied(optional)
    */
-  empty(access)
+  empty(id)
   {
-    if (access)
+    if (id)
     {
-      const item = this.getItem(access, null, false);
-      const element = this.getItemElem(access);
+      const item = this.getItem(id, null, false);
+      const element = this.getItemElem(id);
       if (item)
         delete item.subItems;
       if (element)
@@ -473,16 +475,16 @@ class SettingList extends HTMLElement {
 
   /**
    * Get the index (position) of the item
-   * @param {String} accessor
-   * @param {String} parentAccessor used for getting subItems
+   * @param {String} id
+   * @param {String} parentId used for getting subItems
    * @return {Number} index of the item or -1 if can't find
    */
-  indexOfAccessor(accessor, parentAccessor)
+  getItemIndex(id, parentId)
   {
     let items = this.items;
-    if (parentAccessor)
+    if (parentId)
     {
-      const item = this.getItem(parentAccessor, null, false);
+      const item = this.getItem(parentId, null, false);
       if (item && item.subItems)
         items = item.subItems;
       else
@@ -493,26 +495,26 @@ class SettingList extends HTMLElement {
       return -1;
 
     for (let i = 0; i < items.length; i++)
-      if (items[i].dataset.access === accessor)
+      if (items[i].id === id)
         return i;
     return -1;
   }
 
   /**
-   * Getting the DOM Element that corresponds to the item using accessor
-   * @param {String} accessor main item ID
-   * @param {String} parentAccessor used for getting subItems
+   * Getting the DOM Element that corresponds to the item using id
+   * @param {String} id main item ID
+   * @param {String} parentId used for getting subItems
    * @return {Node} DOM Element
    */
-  getItemElem(accessor, parentAccessor)
+  getItemElem(id, parentId)
   {
-    const index = this.indexOfAccessor(accessor, parentAccessor);
+    const index = this.getItemIndex(id, parentId);
     if (index === -1)
       return null;
     let parentElem = this.listElem;
-    if (parentAccessor)
+    if (parentId)
     {
-      const parentIndex = this.indexOfAccessor(parentAccessor);
+      const parentIndex = this.getItemIndex(parentId);
       parentElem = parentElem.children[parentIndex].querySelector("ul");
     }
     return parentElem.children[index];
@@ -520,19 +522,19 @@ class SettingList extends HTMLElement {
 
   /**
    * Getting the item
-   * @param {String}  accessor main item ID
-   * @param {String}  parentAccessor used for getting subItems
+   * @param {String}  id main item ID
+   * @param {String}  parentId used for getting subItems
    * @param {Boolean} _deepCopy if false returns shallow copy (default: true)
    * @return {JSON}   object of the item or null if can't find
    */
-  getItem(accessor, parentAccessor, _deepCopy = true)
+  getItem(id, parentId, _deepCopy = true)
   {
-    const index = this.indexOfAccessor(accessor, parentAccessor);
+    const index = this.getItemIndex(id, parentId);
     if (index === -1)
       return null;
     let items = this.items;
-    if (parentAccessor)
-      items = items[this.indexOfAccessor(parentAccessor)].subItems;
+    if (parentId)
+      items = items[this.getItemIndex(parentId)].subItems;
     const item = items[index];
     if (_deepCopy)
       return deepCopy(item);
@@ -543,20 +545,20 @@ class SettingList extends HTMLElement {
   /**
    * Update the item and DOM
    * @param {JSON}    newItemObj
-   * @param {String}  accessor ID of the main Item
-   * @param {String}  parentAccessor used for updating subitems
+   * @param {String}  id ID of the main Item
+   * @param {String}  parentId used for updating subitems
    * @param {Boolean} _deepCopy uses shallow copy when false (default: true)
    */
-  updateItem(newItemObj, accessor, parentAccessor, _deepCopy=true)
+  updateItem(newItemObj, id, parentId, _deepCopy=true)
   {
     const itemCopy = _deepCopy ? deepCopy(newItemObj) : newItemObj;
-    const itemElem = this.getItemElem(accessor, parentAccessor);
+    const itemElem = this.getItemElem(id, parentId);
     const wasFocused = itemElem ?
                        itemElem.isSameNode(this._getActiveElement()) : false;
-    this.removeItem(accessor, parentAccessor);
-    this.addItems([itemCopy], parentAccessor);
+    this.removeItem(id, parentId);
+    this.addItems([itemCopy], parentId);
     if (wasFocused)
-      this.selectItem(itemCopy.dataset.access, parentAccessor);
+      this.selectItem(itemCopy.id, parentId);
   }
 
   /**
@@ -583,14 +585,14 @@ class SettingList extends HTMLElement {
 
   /**
    * Managing focus of the element, can select item by ID or switch selection
-   * @param {String} accessor Item
-   * @param {String} parentAccessor used for accessing sub item
+   * @param {String} id Item
+   * @param {String} parentId used for accessing sub item
    * @param {String} type possible values "next", "previous", "end", "start"
    */
-  selectItem(accessor, parentAccessor, type)
+  selectItem(id, parentId, type)
   {
-    const relativeElement = this.getItemElem(accessor, parentAccessor);
-    const parentItemElement = this.getItemElem(parentAccessor);
+    const relativeElement = this.getItemElem(id, parentId);
+    const parentItemElement = this.getItemElem(parentId);
     const isEdgeRequest = type === "start" || type === "end";
     if (!relativeElement && !isEdgeRequest)
       return;
@@ -605,14 +607,14 @@ class SettingList extends HTMLElement {
       case "next":
         const nextElem = relativeElement.nextElementSibling;
         if (!nextElem)
-          this.selectItem(accessor, parentAccessor, "start");
+          this.selectItem(id, parentId, "start");
         else
           nextElem.focus();
         break;
       case "previous":
         const previousElem = relativeElement.previousElementSibling;
         if (!previousElem)
-          this.selectItem(accessor, parentAccessor, "end");
+          this.selectItem(id, parentId, "end");
         else
           previousElem.focus();
         break;
@@ -632,18 +634,18 @@ class SettingList extends HTMLElement {
   }
 
   /**
-   * Get parent element accessor
+   * Get parent element id
    * @param  {Node} element DOM Node child of table list item
-   * @return {String} accessor or null if can't find
+   * @return {String} id or null if can't find
    */
-  _getParentItemElemAccess(element)
+  _getParentItemElemId(element)
   {
     while(element)
     {
       element = element.parentElement;
-      if (element && element.tagName === "LI" && element.dataset.access)
+      if (element && element.tagName === "LI" && element.dataset.id)
       {
-        return element.dataset.access;
+        return element.dataset.id;
       }
     }
     return null;
@@ -659,10 +661,10 @@ class SettingList extends HTMLElement {
     switch (action)
     {
       case "next-sibling":
-        this.selectItem(element.dataset.access, this._getParentItemElemAccess(element), "next");
+        this.selectItem(element.dataset.id, this._getParentItemElemId(element), "next");
         break;
       case "previouse-sibling":
-        this.selectItem(element.dataset.access, this._getParentItemElemAccess(element), "previous");
+        this.selectItem(element.dataset.id, this._getParentItemElemId(element), "previous");
         break;
     }
   }

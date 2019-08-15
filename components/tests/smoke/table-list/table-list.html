@@ -69,11 +69,11 @@
         <pre>
             <code>
 const dataObj = {
-  dataset:  { access: "example1.com"},
+  id:    "example1.com",
   texts: {"domain": "example1.com", "cookienum": "3 Cookies"}
 };
 const dataSubObj = {
-  dataset:  { access: "subexample1.com"},
+  id:    "subexample1.com",
   texts: {"domain": "subexample1.com", "cookienum": "3 Cookies"}
 };
 tableList.addItem(dataObj);
@@ -83,12 +83,12 @@ tableList.addItem(dataSubObj, "example1");
       <h3>Updating data</h3>
       <pre><code>
 const dataObjUpdate = {
-  dataset:  { access: "example2.com"},
+  id:     "example2.com",
   texts: {"domain": "example2.com", "cookienum": "3 Cookies"}
 };
 tableList.updateItem(dataObjUpdate, "example1");
 const dataObjUpdateSub = {
-  dataset:  { access: "subexample2.com"},
+  id:    "subexample2.com",
   texts: {"domain": "subexample2.com", "cookienum": "3 Cookies"}
 };
 tableList.updateItem(dataObjUpdate, "subexample1.com", "example2.com");

@@ -15,7 +15,7 @@ before(async () =>
 });
 
 const tableList = {};
-const methods = ["indexOfAccessor", "addItems", "getItem", "removeItem",
+const methods = ["getItemIndex", "addItems", "getItem", "removeItem",
                  "selectItem", "removeItem", "empty", "updateItem"];
 methods.forEach((methodName) => {
   tableList[methodName] = (...args) => runComponentMethod(methodName, ...args);
@@ -31,40 +31,40 @@ function runComponentMethod()
   }, tableListHandle, functionName, args);
 }
 
-function getItemElemAccess(accessor, parentAccessor)
+function getItemElemDatasetId(id, parentId)
 {
-  return page.evaluate((tableListHandle, accessor, parentAccessor) =>
+  return page.evaluate((tableListHandle, id, parentId) =>
   {
-    if (tableListHandle.getItemElem(accessor, parentAccessor))
-      return tableListHandle.getItemElem(accessor, parentAccessor).dataset.access;
-  }, tableListHandle, accessor, parentAccessor);
+    if (tableListHandle.getItemElem(id, parentId))
+      return tableListHandle.getItemElem(id, parentId).dataset.id;
+  }, tableListHandle, id, parentId);
 }
 
-function getSelectedAccess()
+function getSelectedDatasetId()
 {
   return page.evaluate((tableListHandle) =>
   {
-    return tableListHandle.shadowRoot.activeElement.dataset.access;
+    return tableListHandle.shadowRoot.activeElement.dataset.id;
   }, tableListHandle);
 }
 
-function getLoadedAmount(accessor)
+function getLoadedAmount(id)
 {
-  return page.evaluate((tableListHandle, accessor) => {
+  return page.evaluate((tableListHandle, id) => {
     let elements = tableListHandle.shadowRoot.querySelector("ul").children;
-    if (accessor)
+    if (id)
     {
-      const index = tableListHandle.indexOfAccessor(accessor);
+      const index = tableListHandle.getItemIndex(id);
       elements = elements[index].querySelector("ul").children;
     }
     return elements.length;
-  }, tableListHandle, accessor);
+  }, tableListHandle, id);
 }
 
-async function ensureItem(accessor, parentAccessor)
+async function ensureItem(id, parentId)
 {
-  return !!(await getItemElemAccess(accessor, parentAccessor) ||
-            await tableList.getItem(accessor, parentAccessor));
+  return !!(await getItemElemDatasetId(id, parentId) ||
+            await tableList.getItem(id, parentId));
 }
 
 describe("Table-list component", () =>
@@ -74,7 +74,7 @@ describe("Table-list component", () =>
     const objItems = [];
     for (let i = 0; i < 300; i++) {
       objItems.push({
-        dataset:  { access: `example${i}.com`},
+        id:    `example${i}.com`,
         texts: {"domain": `example${i}.com`, "cookienum": "3 Cookies"}
       });
     }
@@ -83,23 +83,23 @@ describe("Table-list component", () =>
     const loaded =  await getLoadedAmount();
     assert.equal(loaded, 50);
   });
-  it("indexOfAccessor(access) method should return index for accessor", async() =>
+  it("getItemIndex(id) method should return index for Item", async() =>
   {
-    assert.equal(await tableList.indexOfAccessor("example0.com"), 0);
-    assert.equal(await tableList.indexOfAccessor("example-1.com"), -1);
+    assert.equal(await tableList.getItemIndex("example0.com"), 0);
+    assert.equal(await tableList.getItemIndex("example-1.com"), -1);
   });
   it("removeItem() method should remove item and from the table list", async() =>
   {
     await tableList.removeItem("example1.com");
-    const index = await tableList.indexOfAccessor("example1.com");
+    const index = await tableList.getItemIndex("example1.com");
     assert.equal(index, -1);
   });
-  it("addItems(items, accessor) method should add subitems to the item when second argument is used", async() =>
+  it("addItems(items, id) method should add subitems to the item when second argument is used", async() =>
   {
     const itemObjects = [];
     for (let i = 0; i < 5; i++) {
       itemObjects.push({
-        dataset:  { access: `subexample${i}.com`},
+        id:    `subexample${i}.com`,
         texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
       });
     }
@@ -108,47 +108,47 @@ describe("Table-list component", () =>
     await tableList.addItems(itemObjects, "example5.com");
     assert.equal(await getLoadedAmount("example5.com"), 5);
   });
-  it("indexOfAccessor(access, parentAccess) method should return subIndex if one exist", async() =>
+  it("getItemIndex(id, parentId) method should return subIndex if one exist", async() =>
   {
-    assert.equal(await tableList.indexOfAccessor("subexample3.com", "example0.com"), 3);
-    assert.equal(await tableList.indexOfAccessor("subexample3.com", "example2.com"), -1);
-    assert.equal(await tableList.indexOfAccessor("subexample-1.com", "example0.com"), -1);
+    assert.equal(await tableList.getItemIndex("subexample3.com", "example0.com"), 3);
+    assert.equal(await tableList.getItemIndex("subexample3.com", "example2.com"), -1);
+    assert.equal(await tableList.getItemIndex("subexample-1.com", "example0.com"), -1);
   });
-  it("getItemElem(access, parentAccess) should return the node element for accessor if loaded", async() =>
+  it("getItemElem(access, parentId) should return the node element for id if loaded", async() =>
   {
-    assert.equal(await getItemElemAccess("example0.com"), "example0.com");
-    assert.equal(await getItemElemAccess("subexample3.com", "example0.com"), "subexample3.com");
-    assert.equal(await getItemElemAccess("example100.com"), null);
-    assert.equal(await getItemElemAccess("subexample100.com", "example0.com"), null);
+    assert.equal(await getItemElemDatasetId("example0.com"), "example0.com");
+    assert.equal(await getItemElemDatasetId("subexample3.com", "example0.com"), "subexample3.com");
+    assert.equal(await getItemElemDatasetId("example100.com"), null);
+    assert.equal(await getItemElemDatasetId("subexample100.com", "example0.com"), null);
   });
-  it("getItem(access, parentAccess) method returns item or subItem if parentAccess is specified", async() =>
+  it("getItem(access, parentId) method returns item or subItem if parentId is specified", async() =>
   {
     let item;
 
     item = await tableList.getItem("subexample3.com", "example0.com");
-    assert.equal(item.dataset.access, "subexample3.com");
+    assert.equal(item.id, "subexample3.com");
 
     item = await tableList.getItem("example4.com");
-    assert.equal(item.dataset.access, "example4.com");
+    assert.equal(item.id, "example4.com");
   });
   it("ArrowDown and ArrowUp should select sibling items also first and last when reaching the end", async() => 
   {
     await tableList.selectItem("example5.com");
-    assert.equal(await getSelectedAccess(), "example5.com");
+    assert.equal(await getSelectedDatasetId(), "example5.com");
     await page.keyboard.press("ArrowDown");
-    assert.equal(await getSelectedAccess(), "example6.com");
+    assert.equal(await getSelectedDatasetId(), "example6.com");
     await page.keyboard.press("ArrowUp");
     await page.keyboard.press("ArrowUp");
-    assert.equal(await getSelectedAccess(), "example4.com");
+    assert.equal(await getSelectedDatasetId(), "example4.com");
     await tableList.selectItem("subexample3.com", "example0.com");
-    assert.equal(await getSelectedAccess(), "subexample3.com");
+    assert.equal(await getSelectedDatasetId(), "subexample3.com");
     await page.keyboard.press("ArrowDown");
-    assert.equal(await getSelectedAccess(), "subexample4.com");
+    assert.equal(await getSelectedDatasetId(), "subexample4.com");
     await page.keyboard.press("ArrowUp");
     await page.keyboard.press("ArrowUp");
-    assert.equal(await getSelectedAccess(), "subexample2.com");
+    assert.equal(await getSelectedDatasetId(), "subexample2.com");
   });
-  it("removeItem(access, parentAccess) method should remove item or subItem", async() =>
+  it("removeItem(id, parentId) method should remove item or subItem", async() =>
   {
     assert.equal(await ensureItem("example4.com"), true);
     await tableList.removeItem("example4.com");
@@ -160,9 +160,9 @@ describe("Table-list component", () =>
 
     await tableList.selectItem("subexample1.com", "example5.com");
     await tableList.removeItem("subexample1.com", "example5.com");
-    assert.equal(await getSelectedAccess(), "subexample2.com");
+    assert.equal(await getSelectedDatasetId(), "subexample2.com");
   });
-  it("updateItem(access, parentAccess) method should updated item or subItem", async() =>
+  it("updateItem(id, parentId) method should updated item or subItem", async() =>
   {
     const updatableParent = "example1.com";
     const updatableSubitem = "subexample1.com";
@@ -171,27 +171,27 @@ describe("Table-list component", () =>
     await tableList.removeItem(updatedParent);
     await tableList.removeItem(updatableParent);
     const itemObject = {
-      dataset:  { access: updatableParent},
+      id:    updatableParent,
       texts: {"domain": "example.com", "cookienum": "3 Cookies"}
     };
     const subItemObject = {
-      dataset:  { access: updatableSubitem},
+      id:    updatableSubitem,
       texts: {"domain": "example.com", "cookienum": "3 Cookies"}
     };
     await tableList.addItems([itemObject]);
     assert.equal(await ensureItem(updatableParent), true);
     await tableList.selectItem(updatableParent);
-    itemObject.dataset.access = updatedParent;
+    itemObject.id = updatedParent;
     await tableList.updateItem(itemObject, updatableParent);
     assert.equal(await ensureItem(updatableParent), false);
     assert.equal(await ensureItem(updatedParent), true);
-    assert.equal(await getSelectedAccess(), updatedParent);
+    assert.equal(await getSelectedDatasetId(), updatedParent);
     await tableList.addItems([subItemObject], updatableSubitem);
-    subItemObject.dataset.access = updatedSubitem;
+    subItemObject.id = updatedSubitem;
     await tableList.updateItem(subItemObject, updatableSubitem, updatedParent);
     assert.equal(await ensureItem(updatedSubitem, updatedParent), true);
   });
-  it("empty(access) should remove all items or subitems", async() =>
+  it("empty(id) should remove all items or subitems", async() =>
   {
     assert.equal(await ensureItem("subexample2.com", "example5.com"), true);
     await tableList.empty("example5.com");

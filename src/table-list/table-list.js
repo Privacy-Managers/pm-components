@@ -5,8 +5,7 @@ class SettingList extends HTMLElement {
     super();
 
     this.items = [];
-    // TODO: add setSort method.
-    this.sort = (a, b) => a.id.localeCompare(b.id, undefined, {numeric: true});
+    this.sort = this._setSort();
     this.listElem = null;
     this.listItemTemplate = null;
     this.listSubItemTemplate = null;
@@ -165,19 +164,26 @@ class SettingList extends HTMLElement {
   {
     // If we don't deep copy the added items modification of the items on the
     // user side might affect actual data used for table-list
-    const itemObjCopy = _deepCopy ? deepCopy(itemObjs) : itemObjs;
+    const itemObjsCopy = _deepCopy ? deepCopy(itemObjs) : itemObjs;
     const parentItem = this.getItem(id, null, false);
     if (parentItem && !parentItem.subItems)
       parentItem.subItems = [];
     const items = parentItem ? parentItem.subItems : this.items;
 
-    items.push(...itemObjCopy);
+    items.push(...itemObjsCopy);
 
-    // TODO: Sort by item names in PM
     if (this.sort)
+    {
+      // Sorting the additional items because "_loadItem" doesn't know which
+      // one to add first, only the location in the whole sorted arrays.
+      // This behavior might be changed with:
+      // https://github.com/Manvel/webcomponents/issues/14
+      if (items.length > itemObjsCopy.length)
+        itemObjsCopy.sort(this.sort);
       items.sort(this.sort);
+    }
 
-    for (const itemObj of itemObjCopy)
+    for (const itemObj of itemObjsCopy)
     {
       if (parentItem)
       {
@@ -263,6 +269,18 @@ class SettingList extends HTMLElement {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Sets the sorting method to be used when adding and updating items
+   */
+  _setSort()
+  {
+    const text = this.getAttribute("sort");
+    if (text)
+      return (a, b) => a.texts[text].localeCompare(b.texts[text]);
+    else // TODO: return null?
+      return (a, b) => a.id.localeCompare(b.id, undefined, {numeric: true});
   }
 
   /**

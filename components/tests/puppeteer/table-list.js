@@ -200,6 +200,7 @@ describe("Table-list component", () =>
     await tableList.empty();
     assert.equal(await ensureItem("example5.com"), false);
   });
+  it("Create test for sorted items");
 });
 
 after(async () =>

@@ -172,7 +172,7 @@ class SettingList extends HTMLElement {
 
     items.push(...itemObjsCopy);
 
-    if (this.sort)
+    if (this.sort && !parentItem)
     {
       // Sorting the additional items because "_loadItem" doesn't know which
       // one to add first, only the location in the whole sorted arrays.
@@ -278,9 +278,9 @@ class SettingList extends HTMLElement {
   {
     const text = this.getAttribute("sort");
     if (text)
-      return (a, b) => a.texts[text].localeCompare(b.texts[text]);
-    else // TODO: return null?
-      return (a, b) => a.id.localeCompare(b.id, undefined, {numeric: true});
+      return (a, b) => a.texts[text].localeCompare(b.texts[text], undefined, {numeric: true});
+    else
+      return null;
   }
 
   /**

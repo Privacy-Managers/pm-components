@@ -172,11 +172,11 @@ describe("Table-list component", () =>
     await tableList.removeItem(updatableParent);
     const itemObject = {
       id:    updatableParent,
-      texts: {"domain": "example.com", "cookienum": "3 Cookies"}
+      texts: {"domain": updatableParent, "cookienum": "3 Cookies"}
     };
     const subItemObject = {
       id:    updatableSubitem,
-      texts: {"domain": "example.com", "cookienum": "3 Cookies"}
+      texts: {"domain": updatableSubitem, "cookienum": "3 Cookies"}
     };
     await tableList.addItems([itemObject]);
     assert.equal(await ensureItem(updatableParent), true);

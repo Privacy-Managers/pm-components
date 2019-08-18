@@ -9,10 +9,11 @@
 </head>
 <body>
   <div style="display: flex;">
-    <table-list sort="domain">
-      <template data-action="get-cookies"
-        data-key-action="get-cookies"
-        data-key-delete="delete-domain-cookies">
+    <table-list>
+      <template sort="domain"
+                data-action="get-cookies"
+                data-key-action="get-cookies"
+                data-key-delete="delete-domain-cookies">
             <div>
               <div class="data-container">
                 <span data-text="domain" class="domainName"></span>
@@ -27,12 +28,12 @@
                       tabindex="-1"></button>
             </div>
         </template>
-        <template tabindex="-1"
-          data-key-action="open-dialog,edit-cookie"
-          data-key-delete="delete-sublist-cookie"
-          data-key-quite="close-expanded-domain"
-          data-action=""
-          data-dialog="cookie-edit">
+        <template sort="name"
+                  data-key-action="open-dialog,edit-cookie"
+                  data-key-delete="delete-sublist-cookie"
+                  data-key-quite="close-expanded-domain"
+                  data-action=""
+                  data-dialog="cookie-edit">
             <div>
               <button class="icon edit"
                       data-action="open-dialog,edit-cookie"

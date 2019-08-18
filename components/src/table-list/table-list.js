@@ -6,6 +6,7 @@ class SettingList extends HTMLElement {
 
     this.items = [];
     this.sort = this._setSort();
+    this.subSort = this._setSort();
     this.listElem = null;
     this.listItemTemplate = null;
     this.listSubItemTemplate = null;
@@ -134,7 +135,12 @@ class SettingList extends HTMLElement {
 
   connectedCallback()
   {
-    [this.listItemTemplate, this.listSubItemTemplate] = this._createListRowTemplate();
+    const [itemTemplate, subItemTemplate] = this.querySelectorAll("template");
+    this.listItemTemplate = this._createRowFromTempalte(itemTemplate);
+    this.listSubItemTemplate = this._createRowFromTempalte(subItemTemplate);
+    this.sort = this._setSort(itemTemplate.getAttribute("sort"));
+    this.subSort = this._setSort(subItemTemplate.getAttribute("sort"));
+
     this.listElem = this.shadowRoot.querySelector("ul");
     this.listElem.addEventListener("scroll", this._onScroll.bind(this), false);
 
@@ -151,6 +157,20 @@ class SettingList extends HTMLElement {
   }
 
   /**
+   * Move dataset from the template into the new row element
+   * @returns {Element} row element template
+   */
+  _createRowFromTempalte = (itemTemplate) => 
+  {
+    const element = document.createElement("li");
+    Object.assign(element.dataset, itemTemplate.dataset);
+    for (const name in this.defaultRowAttributes)
+      element.setAttribute(name, this.defaultRowAttributes[name]);
+    element.appendChild(itemTemplate.content);
+    return element;
+  }
+
+  /**
    * A helper to create a template row element in order to write less HTML.
    * ex. Set attributes on the template attribute which will be copied into list
    * element. And specify some default data attributes on the rows and subrows.
@@ -159,20 +179,16 @@ class SettingList extends HTMLElement {
   _createListRowTemplate()
   {
     const [itemTemplate, subItemTemplate] = this.querySelectorAll("template");
-    const createRowElement = (attributes) => 
+    const createRowElement = (itemTemplate) => 
     {
       const element = document.createElement("li");
+      Object.assign(element.dataset, itemTemplate.dataset);
       for (const name in this.defaultRowAttributes)
         element.setAttribute(name, this.defaultRowAttributes[name]);
-      for (const {name, value} of attributes)
-        element.setAttribute(name, value);
+      element.appendChild(itemTemplate.content);
       return element;
     }
-    const topRow = createRowElement(itemTemplate.attributes);
-    topRow.appendChild(itemTemplate.content);
-    const subRow = createRowElement(subItemTemplate.attributes);
-    subRow.appendChild(subItemTemplate.content);
-    return [topRow, subRow];
+    return [createRowElement(itemTemplate), createRowElement(subItemTemplate)];
   }
 
   /**
@@ -301,11 +317,10 @@ class SettingList extends HTMLElement {
   /**
    * Sets the sorting method to be used when adding and updating items
    */
-  _setSort()
+  _setSort(sortColumn)
   {
-    const text = this.getAttribute("sort");
-    if (text)
-      return (a, b) => a.texts[text].localeCompare(b.texts[text], undefined, {numeric: true});
+    if (sortColumn)
+      return (a, b) => a.texts[sortColumn].localeCompare(b.texts[sortColumn], undefined, {numeric: true});
     else
       return null;
   }

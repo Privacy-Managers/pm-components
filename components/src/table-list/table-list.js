@@ -12,6 +12,8 @@ class SettingList extends HTMLElement {
     this.loaded = 0;
     this.loadAmount = 50;
     this.scrollLoadPercentage = 0.8;
+    this.defaultRowAttributes = {"data-key-down": "next-sibling", 
+                                 "data-key-up": "previouse-sibling" };
 
     this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
@@ -132,7 +134,7 @@ class SettingList extends HTMLElement {
 
   connectedCallback()
   {
-    [this.listItemTemplate, this.listSubItemTemplate] = this.querySelectorAll("template");
+    [this.listItemTemplate, this.listSubItemTemplate] = this._createListRowTemplate();
     this.listElem = this.shadowRoot.querySelector("ul");
     this.listElem.addEventListener("scroll", this._onScroll.bind(this), false);
 
@@ -146,6 +148,31 @@ class SettingList extends HTMLElement {
     }, false);
 
     registerActionListener(this, this._onAction);
+  }
+
+  /**
+   * A helper to create a template row element in order to write less HTML.
+   * ex. Set attributes on the template attribute which will be copied into list
+   * element. And specify some default data attributes on the rows and subrows.
+   * @return {Array} topRow element and subRow element
+   */
+  _createListRowTemplate()
+  {
+    const [itemTemplate, subItemTemplate] = this.querySelectorAll("template");
+    const createRowElement = (attributes) => 
+    {
+      const element = document.createElement("li");
+      for (const name in this.defaultRowAttributes)
+        element.setAttribute(name, this.defaultRowAttributes[name]);
+      for (const {name, value} of attributes)
+        element.setAttribute(name, value);
+      return element;
+    }
+    const topRow = createRowElement(itemTemplate.attributes);
+    topRow.appendChild(itemTemplate.content);
+    const subRow = createRowElement(subItemTemplate.attributes);
+    subRow.appendChild(subItemTemplate.content);
+    return [topRow, subRow];
   }
 
   /**
@@ -461,11 +488,10 @@ class SettingList extends HTMLElement {
    */
   _itemFromTmpl(itemObj, template)
   {
-    const tmpContent = template.content;
-    const tmpList = tmpContent.querySelector("li");
+    const tmpContent = template.cloneNode(true);
 
-    this._updateListElem(itemObj, tmpList);
-    return document.importNode(tmpContent, true);
+    this._updateListElem(itemObj, tmpContent);
+    return tmpContent;
   }
 
   /**

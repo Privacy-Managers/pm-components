@@ -13,12 +13,9 @@
   <div>
       <div>
       <table-list sort="domain">
-          <template>
-              <li data-action="get-cookies"
-                  data-key-action="get-cookies"
-                  data-key-down="next-sibling"
-                  data-key-up="previouse-sibling"
-                  data-key-delete="delete-domain-cookies">
+          <template data-action="get-cookies"
+            data-key-action="get-cookies"
+            data-key-delete="delete-domain-cookies">
                 <div>
                   <div class="data-container">
                     <span data-text="domain" class="domainName"></span>
@@ -32,17 +29,13 @@
                           data-action="delete-domain-cookies"
                           tabindex="-1"></button>
                 </div>
-              </li>
             </template>
-            <template>
-              <li tabindex="-1"
-                  data-key-down="next-sibling"
-                  data-key-up="previouse-sibling"
-                  data-key-action="open-dialog,edit-cookie"
-                  data-key-delete="delete-sublist-cookie"
-                  data-key-quite="close-expanded-domain"
-                  data-action=""
-                  data-dialog="cookie-edit">
+            <template tabindex="-1"
+              data-key-action="open-dialog,edit-cookie"
+              data-key-delete="delete-sublist-cookie"
+              data-key-quite="close-expanded-domain"
+              data-action=""
+              data-dialog="cookie-edit">
                 <div>
                   <button class="icon edit"
                           data-action="open-dialog,edit-cookie"
@@ -58,7 +51,6 @@
                   <button class="icon delete"
                           data-action="delete-sublist-cookie"></button>
                 </div>
-              </li>
             </template>
       </table-list>
     </div>

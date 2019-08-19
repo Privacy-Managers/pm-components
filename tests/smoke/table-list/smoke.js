@@ -17,20 +17,23 @@ document.addEventListener("DOMContentLoaded", () =>
   console.log(tableList.getItemElem("example100.com"));
   addSubItems("example5.com");
   console.log(tableList.getItemIndex("subexample3.com", "example0.com"));
+  const updatable = tableList.getItem("example1.com");
+  updatable.id = "example1_@@.com"
+  updatable.texts.domain = "example1_@@.com"
+  tableList.selectItem("example1.com");
+  tableList.updateItem(updatable, "example1.com");
 });
 
 function addSubItems(parentId)
 {
   const itemObjs = [];
-  for (let i = 0; i < 5; i++) {
+  const order = [3,2,4,5,1];
+  for (let i = 0; i < order.length; i++) {
     itemObjs.push({
-      id:      `subexample${i}.com`,
-      texts:   {"name": `subexample${i}.com`, "value": "3 Cookies"}
+      id:      `subexample${order[i]}.com`,
+      texts:   {"name": `subexample${order[i]}.com`, "value": "3 Cookies"}
     });
   }
   tableList.addItems(itemObjs, parentId);
 
-  tableList.removeItem("example4.com");
-  tableList.removeItem("subexample0.com", "example5.com");
-  tableList.removeItem("subexample1.com", "example5.com");
 }

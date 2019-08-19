@@ -209,28 +209,32 @@ class SettingList extends HTMLElement {
     // user side might affect actual data used for table-list
     const itemObjsCopy = _deepCopy ? deepCopy(itemObjs) : itemObjs;
     const parentItem = this.getItem(id, null, false);
+    let sortMethod = this.sort;
     if (parentItem && !parentItem.subItems)
+    {
       parentItem.subItems = [];
+      sortMethod = this.subSort;
+    }
     const items = parentItem ? parentItem.subItems : this.items;
 
     items.push(...itemObjsCopy);
 
-    if (this.sort && !parentItem)
+    if (sortMethod)
     {
       // Sorting the additional items because "_loadItem" doesn't know which
       // one to add first, only the location in the whole sorted arrays.
       // This behavior might be changed with:
       // https://github.com/Manvel/webcomponents/issues/14
-      if (items.length > itemObjsCopy.length)
-        itemObjsCopy.sort(this.sort);
-      items.sort(this.sort);
+      // TODO: Optimize sorting
+      itemObjsCopy.sort(sortMethod);
+      items.sort(sortMethod);
     }
 
     for (const itemObj of itemObjsCopy)
     {
       if (parentItem)
       {
-        this._loadSubItem(itemObj, id);
+        this._loadItem(itemObj, id);
       }
       else  // Dynamic load only top level items
       {
@@ -245,24 +249,37 @@ class SettingList extends HTMLElement {
    * Load item into the view
    * @param  {JSON} itemObj as specified in addItems
    */
-  _loadItem(itemObj)
+  _loadItem(itemObj, parentId)
   {
     if (!itemObj.dataset)
       itemObj.dataset = {};
 
     if (!itemObj.id)
-      itemObj.id = this.items.indexOf(itemObj);
+      itemObj.dataset.id = this.items.indexOf(itemObj);
 
-    const listItem = this._itemFromTmpl(itemObj, this.listItemTemplate);
-    const itemIndex = this.items.indexOf(itemObj);
-    const elemAfter = this.listElem.children[itemIndex];
-
-    if (elemAfter)
-      this.listElem.insertBefore(listItem, elemAfter);
+    let listItem = this._itemFromTmpl(itemObj, this.listItemTemplate);
+    let listItemsContainer = this.listElem;
+    if (parentId)
+    {
+      listItem = this._itemFromTmpl(itemObj, this.listSubItemTemplate);
+      const parentListElem = this.getItemElem(parentId);
+      let subContainer = parentListElem.querySelector("ul");
+      if (!subContainer)
+        subContainer = parentListElem.appendChild(document.createElement("ul"));
+      listItemsContainer = subContainer;
+    }
     else
-      this.listElem.appendChild(listItem);
+    {
+      // Only top level lazy loading is supported.
+      this.loaded++;
+    }
 
-    this.loaded++;
+    const itemIndex = this.getItemIndex(itemObj.id, parentId);
+    const elemAfter = listItemsContainer.children[itemIndex];
+    if (elemAfter)
+      listItemsContainer.insertBefore(listItem, elemAfter);
+    else
+      listItemsContainer.appendChild(listItem);
   }
 
   /**
@@ -360,31 +377,6 @@ class SettingList extends HTMLElement {
     subListElems.removeChild(itemElem);
     if (!subListElems.children.length)
       subListContainerElem.removeChild(subListElems);
-  }
-
-  /**
-   * Add subitem
-   * @param {JSON} itemObj as specified in addItems
-   * @param {String} id item ID
-   */
-  _loadSubItem(itemObj, id)
-  {
-    const subListItemElem = this._itemFromTmpl(itemObj, this.listSubItemTemplate);
-    const listItemElem = this.getItemElem(id);
-    const subContainer = listItemElem.querySelector("ul");
-
-    if (!subContainer)
-    {
-      listItemElem.dataset.expanded = true;
-      const subListElem = document.createElement("ul");
-      subListElem.appendChild(subListItemElem);
-      listItemElem.appendChild(subListElem);
-      this.selectItem(itemObj.id, id, "start");
-    }
-    else
-    {
-      subContainer.appendChild(subListItemElem);
-    }
   }
 
   /**

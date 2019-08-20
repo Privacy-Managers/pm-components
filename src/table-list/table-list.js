@@ -355,6 +355,7 @@ class SettingList extends HTMLElement {
     if (itemElem.isSameNode(this.shadowRoot.activeElement))
       this.selectItem(id, null, "next");
     this.listElem.removeChild(itemElem);
+    this.loaded--;
   }
 
   /**
@@ -521,6 +522,7 @@ class SettingList extends HTMLElement {
     {
       this.items = [];
       this.listElem.innerHTML = "";
+      this.loaded = 0;
     }
   }
 

@@ -217,17 +217,20 @@ class SettingList extends HTMLElement {
     }
     const items = parentItem ? parentItem.subItems : this.items;
 
-    items.push(...itemObjsCopy);
-
     if (sortMethod)
     {
       // Sorting the additional items because "_loadItem" doesn't know which
       // one to add first, only the location in the whole sorted arrays.
       // This behavior might be changed with:
       // https://github.com/Manvel/webcomponents/issues/14
-      // TODO: Optimize sorting
       itemObjsCopy.sort(sortMethod);
-      items.sort(sortMethod);
+      items.push(...itemObjsCopy);
+      if (items.length > 0)
+        items.sort(sortMethod);
+    }
+    else
+    {
+      items.push(...itemObjsCopy);
     }
 
     for (const itemObj of itemObjsCopy)

@@ -262,7 +262,7 @@ describe("Table-list component", () =>
     assert.equal(await getItemAndElemIndex("subexample3.com", "example3.com"), 2);
     await tableList.empty();
     await removeSortAndReadd();
-    populateTable();
+    await populateTable();
     assert.equal(await getItemAndElemIndex("example1.com"), 4);
     assert.equal(await getItemAndElemIndex("example2.com"), 1);
     assert.equal(await getItemAndElemIndex("example3.com"), 0);

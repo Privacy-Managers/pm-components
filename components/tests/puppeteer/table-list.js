@@ -40,11 +40,34 @@ function getItemElemDatasetId(id, parentId)
   }, tableListHandle, id, parentId);
 }
 
+function getItemElemIndex(id, parentId)
+{
+  return page.evaluate((tableListHandle, id, parentId) =>
+  {
+    const elem = tableListHandle.getItemElem(id, parentId);
+    if (elem)
+      return Array.prototype.indexOf.call(elem.parentElement.children, elem);
+  }, tableListHandle, id, parentId);
+}
+
 function getSelectedDatasetId()
 {
   return page.evaluate((tableListHandle) =>
   {
     return tableListHandle.shadowRoot.activeElement.dataset.id;
+  }, tableListHandle);
+}
+
+function removeSortAndReadd()
+{
+  return page.evaluate((tableListHandle) =>
+  {
+    const [mainTemplate, subTemplate] = tableListHandle.querySelectorAll("template");
+    mainTemplate.removeAttribute("sort");
+    subTemplate.removeAttribute("sort");
+    const parentElem = tableListHandle.parentElement;
+    parentElem.removeChild(tableListHandle);
+    parentElem.appendChild(tableListHandle);
   }, tableListHandle);
 }
 
@@ -65,6 +88,16 @@ async function ensureItem(id, parentId)
 {
   return !!(await getItemElemDatasetId(id, parentId) ||
             await tableList.getItem(id, parentId));
+}
+
+async function getItemAndElemIndex(id, parentId)
+{
+  const elemIndex = await getItemElemIndex(id, parentId);
+  const itemIndex = await tableList.getItemIndex(id, parentId);
+  if (elemIndex !== itemIndex)
+    return false;
+  else
+    return itemIndex;
 }
 
 describe("Table-list component", () =>
@@ -200,7 +233,43 @@ describe("Table-list component", () =>
     await tableList.empty();
     assert.equal(await ensureItem("example5.com"), false);
   });
-  it("Create test for sorted items");
+  it("Create test for sorted items", async() =>
+  {
+    const populateTable = async() =>
+    {
+      const order = [3,2,4,5,1];
+      const subItems = [];
+      const mainItems = [];
+      for (let i = 0; i < order.length; i++) {
+        subItems.push({
+          id:      `subexample${order[i]}.com`,
+          texts:   {"name": `subexample${order[i]}.com`, "value": "3 Cookies"}
+        });
+        mainItems.push({
+          id:      `example${order[i]}.com`,
+          texts:   {"domain": `example${order[i]}.com`, "value": "3 Cookies"}
+        });
+      }
+      await tableList.addItems(mainItems);
+      await tableList.addItems(subItems, "example3.com");
+    };
+    populateTable();
+    assert.equal(await getItemAndElemIndex("example1.com"), 0);
+    assert.equal(await getItemAndElemIndex("example2.com"), 1);
+    assert.equal(await getItemAndElemIndex("example3.com"), 2);
+    assert.equal(await getItemAndElemIndex("subexample1.com", "example3.com"), 0);
+    assert.equal(await getItemAndElemIndex("subexample2.com", "example3.com"), 1);
+    assert.equal(await getItemAndElemIndex("subexample3.com", "example3.com"), 2);
+    await tableList.empty();
+    await removeSortAndReadd();
+    populateTable();
+    assert.equal(await getItemAndElemIndex("example1.com"), 4);
+    assert.equal(await getItemAndElemIndex("example2.com"), 1);
+    assert.equal(await getItemAndElemIndex("example3.com"), 0);
+    assert.equal(await getItemAndElemIndex("subexample1.com", "example3.com"), 4);
+    assert.equal(await getItemAndElemIndex("subexample2.com", "example3.com"), 1);
+    assert.equal(await getItemAndElemIndex("subexample3.com", "example3.com"), 0);
+  });
 });
 
 after(async () =>

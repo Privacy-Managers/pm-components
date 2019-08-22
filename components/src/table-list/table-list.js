@@ -5,8 +5,8 @@ class SettingList extends HTMLElement {
     super();
 
     this.items = [];
-    this.sort = this._setSort();
-    this.subSort = this._setSort();
+    this.sort = null;
+    this.subSort = null;
     this.listElem = null;
     this.listItemTemplate = null;
     this.listSubItemTemplate = null;

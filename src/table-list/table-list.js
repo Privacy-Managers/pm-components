@@ -25,7 +25,7 @@ class SettingList extends HTMLElement {
           list-style: none;
           font-size: 13px;
           overflow: auto;
-          padding: 0px;
+          padding: 4px;
         }
 
         .tableList
@@ -44,6 +44,12 @@ class SettingList extends HTMLElement {
           padding: 5px 5px;
           align-items: center;
           cursor: pointer;
+        }
+
+        ul.tableList > li > div
+        {
+          padding-left: 9px;
+          padding-right: 9px; 
         }
 
         .tableList li > div:hover

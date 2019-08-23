@@ -233,7 +233,7 @@ describe("Table-list component", () =>
     await tableList.empty();
     assert.equal(await ensureItem("example5.com"), false);
   });
-  it("Create test for sorted items", async() =>
+  it("Sort attribute of template item defines the sorting for list", async() =>
   {
     const populateTable = async() =>
     {

@@ -1,6 +1,9 @@
-class SettingList extends HTMLElement {
+class ModalDialog extends HTMLElement {
   constructor() {
     super();
+    
+    this.modalTitle = "";
+    this.fields = [];
 
     this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
@@ -35,7 +38,7 @@ class SettingList extends HTMLElement {
         }
 
         #dialog .body > div,
-        #dialog .header > span,
+        header > span,
         #dialog[data-dialog="cookie-add"] #cookie-edit-control,
         #dialog[data-dialog="cookie-edit"] #cookie-add-control
         {
@@ -63,7 +66,7 @@ class SettingList extends HTMLElement {
           margin: auto;
         }
 
-        #dialog .header
+        header
         {
           display: flex;
           background-color: var(--color-primary);
@@ -72,7 +75,7 @@ class SettingList extends HTMLElement {
           font-size: 14px;
         }
 
-        #dialog .header span
+        header span
         {
           padding: 5px;
           flex-grow: 1;
@@ -122,12 +125,14 @@ class SettingList extends HTMLElement {
           padding: 0px 10px;
         }
       </style>
-      <div>
-        <span id="label" tabindex="0"><slot>Some default</slot></span>
-        <button aria-labelledby="label" role="checkbox" type="button">
-          <span id="btn-on-label">On</span>
-          <span id="btn-off-label">Off</span>
-        </button>
+      <div id="dialog" data-keyQuite="close-dialog" role="dialog" aria-hidden="true">
+        <div>
+          <header>
+            <span data-text=""></span>
+            <button data-action="close-dialog" class="icon delete"></button>
+          </header>
+          <div id="body"></div>
+        </div>
       </div>
     `;
   }
@@ -137,8 +142,28 @@ class SettingList extends HTMLElement {
    */
   connectedCallback()
   {
-    // TODO: Add actions on connection
+    console.log(this.querySelector("div"));
+    this.shadowRoot.querySelector("#body").appendChild(document.importNode(this.querySelector("template").content, true));
     this._render();
+  }
+
+  setData(item)
+  {
+    if (item.title)
+      this.modalTitle = item.title;
+    if (item.fields)
+      this.fields = item.fields;
+    this._render();
+  }
+
+  showDialog()
+  {
+    this.querySelector("[role='dialog']").setAttribute("aria-hidden", false);
+  }
+
+  closeDialod()
+  {
+    this.querySelector("[role='dialog']").setAttribute("aria-hidden", true);
   }
 
   /**
@@ -167,8 +192,13 @@ class SettingList extends HTMLElement {
    * Render method to be called after each state change
    */
   _render() {
-
+    this.querySelector("header span").textContent = this.title;
+    for (const dataset in this.fields)
+    {
+      const value = this.fields[dataset];
+      this.querySelector(`data-${dataset}`).textContent = value;
+    }
   }
 }
 
-customElements.define('setting-list', SettingList);
+customElements.define('pm-dialog', ModalDialog);

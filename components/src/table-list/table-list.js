@@ -1,6 +1,6 @@
 import {registerActionListener, deepCopy} from "./utils.js";
 
-class SettingList extends HTMLElement {
+class TableList extends HTMLElement {
   constructor() {
     super();
 
@@ -732,4 +732,4 @@ class SettingList extends HTMLElement {
   }
 }
 
-customElements.define('table-list', SettingList);
+customElements.define('table-list', TableList);

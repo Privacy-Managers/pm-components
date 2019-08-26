@@ -8,6 +8,10 @@ class ModalDialog extends HTMLElement {
     this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
       <style>
+        :host
+        {
+          --color-primary: #679c16;
+        }
         #dialog
         {
           position: absolute;
@@ -35,14 +39,6 @@ class ModalDialog extends HTMLElement {
           transform: scale(1, 1);
           visibility: visible;
           opacity: 1;
-        }
-
-        #dialog .body > div,
-        header > span,
-        #dialog[data-dialog="cookie-add"] #cookie-edit-control,
-        #dialog[data-dialog="cookie-edit"] #cookie-add-control
-        {
-          display: none;
         }
 
         #dialog[data-dialog="cookie-add"] #dialog-header-cookie-add,
@@ -81,7 +77,7 @@ class ModalDialog extends HTMLElement {
           flex-grow: 1;
         }
 
-        #dialog .body
+        #dialog #body
         {
           padding: 10px;
           font-size: 12px;
@@ -124,11 +120,36 @@ class ModalDialog extends HTMLElement {
         {
           padding: 0px 10px;
         }
+        button.icon
+        {
+          background-color: transparent;
+          border: none;
+          width: 20px;
+          padding: 0px;
+          cursor: default;
+        }
+        button.icon:after
+        {
+          display: inline-block;
+          content: "";
+          width: 10px;
+          height: 10px;
+          margin: 0px auto;
+        }
+        button.icon.delete:after
+        {
+          background-image: url(../../../img/pm-dialog/delete.svg);
+        }
+
+        button.icon.delete:hover:after
+        {
+          background-image: url(../../../img/pm-dialog/delete-hover.svg);
+        }
       </style>
       <div id="dialog" data-keyQuite="close-dialog" role="dialog" aria-hidden="true">
         <div>
           <header>
-            <span data-text=""></span>
+            <span></span>
             <button data-action="close-dialog" class="icon delete"></button>
           </header>
           <div id="body"></div>
@@ -142,7 +163,6 @@ class ModalDialog extends HTMLElement {
    */
   connectedCallback()
   {
-    console.log(this.querySelector("div"));
     this.shadowRoot.querySelector("#body").appendChild(document.importNode(this.querySelector("template").content, true));
     this._render();
   }
@@ -158,12 +178,12 @@ class ModalDialog extends HTMLElement {
 
   showDialog()
   {
-    this.querySelector("[role='dialog']").setAttribute("aria-hidden", false);
+    this.shadowRoot.querySelector("[role='dialog']").setAttribute("aria-hidden", false);
   }
 
   closeDialod()
   {
-    this.querySelector("[role='dialog']").setAttribute("aria-hidden", true);
+    this.shadowRoot.querySelector("[role='dialog']").setAttribute("aria-hidden", true);
   }
 
   /**
@@ -192,11 +212,13 @@ class ModalDialog extends HTMLElement {
    * Render method to be called after each state change
    */
   _render() {
-    this.querySelector("header span").textContent = this.title;
+    this.shadowRoot.querySelector("header span").textContent = this.modalTitle;
     for (const dataset in this.fields)
     {
       const value = this.fields[dataset];
-      this.querySelector(`data-${dataset}`).textContent = value;
+      const element = this.shadowRoot.querySelector(`[data-${dataset}]`);
+      if (element)
+        element.textContent = value;
     }
   }
 }

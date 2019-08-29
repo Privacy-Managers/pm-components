@@ -24,7 +24,6 @@ class ModalDialog extends HTMLElement {
           background-color: rgba(219, 226, 221, 0.5);
           transition: all 0.2s;
         }
-
         /* Dialog animation */
         #dialog[aria-hidden="true"]
         {
@@ -32,7 +31,6 @@ class ModalDialog extends HTMLElement {
           transform: scale(0.5, 0.5);
           visibility: hidden;
         }
-
         /* Dialog animation */
         #dialog[aria-hidden="false"]
         {
@@ -40,19 +38,6 @@ class ModalDialog extends HTMLElement {
           visibility: visible;
           opacity: 1;
         }
-
-        #dialog[data-dialog="cookie-add"] #dialog-header-cookie-add,
-        #dialog[data-dialog="cookie-edit"] #dialog-header-cookie-edit,
-        #dialog[data-dialog="cookies-delete-all"] #dialog-header-cookie-delete-all,
-        #dialog[data-dialog="setting-info"] #dialog-header-setting-info,
-        #dialog[data-dialog="cookie-add"] #dialog-content-cookie-form,
-        #dialog[data-dialog="cookie-edit"] #dialog-content-cookie-form,
-        #dialog[data-dialog="cookies-delete-all"] #dialog-content-cookie-delete-all,
-        #dialog[data-dialog="setting-info"] #dialog-content-setting-info
-        {
-          display: block;
-        }
-
         #dialog > div:first-child
         {
           width: 90%;
@@ -61,7 +46,6 @@ class ModalDialog extends HTMLElement {
           box-shadow: 0 4px 23px -3px black;
           margin: auto;
         }
-
         header
         {
           display: flex;
@@ -70,26 +54,22 @@ class ModalDialog extends HTMLElement {
           color: #fff;
           font-size: 14px;
         }
-
         header span
         {
           padding: 5px;
           flex-grow: 1;
         }
-
         #dialog #body
         {
           padding: 10px;
           font-size: 12px;
           line-height: 16px;
         }
-
         #dialog .fieldset-container
         {
           display: flex;
           justify-content: space-between;
         }
-
         #dialog form label
         {
           display: flex;
@@ -98,24 +78,20 @@ class ModalDialog extends HTMLElement {
           flex-wrap: wrap;
           padding: 0px 20px;
         }
-
         #dialog form label span
         {
           padding: 0px 10px;
         }
-
         #dialog form input[type="text"],
         #dialog form input[type="date"],
         #dialog form input[type="time"]
         {
           width: 150px;
         }
-
         #dialog form input[type="number"]
         {
           width: 30px;
         }
-
         #dialog .controls
         {
           padding: 0px 10px;
@@ -206,7 +182,6 @@ class ModalDialog extends HTMLElement {
     // TODO: Add observables
     return [];
   }
-
 
   /**
    * Render method to be called after each state change

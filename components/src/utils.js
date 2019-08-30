@@ -85,9 +85,21 @@ function onClick(ev, listenerElem, callback)
   });
 }
 
+function getMsg(id)
+{
+  // Mock data
+  const data = 
+  {
+    "btn-txt": "Label text",
+    "btn-desc": "Longer, more informative description of the toggle button"
+  };
+
+  return data[id] || id;
+}
+
 function deepCopy(object)
 {
   return JSON.parse(JSON.stringify(object));
 }
 
-export {registerActionListener, deepCopy};
+export {registerActionListener, deepCopy, getMsg};

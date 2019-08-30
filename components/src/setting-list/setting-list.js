@@ -1,3 +1,5 @@
+import {getMsg} from "../utils.js";
+
 class SettingList extends HTMLElement {
   constructor() {
     super();
@@ -135,18 +137,6 @@ class SettingList extends HTMLElement {
     return ["text", "description", "checked"];
   }
 
-  _getMsg(id)
-  {
-    // Mock data
-    const data = 
-    {
-      "btn-txt": "Label text",
-      "btn-desc": "Longer, more informative description of the toggle button"
-    };
-
-    return data[id] || id;
-  }
-
   /**
    * Called when the info(description) is requested
    */
@@ -203,8 +193,8 @@ class SettingList extends HTMLElement {
    */
   _render() {
     this.toggleElem.setAttribute("aria-checked", this.isEnabled());
-    this.labelElem.textContent = this._getMsg(this.text);
-    this.labelElem.setAttribute("title", this._getMsg(this.description));
+    this.labelElem.textContent = getMsg(this.text);
+    this.labelElem.setAttribute("title", getMsg(this.description));
   }
 }
 

@@ -1,4 +1,4 @@
-import {registerActionListener, deepCopy} from "./utils.js";
+import {registerActionListener, deepCopy} from "../utils.js";
 
 class TableList extends HTMLElement {
   constructor() {

@@ -1,3 +1,5 @@
+import {registerActionListener} from "../utils.js";
+
 class ModalDialog extends HTMLElement {
   constructor() {
     super();
@@ -140,6 +142,7 @@ class ModalDialog extends HTMLElement {
   connectedCallback()
   {
     this.shadowRoot.querySelector("#body").appendChild(document.importNode(this.querySelector("template").content, true));
+    registerActionListener(this.shadowRoot, this, this._onAction);
     this._render();
   }
 
@@ -157,7 +160,7 @@ class ModalDialog extends HTMLElement {
     this.shadowRoot.querySelector("[role='dialog']").setAttribute("aria-hidden", false);
   }
 
-  closeDialod()
+  closeDialog()
   {
     this.shadowRoot.querySelector("[role='dialog']").setAttribute("aria-hidden", true);
   }
@@ -181,6 +184,15 @@ class ModalDialog extends HTMLElement {
   static get observedAttributes() {
     // TODO: Add observables
     return [];
+  }
+
+  _onAction(action) {
+    switch (action)
+    {
+      case "close-dialog":
+        this.closeDialog();
+        break;
+    }
   }
 
   /**

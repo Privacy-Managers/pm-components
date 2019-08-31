@@ -1,17 +1,17 @@
-function registerActionListener(target, callback)
+function registerActionListener(target, component, callback)
 {
   target.addEventListener("keyup", function(ev)
   {
-    onKeyUp(ev, target, callback);
+    onKeyUp(ev, component, callback);
   }, false);
 
   target.addEventListener("click", function(ev)
   {
-    onClick(ev, target, callback);
+    onClick(ev, component, callback);
   }, false);
 };
 
-function onKeyUp(ev, listenerElem, callback)
+function onKeyUp(ev, component, callback)
 {
   const root = ev.target.shadowRoot || document;
   const key = ev.key;
@@ -52,11 +52,11 @@ function onKeyUp(ev, listenerElem, callback)
   ev.preventDefault;
   actions.split(",").forEach(function(action)
   {
-    callback.call(listenerElem, action, activeElem);
+    callback.call(component, action, activeElem);
   });
 }
 
-function onClick(ev, listenerElem, callback)
+function onClick(ev, component, callback)
 {
   let element = ev.target;
   let actions = null;
@@ -81,7 +81,7 @@ function onClick(ev, listenerElem, callback)
   ev.preventDefault;
   actions.split(",").forEach(function(action)
   {
-    callback.call(listenerElem, action, element);
+    callback.call(component, action, element);
   });
 }
 

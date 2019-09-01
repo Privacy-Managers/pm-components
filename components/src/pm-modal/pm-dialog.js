@@ -1,4 +1,4 @@
-import {registerActionListener} from "../utils.js";
+import {registerActionListener, initI18n} from "../utils.js";
 
 class ModalDialog extends HTMLElement {
   constructor() {
@@ -143,6 +143,7 @@ class ModalDialog extends HTMLElement {
   {
     this.shadowRoot.querySelector("#body").appendChild(document.importNode(this.querySelector("template").content, true));
     registerActionListener(this.shadowRoot, this, this._onAction);
+    initI18n(this.shadowRoot);
     this._render();
   }
 

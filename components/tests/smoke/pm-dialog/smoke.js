@@ -9,9 +9,10 @@ document.addEventListener("DOMContentLoaded", () =>
 
 function buttonClickHandler(ev)
 {
-  const pmDialog = document.querySelector("pm-dialog");
   switch (ev.target.id) {
-    case "basic":
+    case "basic-btn":
+    {
+      const pmDialog = document.querySelector("#basic");
       const data = {
         title: "My Title", 
         fields: {
@@ -21,8 +22,17 @@ function buttonClickHandler(ev)
       pmDialog.setData(data);
       pmDialog.showDialog();
       break;
-    case "advanced":
-
+    }
+    case "advanced-btn":
+      const pmDialog = document.querySelector("#advanced");
+      const data = {
+        title: "My Title", 
+        fields: {
+          description: "My description"
+        }
+      };
+      pmDialog.setData(data);
+      pmDialog.showDialog();
       break;
     default:
       break;

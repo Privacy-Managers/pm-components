@@ -91,10 +91,32 @@ function getMsg(id)
   const data = 
   {
     "btn-txt": "Label text",
-    "btn-desc": "Longer, more informative description of the toggle button"
+    "btn-desc": "Longer, more informative description of the toggle button",
+    "cookieDialog_domain": "Domain",
+    "cookieDialog_name": "Name",
+    "cookieDialog_value": "Value",
+    "cookieDialog_path": "Path",
+    "cookieDialog_expDate Exp.": "date",
+    "cookieDialog_expTime Exp.": "time",
+    "cookieDialog_hostOnyl Host": "only",
+    "cookieDialog_httpOnyl HTTP": "only",
+    "cookieDialog_secure": "Secure",
+    "cookieDialog_session": "Session",
+    "cookieDialog_storeId Store": "ID",
+    "cookieDialog_add": "Add",
+    "cookieDialog_update": "Update",
+    "cookieDialog_delete": "Delete"
   };
 
   return data[id] || id;
+}
+
+function initI18n(rootElement)
+{
+  rootElement.querySelectorAll("[data-i18n]").forEach(function(node)
+  {
+    node.textContent = getMsg(node.dataset.i18n);
+  });
 }
 
 function deepCopy(object)
@@ -102,4 +124,4 @@ function deepCopy(object)
   return JSON.parse(JSON.stringify(object));
 }
 
-export {registerActionListener, deepCopy, getMsg};
+export {registerActionListener, deepCopy, getMsg, initI18n};

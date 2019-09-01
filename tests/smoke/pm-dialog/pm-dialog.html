@@ -15,9 +15,96 @@
 </head>
 <body>
   <div style="width: 200px">
-    <pm-dialog>
+    <pm-dialog id="basic">
       <template>
         <div data-description=""></div>
+      </template>
+    </pm-dialog>
+
+    <pm-dialog id="advanced">
+      <template>
+        <form action="#">
+          <div class="fieldset-container">
+            <div>
+              <p>
+                <label>
+                  <span data-i18n="cookieDialog_domain"></span>
+                  <!-- TODO: Revisit the Domain pattern -->
+                  <input required="true" id="cookie-domain" type="text" disabled="disabled" title="Not a valid Domain name" pattern="^[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_.]*">
+                </label>
+              </p>
+              <p>
+                <label>
+                  <span data-i18n="cookieDialog_name"></span>
+                  <input id="cookie-name" type="text" required="true">
+                </label>
+              </p>
+              <p>
+                <label>
+                  <span data-i18n="cookieDialog_value"></span>
+                  <input id="cookie-value" type="text" required="true">
+                </label>
+              </p>
+              <p>
+                <label>
+                  <span data-i18n="cookieDialog_path"></span>
+                  <input id="cookie-path" type="text" title="Should start with '/'" pattern="^\/.*" value="/" required="true">
+                </label>
+              </p>
+              <p>
+                <label>
+                  <span data-i18n="cookieDialog_expDate"></span>
+                    <input id="cookie-expiration-date" type="date" required="true">
+                </label>
+              </p>
+              <p>
+                <label>
+                  <span data-i18n="cookieDialog_expTime"></span>
+                    <input id="cookie-expiration-time" type="time" step="1">
+                </label>
+              </p>
+            </div>
+            <div>
+              <p>
+                <label>
+                  <span data-i18n="cookieDialog_hostOnyl"></span>
+                  <input id="cookie-host-only" type="checkbox">
+                </label>
+              </p>
+              <p>
+                <label>
+                  <span data-i18n="cookieDialog_httpOnyl"></span>
+                  <input id="cookie-http-only" type="checkbox">
+                </label>
+              </p>
+              <p>
+                <label>
+                  <span data-i18n="cookieDialog_secure"></span>
+                  <input id="cookie-secure" type="checkbox">
+                </label>
+              </p>
+              <p>
+                <label>
+                  <span data-i18n="cookieDialog_session"></span>
+                  <input id="cookie-session" type="checkbox">
+                </label>
+              </p>
+              <p>
+                <label>
+                  <span data-i18n="cookieDialog_storeId"></span>
+                  <input id="cookie-store-id" type="number" required="true" value="0">
+                </label>
+              </p>
+            </div>
+          </div>
+          <div id="cookie-add-control" class="controls">
+            <button data-i18n="cookieDialog_add" data-action="update-cookie"></button>
+          </div>
+          <div id="cookie-edit-control" class="controls">
+            <button data-i18n="cookieDialog_update" data-action="update-cookie"></button>
+            <button data-i18n="cookieDialog_delete" data-action="delete-cookie"></button>
+          </div>
+        </form>
       </template>
     </pm-dialog>
 
@@ -138,7 +225,7 @@
   <div>
     <div>
       <h3>Basic dialog</h3>
-      <button id="basic">Basic</button>
+      <button id="basic-btn">Basic</button>
       <pre><code>
 const data = {
   title: "My Title", 
@@ -152,7 +239,7 @@ pmDialog.showDialog();
     </div>
     <div>
       <h3>Advanced dialog</h3>
-      <button id="basic">advanced</button>
+      <button id="advanced-btn">advanced</button>
       <pre><code>
 const data = {
   title: "My Title", 

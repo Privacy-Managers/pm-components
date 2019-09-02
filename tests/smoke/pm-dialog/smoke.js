@@ -24,6 +24,7 @@ function buttonClickHandler(ev)
       break;
     }
     case "advanced-btn":
+    {
       const pmDialog = document.querySelector("#advanced");
       const data = {
         title: "My Title", 
@@ -34,8 +35,20 @@ function buttonClickHandler(ev)
       pmDialog.setData(data);
       pmDialog.showDialog();
       break;
-    default:
+    }
+    case "prompt-btn":
+    {
+      const pmDialog = document.querySelector("#prompt");
+      const data = {
+        title: "My Title", 
+        fields: {
+          description: "My description"
+        }
+      };
+      pmDialog.setData(data);
+      pmDialog.showDialog();
       break;
+    }
   }
   
 }

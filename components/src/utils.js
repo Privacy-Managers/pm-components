@@ -98,14 +98,15 @@ function getMsg(id)
     "cookieDialog_path": "Path",
     "cookieDialog_expDate Exp.": "date",
     "cookieDialog_expTime Exp.": "time",
-    "cookieDialog_hostOnyl Host": "only",
-    "cookieDialog_httpOnyl HTTP": "only",
+    "cookieDialog_hostOnyl": "Host only",
+    "cookieDialog_httpOnyl": "HTTP only",
     "cookieDialog_secure": "Secure",
     "cookieDialog_session": "Session",
     "cookieDialog_storeId Store": "ID",
     "cookieDialog_add": "Add",
     "cookieDialog_update": "Update",
-    "cookieDialog_delete": "Delete"
+    "cookieDialog_delete": "Delete",
+    "cookieDialog_deleteAll_msg": "You are about to delete all cookies, are you sure ?"
   };
 
   return data[id] || id;

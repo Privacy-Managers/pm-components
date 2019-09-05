@@ -1,11 +1,14 @@
-import {registerActionListener, initI18n} from "../utils.js";
+import {registerActionListener, initI18n, getMsg} from "../utils.js";
 
 class ModalDialog extends HTMLElement {
   constructor() {
     super();
     
+    this.dialogElem = null;
+    this.dialogBodyElem = null;
     this.modalTitle = "";
     this.fields = [];
+    this.data = {};
 
     this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
@@ -141,29 +144,26 @@ class ModalDialog extends HTMLElement {
    */
   connectedCallback()
   {
-    this.shadowRoot.querySelector("#body").appendChild(document.importNode(this.querySelector("template").content, true));
+    this.dialogElem = this.shadowRoot.querySelector("[role='dialog']");
+    this.dialogBodyElem = this.shadowRoot.querySelector("#body");
+    const templateContent = this.querySelector("template").content;
+    this.dialogBodyElem.appendChild(document.importNode(templateContent, true));
     registerActionListener(this.shadowRoot, this, this._onAction);
     initI18n(this.shadowRoot);
     this._render();
   }
 
-  setData(item)
+  showDialog(title, data)
   {
-    if (item.title)
-      this.modalTitle = item.title;
-    if (item.fields)
-      this.fields = item.fields;
+    this.modalTitle = getMsg(title);
+    this.data = data;
     this._render();
-  }
-
-  showDialog()
-  {
-    this.shadowRoot.querySelector("[role='dialog']").setAttribute("aria-hidden", false);
+    this.dialogElem.setAttribute("aria-hidden", false);
   }
 
   closeDialog()
   {
-    this.shadowRoot.querySelector("[role='dialog']").setAttribute("aria-hidden", true);
+    this.dialogElem.setAttribute("aria-hidden", true);
   }
 
   /**
@@ -201,12 +201,24 @@ class ModalDialog extends HTMLElement {
    */
   _render() {
     this.shadowRoot.querySelector("header span").textContent = this.modalTitle;
-    for (const dataset in this.fields)
+
+    for (const name in this.data)
     {
-      const value = this.fields[dataset];
-      const element = this.shadowRoot.querySelector(`[data-${dataset}]`);
-      if (element)
-        element.textContent = value;
+      const elem = this.shadowRoot.querySelector(`[data-id=${name}]`);
+      if (!elem)
+        continue;
+      const value = this.data[name]
+      if (elem.tagName == "INPUT" || elem.tagName == "TEXTAREA")
+      {
+        if (elem.type == "checkbox" || elem.type == "radio")
+          elem.checked = value;
+        else
+          elem.value = value;
+      }
+      else
+      {
+        elem.textContent = value;
+      }
     }
   }
 }

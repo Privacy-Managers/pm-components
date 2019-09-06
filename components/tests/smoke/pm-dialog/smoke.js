@@ -1,7 +1,7 @@
 
 document.addEventListener("DOMContentLoaded", () =>
 {
-  document.querySelectorAll("button").forEach((button) => 
+  document.querySelectorAll("pm-button").forEach((button) => 
   {
     button.addEventListener("click", buttonClickHandler);
   });

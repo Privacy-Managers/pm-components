@@ -121,10 +121,17 @@ class ModalDialog extends HTMLElement {
         {
           background-image: url(../../../img/pm-dialog/delete.svg);
         }
-
         button.icon.delete:hover:after
         {
           background-image: url(../../../img/pm-dialog/delete-hover.svg);
+        }
+        .controls
+        {
+          height: 30px;
+          display: flex;
+          justify-content: flex-end;
+          padding: 0px;
+          align-items: center;
         }
       </style>
       <div id="dialog" data-keyQuite="close-dialog" role="dialog" aria-hidden="true">

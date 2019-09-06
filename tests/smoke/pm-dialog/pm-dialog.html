@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Setting List</title>
   <script src="../../../src/pm-modal/pm-dialog.js" type="module" defer></script>
+  <script src="../../../src/pm-button/pm-button.js" type="module"></script>
   <style>
     body
     {
@@ -98,11 +99,11 @@
             </div>
           </div>
           <div id="cookie-add-control" class="controls">
-            <button data-i18n="cookieDialog_add" data-action="update-cookie"></button>
+            <pm-button data-i18n="cookieDialog_add" data-action="update-cookie"></pm-button>
           </div>
           <div id="cookie-edit-control" class="controls">
-            <button data-i18n="cookieDialog_update" data-action="update-cookie"></button>
-            <button data-i18n="cookieDialog_delete" data-action="delete-cookie"></button>
+            <pm-button data-i18n="cookieDialog_update" data-action="update-cookie"></pm-button>
+            <pm-button data-i18n="cookieDialog_delete" data-action="delete-cookie"></pm-button>
           </div>
         </form>
       </template>
@@ -113,8 +114,8 @@
         <div>
           <div data-i18n="cookieDialog_deleteAll_msg" class="message"></div>
           <div class="controls">
-            <button data-i18n="cookieDialog_cancel" data-action="close-dialog"></button>
-            <button data-action="delete-all-cookies" data-i18n="deleteAll"></button>
+            <pm-button data-i18n="cookieDialog_cancel" data-action="close-dialog"></pm-button>
+            <pm-button data-action="delete-all-cookies" data-i18n="deleteAll"></pm-button>
           </div>
         </div>
         <div id="dialog-content-setting-info">
@@ -126,7 +127,7 @@
   <div>
     <div>
       <h3>Basic dialog</h3>
-      <button id="basic-btn">Basic</button>
+      <pm-button id="basic-btn">Basic</pm-button>
       <pre><code>
 const title = "My Title";
 const data = {
@@ -137,7 +138,7 @@ pmDialog.showDialog(title, data);
     </div>
     <div>
       <h3>Advanced dialog</h3>
-      <button id="advanced-btn">advanced</button>
+      <pm-button id="advanced-btn">advanced</pm-button>
       <pre><code>
 const title = "Advanced";
 const data = {
@@ -158,7 +159,7 @@ pmDialog.showDialog(title, data);
     </div>
     <div>
       <h3>Prompt dialog</h3>
-      <button id="prompt-btn">prompt</button>
+      <pm-button id="prompt-btn">prompt</pm-button>
       <pre><code>
 const title = "Promt dialog";
 pmDialog.showDialog(title);

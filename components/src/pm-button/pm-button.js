@@ -1,5 +1,3 @@
-import {getMsg} from "../utils.js";
-
 class PmButton extends HTMLElement {
   constructor() {
     super();

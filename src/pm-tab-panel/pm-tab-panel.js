@@ -1,4 +1,4 @@
-class PmTabs extends HTMLElement {
+class PmTabPanel extends HTMLElement {
   constructor() {
     super();
     this.tabs = [];
@@ -9,18 +9,24 @@ class PmTabs extends HTMLElement {
     this.tabs = this.querySelectorAll("pm-tab");
     this.addEventListener("click", (e) =>
     {
-      this._select(e.target.id);
+      this.select(e.target.id);
     });
   }
 
-  _select(id)
+  select(id)
   {
     this.tabs.forEach((tab) =>
     {
-      tab.hide();
+      tab._hide();
       if (tab.id === id)
-        tab.show();
+        tab._show();
     });
+  }
+}
+
+class PmTabs extends HTMLElement {
+  constructor() {
+    super();
   }
 }
 
@@ -36,16 +42,22 @@ class PmTab extends HTMLElement {
     this.panel = document.querySelector(`[aria-labelledby=${this.id}]`);
   }
 
-  show()
+  _show()
   {
     this.setAttribute("aria-selected", true);
-    this.panel.show();
+    this.panel._show();
   }
 
-  hide()
+  _hide()
   {
     this.removeAttribute("aria-selected");
-    this.panel.hide();
+    this.panel._hide();
+  }
+}
+
+class PmPanels extends HTMLElement {
+  constructor() {
+    super();
   }
 }
 
@@ -60,17 +72,19 @@ class PmPanel extends HTMLElement {
     this.setAttribute("hidden", true);
   }
 
-  show()
+  _show()
   {
     this.removeAttribute("hidden");
   }
 
-  hide()
+  _hide()
   {
     this.setAttribute("hidden", true);
   }
 }
 
+customElements.define('pm-tab-panel', PmTabPanel);
 customElements.define('pm-tab', PmTab);
 customElements.define('pm-tabs', PmTabs);
+customElements.define('pm-panels', PmPanels);
 customElements.define('pm-panel', PmPanel);

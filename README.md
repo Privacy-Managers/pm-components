@@ -8,3 +8,18 @@ Collection of Web Components for my various projects:
 - [pm-modal](https://manvel.github.io/webcomponents/components/tests/smoke/pm-modal/pm-modal.html) - Modal dialog to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
 - [pm-tab-panel](https://manvel.github.io/webcomponents/components/tests/smoke/pm-tab-panel/pm-tab-panel.html) - Tab panel to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
 - [pm-button](https://manvel.github.io/webcomponents/components/tests/smoke/pm-button/pm-button.html) - Button to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
+
+
+## Development
+
+```
+npm start // Starts server
+npm run test:puppeteer // Launch puppeteer tests
+```
+
+## Structure
+
+- [components/src](components/src) - Source codes
+- [components/tests/smoke](components/tests/smoke) - Smoke tests
+  - GOTO: [http://127.0.0.1:3000/tests/smoke/](http://127.0.0.1:3000/tests/smoke/)
+- [components/tests/smoke](components/tests/puppeteer) - Automated tests

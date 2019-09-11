@@ -1,4 +1,4 @@
-const tableList = document.querySelector("table-list");
+const tableList = document.querySelector("pm-table");
 document.addEventListener("DOMContentLoaded", () =>
 {
   const objItems = [];

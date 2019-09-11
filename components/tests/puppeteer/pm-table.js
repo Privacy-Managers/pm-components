@@ -10,8 +10,8 @@ before(async () =>
   browser = await puppeteer.launch({headless: true, args: ["--allow-file-access-from-files"]});
   page = await browser.newPage();
   await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3419.0 Safari/537.36');
-  await page.goto(`http://127.0.0.1:3001/tests/puppeteer/table-list.html`);
-  tableListHandle = await page.$('table-list');
+  await page.goto(`http://127.0.0.1:3001/tests/puppeteer/pm-table.html`);
+  tableListHandle = await page.$('pm-table');
 });
 
 const tableList = {};
@@ -100,7 +100,7 @@ async function getItemAndElemIndex(id, parentId)
     return itemIndex;
 }
 
-describe("Table-list component", () =>
+describe("pm-table component", () =>
 {
   it("Populating Table with 300 items should load first 50 items by default", async() =>
   {

@@ -89,23 +89,23 @@ class TableList extends HTMLElement {
         }
         button.icon.delete:after
         {
-          background-image: url(../../../img/table-list/delete.svg);
+          background-image: url(../../../img/pm-table/delete.svg);
         }
         button.icon.delete:hover:after
         {
-          background-image: url(../../../img/table-list//delete-hover.svg);
+          background-image: url(../../../img/pm-table//delete-hover.svg);
         }
         button.icon.edit:after
         {
-          background-image: url(../../../img/table-list//edit.svg);
+          background-image: url(../../../img/pm-table//edit.svg);
         }
         button.icon.edit:hover:after
         {
-          background-image: url(../../../img/table-list//edit-hover.svg);
+          background-image: url(../../../img/pm-table//edit-hover.svg);
         }
         button.icon.whitelist:after
         {
-          background-image: url(../../../img/table-list//check-mark.svg);
+          background-image: url(../../../img/pm-table//check-mark.svg);
         }
         button.icon.whitelist:hover:after
         {
@@ -113,11 +113,11 @@ class TableList extends HTMLElement {
         }
         [data-whitelist="true"] button.icon.whitelist:after
         {
-          background-image: url(../../../img/table-list//check-mark-active.svg);
+          background-image: url(../../../img/pm-table//check-mark-active.svg);
         }
         [data-whitelist="true"] [data-whitelist="true"] button.icon.whitelist:after
         {
-          background-image: url(../../../img/table-list//check-mark-double-active.svg);
+          background-image: url(../../../img/pm-table//check-mark-double-active.svg);
         }
         .tableList .domainName
         {
@@ -212,7 +212,7 @@ class TableList extends HTMLElement {
   addItems(itemObjs, id, _deepCopy = true)
   {
     // If we don't deep copy the added items modification of the items on the
-    // user side might affect actual data used for table-list
+    // user side might affect actual data used for pm-table
     const itemObjsCopy = _deepCopy ? deepCopy(itemObjs) : itemObjs;
     const parentItem = this.getItem(id, null, false);
     let sortMethod = this.sort;
@@ -732,4 +732,4 @@ class TableList extends HTMLElement {
   }
 }
 
-customElements.define('table-list', TableList);
+customElements.define('pm-table', TableList);

@@ -11,10 +11,10 @@ before(async () => {
   browser = await puppeteer.launch({headless: true});
   page = await browser.newPage()
   await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3419.0 Safari/537.36');
-  const pathToComponent = resolve("./puppeteer/setting-list.html");
-  await page.goto(`http://127.0.0.1:3001/tests/puppeteer/setting-list.html`);
-  settingListHandle = await page.$('setting-list');
-  buttonHandle = await page.evaluateHandle(`document.querySelector('setting-list').shadowRoot.querySelector('button')`);
+  const pathToComponent = resolve("./puppeteer/pm-toggle.html");
+  await page.goto(`http://127.0.0.1:3001/tests/puppeteer/pm-toggle.html`);
+  settingListHandle = await page.$('pm-toggle');
+  buttonHandle = await page.evaluateHandle(`document.querySelector('pm-toggle').shadowRoot.querySelector('button')`);
 });
 
 function isEnabled()

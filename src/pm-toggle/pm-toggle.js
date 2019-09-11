@@ -41,7 +41,7 @@ class SettingList extends HTMLElement {
           display: inline-block;
           width: 12px;
           height: 12px;
-          background: url(../../../img/setting-list/info.svg) center no-repeat transparent;
+          background: url(../../../img/pm-toggle/info.svg) center no-repeat transparent;
           margin: 0px 3px;
         }
         button[role="checkbox"]
@@ -198,4 +198,4 @@ class SettingList extends HTMLElement {
   }
 }
 
-customElements.define('setting-list', SettingList);
+customElements.define('pm-toggle', SettingList);

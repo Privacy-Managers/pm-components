@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="../../../src/pm-tab-panel/pm-tab-panel.js" defer></script>
+  <title>Tabs</title>
+</head>
+<body>
+  <pm-tab-panel>
+
+    <pm-tabs>
+      <pm-tab id="main-tab">Main</pm-tab>
+      <pm-tab id="cookie-tab">Cookies</pm-tab>
+      <pm-tab id="network-tab">Network</pm-tab>
+    </pm-tabs>
+
+    <pm-panels>
+      <pm-panel aria-labelledby="main-tab">
+        Main Tab content
+      </pm-panel>
+      <pm-panel aria-labelledby="cookie-tab">
+        Cookies Tab content
+      </pm-panel>
+      <pm-panel aria-labelledby="network-tab">
+        Network Tab content
+      </pm-panel>
+    </pm-panels>
+
+  </pm-tab-panel>
+</body>
+</html>

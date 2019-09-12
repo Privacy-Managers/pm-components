@@ -14,9 +14,9 @@ class PmTabPanel extends HTMLElement {
 
     this.addEventListener("keydown", ({key}) =>
     {
-      if (key === "ArrowUp" || key === "ArrowRight")
+      if (key === "ArrowDown" || key === "ArrowRight")
         this.selectNextTab();
-      if (key === "ArrowDown" || key === "ArrowLeft")
+      if (key === "ArrowUp" || key === "ArrowLeft")
         this.selectPrevTab();
     });
   }

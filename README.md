@@ -14,7 +14,7 @@ Collection of Web Components for my various projects:
 
 ```
 npm start // Starts server
-npm run test:puppeteer // Launch puppeteer tests
+npm test // Launch puppeteer tests
 ```
 
 ## Structure

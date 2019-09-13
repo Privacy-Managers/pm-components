@@ -5,7 +5,7 @@
 Collection of Web Components for my various projects:
 - [pm-toggle](https://manvel.github.io/webcomponents/components/tests/smoke/pm-toggle/pm-toggle.html) - Toggle switch to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
 - [pm-table](https://manvel.github.io/webcomponents/components/tests/smoke/pm-table/pm-table.html) - Table to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
-- [pm-modal](https://manvel.github.io/webcomponents/components/tests/smoke/pm-modal/pm-modal.html) - Modal dialog to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
+- [pm-dialog](https://manvel.github.io/webcomponents/components/tests/smoke/pm-dialog/pm-dialog.html) - Modal dialog to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
 - [pm-tab-panel](https://manvel.github.io/webcomponents/components/tests/smoke/pm-tab-panel/pm-tab-panel.html) - Tab panel to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
 - [pm-button](https://manvel.github.io/webcomponents/components/tests/smoke/pm-button/pm-button.html) - Button to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
 

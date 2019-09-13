@@ -156,6 +156,11 @@ class ModalDialog extends HTMLElement {
     const templateContent = this.querySelector("template").content;
     this.dialogBodyElem.appendChild(document.importNode(templateContent, true));
     registerActionListener(this.shadowRoot, this, this._onAction);
+    document.addEventListener("keydown", ({key}) =>
+    {
+      if (key === "Escape")
+        this.closeDialog();
+    });
     initI18n(this.shadowRoot);
     this._render();
   }

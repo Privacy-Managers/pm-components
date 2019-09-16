@@ -58,17 +58,24 @@ function getSelectedDatasetId()
   }, tableListHandle);
 }
 
-function removeSortAndReadd()
+function updateSortAndReAdd(sort, sortSub)
 {
-  return page.evaluate((tableListHandle) =>
+  return page.evaluate((tableListHandle, sort, sortSub) =>
   {
     const [mainTemplate, subTemplate] = tableListHandle.querySelectorAll("template");
-    mainTemplate.removeAttribute("sort");
-    subTemplate.removeAttribute("sort");
+    const updateSort = (template, sortValue) =>
+    {
+      if (sortValue)
+        template.setAttribute("sort", sortValue);
+      else
+        template.removeAttribute("sort");
+    };
+    updateSort(mainTemplate, sort);
+    updateSort(subTemplate, sortSub);
     const parentElem = tableListHandle.parentElement;
     parentElem.removeChild(tableListHandle);
     parentElem.appendChild(tableListHandle);
-  }, tableListHandle);
+  }, tableListHandle, sort, sortSub);
 }
 
 function getLoadedAmount(id)
@@ -261,7 +268,7 @@ describe("pm-table component", () =>
     assert.equal(await getItemAndElemIndex("subexample2.com", "example3.com"), 1);
     assert.equal(await getItemAndElemIndex("subexample3.com", "example3.com"), 2);
     await tableList.empty();
-    await removeSortAndReadd();
+    await updateSortAndReAdd();
     await populateTable();
     assert.equal(await getItemAndElemIndex("example1.com"), 4);
     assert.equal(await getItemAndElemIndex("example2.com"), 1);
@@ -269,6 +276,15 @@ describe("pm-table component", () =>
     assert.equal(await getItemAndElemIndex("subexample1.com", "example3.com"), 4);
     assert.equal(await getItemAndElemIndex("subexample2.com", "example3.com"), 1);
     assert.equal(await getItemAndElemIndex("subexample3.com", "example3.com"), 0);
+    await tableList.empty();
+    await updateSortAndReAdd("domain$reverse", "name$reverse");
+    await populateTable();
+    assert.equal(await getItemAndElemIndex("example1.com"), 4);
+    assert.equal(await getItemAndElemIndex("example2.com"), 3);
+    assert.equal(await getItemAndElemIndex("example3.com"), 2);
+    assert.equal(await getItemAndElemIndex("subexample1.com", "example3.com"), 4);
+    assert.equal(await getItemAndElemIndex("subexample2.com", "example3.com"), 3);
+    assert.equal(await getItemAndElemIndex("subexample3.com", "example3.com"), 2);
   });
 });
 

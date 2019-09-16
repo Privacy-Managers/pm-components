@@ -343,10 +343,16 @@ class TableList extends HTMLElement {
   /**
    * Sets the sorting method to be used when adding and updating items
    */
-  _setSort(sortColumn)
+  _setSort(sort)
   {
-    if (sortColumn)
-      return (a, b) => a.texts[sortColumn].localeCompare(b.texts[sortColumn], undefined, {numeric: true});
+    if (sort)
+    {
+      const [sortColumn, type] = sort.split("$");
+      if (type && type == "reverse")
+        return (a, b) => b.texts[sortColumn].localeCompare(a.texts[sortColumn], undefined, {numeric: true});
+      else
+        return (a, b) => a.texts[sortColumn].localeCompare(b.texts[sortColumn], undefined, {numeric: true});
+    }
     else
       return null;
   }

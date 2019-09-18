@@ -44,7 +44,7 @@ class SettingList extends HTMLElement {
           background: url(../../../img/pm-toggle/info.svg) center no-repeat transparent;
           margin: 0px 3px;
         }
-        button[role="checkbox"]
+        #toggle
         {
           font-size: 0px; /* Fighting the Space Between Inline Block Elements */
           background: none;
@@ -53,7 +53,7 @@ class SettingList extends HTMLElement {
           padding: 0px;
           display: flex;
         }
-        button[role="checkbox"] > span
+        #toggle > span
         {
           font-size: 12px;
           line-height: 19px;
@@ -61,23 +61,23 @@ class SettingList extends HTMLElement {
           border: 1px solid var(--color-secondary);
         }
         /*#7f7f7f #8abc25 #f8f8f8 */
-        button[role="checkbox"] > span:first-child
+        #toggle > span:first-child
         {
           border-radius: 5px 0px 0px 5px;
           border-right: 0px;
         }
-        button[role="checkbox"] > span:last-child
+        #toggle > span:last-child
         {
           border-radius: 0px 5px 5px 0px;
           background-color: var(--color-secondary);
           color: #fff;
         }
-        :host([checked="true"]) button[role="checkbox"] > span:first-child
+        :host([checked="true"]) #toggle > span:first-child
         {
           background-color: var(--color-primary);
           color: #fff;
         }
-        :host([checked="true"]) button[role="checkbox"] > span:last-child
+        :host([checked="true"]) #toggle > span:last-child
         {
           color: #000;
           background: none;
@@ -85,7 +85,7 @@ class SettingList extends HTMLElement {
       </style>
       <div>
         <span id="label" tabindex="0"><slot>Some default</slot></span>
-        <button aria-labelledby="label" role="checkbox" type="button">
+        <button id="toggle" aria-labelledby="label" role="button" type="button">
           <span id="btn-on-label">On</span>
           <span id="btn-off-label">Off</span>
         </button>
@@ -192,7 +192,7 @@ class SettingList extends HTMLElement {
    * Render method to be called after each state change
    */
   _render() {
-    this.toggleElem.setAttribute("aria-checked", this.isEnabled());
+    this.toggleElem.setAttribute("aria-pressed", this.isEnabled());
     this.labelElem.textContent = getMsg(this.text);
     this.labelElem.setAttribute("title", getMsg(this.description));
   }

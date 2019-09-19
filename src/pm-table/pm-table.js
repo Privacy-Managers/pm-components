@@ -272,6 +272,7 @@ class TableList extends HTMLElement {
     {
       listItem = this._itemFromTmpl(itemObj, this.listSubItemTemplate);
       const parentListElem = this.getItemElem(parentId);
+      parentListElem.setAttribute("aria-expanded", true);
       let subContainer = parentListElem.querySelector("ul");
       if (!subContainer)
         subContainer = parentListElem.appendChild(document.createElement("ul"));
@@ -392,7 +393,10 @@ class TableList extends HTMLElement {
     const subListElems = subListContainerElem.querySelector("ul");
     subListElems.removeChild(itemElem);
     if (!subListElems.children.length)
+    {
+      subListContainerElem.setAttribute("aria-expanded", false);
       subListContainerElem.removeChild(subListElems);
+    }
   }
 
   /**

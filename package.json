@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run build && npm run test:puppeteer",
-    "start": "npm run build && http-server components -p 3000",
+    "start": "npm run build && npm run watch & http-server components -p 3000",
     "test:server": "http-server components -p 3001",
     "test:puppeteer": "npm run test:server & mocha components/tests/puppeteer/*/*.js",
     "posttest:puppeteer": "kill $(lsof -t -i:3001)",
     "clear": "rm -r components/dist",
-    "build": "npm run clear && node build/index.js"
+    "build": "npm run clear && node build/index.js",
+    "watch": "node build/watch.js"
   },
   "repository": {
     "type": "git",

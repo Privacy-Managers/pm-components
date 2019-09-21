@@ -6,6 +6,11 @@ const inputDir = "./components/src";
 const outputDir = "./components/dist";
 const utils = join(inputDir, "utils.js");
 
+/**
+ * Builds the components by combining CSS and HTML files into the src.
+ * ${pmLoadHTML} - Load HTML file that matches component name in dir.
+ * ${pmLoadCSS} - Load CSS file that matches component name in dir.
+ */
 async function build()
 {
   if (existsSync(outputDir))
@@ -16,6 +21,9 @@ async function build()
   components.forEach(compile);
 }
 
+/**
+ * Extract component names from the directories
+ */
 async function getComponents()
 {
   
@@ -25,6 +33,10 @@ async function getComponents()
   return components;
 }
 
+/**
+ * Reads content of the file
+ * @param {String} path file path
+ */
 async function readContent(path)
 {
   if(existsSync(path))
@@ -33,12 +45,20 @@ async function readContent(path)
     return "";
 }
 
+/**
+ * Create dir if doesn't exist
+ * @param {String} dir path to the directory
+ */
 async function ensureDir(dir)
 {
   if (!existsSync(dir))
     await mkdir(dir);
 }
 
+/**
+ * Compile component which filename and folder name matches the component
+ * @param {String} name of the component
+ */
 async function compile(name)
 {
   const componentContent = await readContent(join(inputDir, name, name + ".js"));
@@ -50,6 +70,10 @@ async function compile(name)
   console.log(`${name} build ready.`);
 }
 
+/**
+ * Recursively removes the dist directory
+ * @param {String} path dist directory path
+ */
 function clearBuild(path)
 {
   if(existsSync(path)) 

@@ -1,5 +1,5 @@
 const {readFile, readdir, writeFile, mkdir, copyFile} = require("fs").promises;
-const {existsSync} = require("fs");
+const {existsSync, rmdirSync, readdirSync, lstatSync, unlinkSync} = require("fs");
 const {join} = require("path");
 
 const inputDir = "./components/src";
@@ -8,12 +8,13 @@ const utils = join(inputDir, "utils.js");
 
 async function build()
 {
+  if (existsSync(outputDir))
+    clearBuild(outputDir);
   const components = await getComponents();
   await ensureDir(outputDir);
   await copyFile(utils, join(outputDir, "utils.js"));
   components.forEach(compile);
 }
-
 
 async function getComponents()
 {
@@ -48,5 +49,22 @@ async function compile(name)
   await writeFile(join(outputDir, name, name + ".js"), builtContent, "utf8");
   console.log(`${name} build ready.`);
 }
+
+function clearBuild(path)
+{
+  if(existsSync(path)) 
+  {
+    readdirSync(path).forEach((file) =>
+    {
+      const curPath = join(path, file);
+      if(lstatSync(curPath).isDirectory())
+        clearBuild(curPath);
+      else
+        unlinkSync(curPath);
+    });
+    rmdirSync(path);
+  }
+};
+
 
 module.exports = {build};

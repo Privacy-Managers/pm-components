@@ -10,7 +10,8 @@
     "test:puppeteer": "npm run test:server & mocha components/tests/puppeteer/*/*.js",
     "posttest:puppeteer": "kill $(lsof -t -i:3001)",
     "build": "node build/index.js",
-    "watch": "node build/watch.js"
+    "watch": "node build/watch.js",
+    "deploy": "./deploy.sh"
   },
   "repository": {
     "type": "git",

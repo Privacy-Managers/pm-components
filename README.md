@@ -26,8 +26,8 @@ npm test // Launch puppeteer tests
 
 ## Deployment
 
-Deploying to the gh-pages branch in Github for demo:
+Deploying to the `gh-pages` branch for the Github demo:
 
 ```
-./gh-pages.sh
+npm run deploy
 ```

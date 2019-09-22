@@ -26,15 +26,15 @@ class ModalDialog extends HTMLElement {
   {
     this.dialogElem = this.shadowRoot.querySelector("[role='dialog']");
     this.dialogBodyElem = this.shadowRoot.querySelector("#body");
-    const templateContent = this.querySelector("template").content;
-    this.dialogBodyElem.appendChild(document.importNode(templateContent, true));
+    // const templateContent = this.querySelector("template").content;
+    // this.dialogBodyElem.appendChild(document.importNode(templateContent, true));
     registerActionListener(this.shadowRoot, this, this._onAction);
     document.addEventListener("keydown", ({key}) =>
     {
       if (key === "Escape")
         this.closeDialog();
     });
-    initI18n(this.shadowRoot);
+    initI18n(this);
     this._render();
   }
 
@@ -89,7 +89,7 @@ class ModalDialog extends HTMLElement {
 
     for (const name in this.data)
     {
-      const elem = this.shadowRoot.querySelector(`[data-id=${name}]`);
+      const elem = this.querySelector(`[data-id=${name}]`);
       if (!elem)
         continue;
       const value = this.data[name]

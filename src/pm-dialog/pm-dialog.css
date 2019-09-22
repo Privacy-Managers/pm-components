@@ -55,37 +55,6 @@ header span
   font-size: 12px;
   line-height: 16px;
 }
-#dialog .fieldset-container
-{
-  display: flex;
-  justify-content: space-between;
-}
-#dialog form label
-{
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 0px 20px;
-}
-#dialog form label span
-{
-  padding: 0px 10px;
-}
-#dialog form input[type="text"],
-#dialog form input[type="date"],
-#dialog form input[type="time"]
-{
-  width: 150px;
-}
-#dialog form input[type="number"]
-{
-  width: 30px;
-}
-#dialog .controls
-{
-  padding: 0px 10px;
-}
 button.icon
 {
   background-color: transparent;
@@ -109,12 +78,4 @@ button.icon.delete:after
 button.icon.delete:hover:after
 {
   background-image: url(../../../img/pm-dialog/delete-hover.svg);
-}
-.controls
-{
-  height: 30px;
-  display: flex;
-  justify-content: flex-end;
-  padding: 0px;
-  align-items: center;
 }

@@ -7,6 +7,7 @@
   <title>Setting List</title>
   <script src="../../../dist/pm-dialog/pm-dialog.js" type="module" defer></script>
   <script src="../../../dist/pm-button/pm-button.js" type="module"></script>
+  <link rel="stylesheet" href="smoke.css">
   <style>
     body
     {
@@ -17,13 +18,11 @@
 <body>
   <div style="width: 200px">
     <pm-dialog id="basic">
-      <template>
-        <div data-id="description"></div>
-      </template>
+      <div data-id="description" slot="body"></div>
     </pm-dialog>
 
     <pm-dialog id="advanced">
-      <template>
+      <div slot="body">
         <form action="#">
           <div class="fieldset-container">
             <div>
@@ -106,22 +105,17 @@
             <pm-button data-i18n="cookieDialog_delete" data-action="delete-cookie"></pm-button>
           </div>
         </form>
-      </template>
+      </div>
     </pm-dialog>
 
     <pm-dialog id="prompt">
-      <template>
-        <div>
-          <div data-i18n="cookieDialog_deleteAll_msg" class="message"></div>
-          <div class="controls">
-            <pm-button data-i18n="cookieDialog_cancel" data-action="close-dialog"></pm-button>
-            <pm-button data-action="delete-all-cookies" data-i18n="deleteAll"></pm-button>
-          </div>
+      <div slot="body">
+        <div data-i18n="cookieDialog_deleteAll_msg" class="message"></div>
+        <div class="controls">
+          <pm-button data-i18n="cookieDialog_cancel" data-action="close-dialog"></pm-button>
+          <pm-button data-action="delete-all-cookies" data-i18n="deleteAll"></pm-button>
         </div>
-        <div id="dialog-content-setting-info">
-          <div id="dialog-content-setting-info-text"></div>
-        </div>
-      </template>
+      </div>
     </pm-dialog>
   </div>
   <div>

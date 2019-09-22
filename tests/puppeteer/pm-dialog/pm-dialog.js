@@ -55,7 +55,7 @@ function clickCloseButton()
 function checkValue(data, attr)
 {
   return page.evaluate((dialogHandle, data, attr) => {
-    return dialogHandle.shadowRoot.querySelector(`[data-id='${data}']`)[attr];
+    return dialogHandle.querySelector(`[data-id='${data}']`)[attr];
   }, dialogHandle, data, attr);
 }
 

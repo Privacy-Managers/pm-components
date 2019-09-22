@@ -55,27 +55,24 @@ header span
   font-size: 12px;
   line-height: 16px;
 }
-button.icon
+button
 {
   background-color: transparent;
   border: none;
   width: 20px;
   padding: 0px;
-  cursor: default;
+  cursor: pointer;
 }
-button.icon:after
+button:after
 {
   display: inline-block;
   content: "";
   width: 10px;
   height: 10px;
   margin: 0px auto;
-}
-button.icon.delete:after
-{
   background-image: url(../../../img/pm-dialog/delete.svg);
 }
-button.icon.delete:hover:after
+button:hover:after
 {
   background-image: url(../../../img/pm-dialog/delete-hover.svg);
 }

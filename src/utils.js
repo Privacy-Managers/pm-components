@@ -106,6 +106,7 @@ function getMsg(id)
     "cookieDialog_add": "Add",
     "cookieDialog_update": "Update",
     "cookieDialog_delete": "Delete",
+    "cookieDialog_cancel": "Cancel",
     "cookieDialog_deleteAll_msg": "You are about to delete all cookies, are you sure ?"
   };
 

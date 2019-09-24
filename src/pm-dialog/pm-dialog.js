@@ -46,6 +46,16 @@ class ModalDialog extends HTMLElement {
     this.dialogElem.setAttribute("aria-hidden", false);
   }
 
+  _focus()
+  {
+
+  }
+
+  _unfocus()
+  {
+    
+  }
+
   closeDialog()
   {
     this.dialogElem.setAttribute("aria-hidden", true);

@@ -7,7 +7,19 @@
   padding: 10px;
   border: 1px solid grey;
 }
-body > div
+
+pm-table
+{
+  width: 500px;
+  display: block;
+}
+
+pm-tab-panel
+{
+  width: 100%;
+}
+
+#documentation
 {
   display: inline-block;
 }

@@ -7,7 +7,7 @@ class PmTabPanel extends HTMLElement {
   connectedCallback()
   {
     this.tabs = [...this.querySelectorAll("pm-tab")];
-    this.addEventListener("click", (e) =>
+    this.querySelector("pm-tabs").addEventListener("click", (e) =>
     {
       this.select(e.target.id);
     });

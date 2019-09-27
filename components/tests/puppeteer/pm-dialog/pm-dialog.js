@@ -15,7 +15,7 @@ before(async () =>
 });
 
 const dialog = {};
-const methods = ["showDialog"];
+const methods = ["showDialog", "closeDialog"];
 methods.forEach((methodName) => {
   dialog[methodName] = (...args) => runComponentMethod(methodName, ...args);
 });
@@ -59,6 +59,13 @@ function checkValue(data, attr)
   }, dialogHandle, data, attr);
 }
 
+function getFocusedElement()
+{
+  return page.evaluate(() => {
+    return document.activeElement.id;
+  });
+}
+
 describe("pm-tab-panel component", () =>
 {
   it(".showDialog(title) should open the dialog and set the title", async() =>
@@ -93,6 +100,22 @@ describe("pm-tab-panel component", () =>
     assert.equal(await checkValue("date", "value"), date);
     assert.equal(await checkValue("time", "value"), time);
     assert.equal(await checkValue("checkbox", "checked"), checkbox);
+  });
+  it(".closeDialog() should close the dialog", async() =>
+  {
+    await dialog.closeDialog();
+    assert.equal(await isDialogHidden(), "true");
+  });
+  it("Opening the dialog should focus first focusable element, closing should return the old focus", async() =>
+  {
+    const buttonHandle = await page.evaluateHandle(`document.querySelector('button')`);
+    await buttonHandle.focus();
+    assert.equal(await getFocusedElement(), "focusableButton");
+    await dialog.showDialog("Basic title");
+    await page.waitFor(100);
+    assert.equal(await getFocusedElement(), "firstFocusable");
+    await dialog.closeDialog();
+    assert.equal(await getFocusedElement(), "focusableButton");
   });
 });
 

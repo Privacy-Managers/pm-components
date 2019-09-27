@@ -8,10 +8,11 @@
   <script src="../../../dist/pm-dialog/pm-dialog.js" type="module" defer></script>
 </head>
 <body>
+  <button id="focusableButton">Focus me</button>
   <pm-dialog>
     <div slot="body">
       <div data-id="description"></div>
-      <input data-id="text" type="text">
+      <input data-id="text" type="text" id="firstFocusable">
       <input data-id="date" type="date">
       <input data-id="time" type="time">
       <input data-id="checkbox" type="checkbox">

@@ -2,10 +2,11 @@
   <div>
     <header>
       <span></span>
-      <button data-action="close-dialog" class="icon delete"></button>
+      <button data-action="close-dialog" class="icon delete" id="close"></button>
     </header>
     <div id="body">
       <slot name="body"></slot>
     </div>
   </div>
+  <span tabindex="0" id="focustrap"></span>
 </div>

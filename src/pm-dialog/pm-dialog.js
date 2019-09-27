@@ -9,6 +9,8 @@ class ModalDialog extends HTMLElement {
     this.modalTitle = "";
     this.fields = [];
     this.data = {};
+    this.closeButton = null;
+    this.outerFocus = null;
 
     this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
@@ -26,13 +28,19 @@ class ModalDialog extends HTMLElement {
   {
     this.dialogElem = this.shadowRoot.querySelector("[role='dialog']");
     this.dialogBodyElem = this.shadowRoot.querySelector("#body");
-    // const templateContent = this.querySelector("template").content;
-    // this.dialogBodyElem.appendChild(document.importNode(templateContent, true));
+    this.closeButton = this.shadowRoot.querySelector("#close");
+
     registerActionListener(this.shadowRoot, this, this._onAction);
     document.addEventListener("keydown", ({key}) =>
     {
       if (key === "Escape")
         this.closeDialog();
+    });
+
+    // Focus trap
+    this.shadowRoot.querySelector("#focustrap").addEventListener("focus", () =>
+    {
+      this.closeButton.focus();
     });
     initI18n(this);
     this._render();
@@ -44,21 +52,44 @@ class ModalDialog extends HTMLElement {
     this.data = data;
     this._render();
     this.dialogElem.setAttribute("aria-hidden", false);
+    this.outerFocus = this._getFocusedElement();
+    this._focusDialogFirstFocusable();
   }
 
-  _focus()
+  _getFocusedElement()
   {
-
+    const focusedComponent = document.activeElement;
+    if (focusedComponent.shadowRoot)
+      return focusedComponent.shadowRoot.activeElement;
+    return focusedComponent;
   }
 
-  _unfocus()
+  _focusDialogFirstFocusable()
   {
-    
+    // get focusable element
+    const focusables = ["button", "[href]", "input", "select", "textarea",
+                        "[tabindex]:not([tabindex='-1'])", "pm-button"]
+                        .join(":not([disabled]),");
+    const firstFocusableElem = this.querySelectorAll(focusables)[0];
+    window.setTimeout(() =>
+    {
+      if (firstFocusableElem)
+      {
+        if (firstFocusableElem.tagName === "PM-BUTTON")
+          firstFocusableElem.shadowRoot.querySelector("button").focus();
+        else
+          firstFocusableElem.focus();
+      }
+      else
+        this.closeButton.focus();
+    }, 50);
+
   }
 
   closeDialog()
   {
     this.dialogElem.setAttribute("aria-hidden", true);
+    this.outerFocus.focus();
   }
 
   /**

@@ -1,5 +1,8 @@
 import {registerActionListener, initI18n, getMsg} from "../utils.js";
 
+const sheet = new CSSStyleSheet();
+sheet.replaceSync(`${pmLoadCSS}`);
+
 class ModalDialog extends HTMLElement {
   constructor() {
     super();
@@ -14,11 +17,9 @@ class ModalDialog extends HTMLElement {
 
     this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
-      <style>
-        ${pmLoadCSS}
-      </style>
       ${pmLoadHTML}
     `;
+    this.shadowRoot.adoptedStyleSheets = [sheet];
   }
 
   /**

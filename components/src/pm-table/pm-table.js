@@ -1,5 +1,8 @@
 import {registerActionListener, deepCopy} from "../utils.js";
 
+const sheet = new CSSStyleSheet();
+sheet.replaceSync(`${pmLoadCSS}`);
+
 class TableList extends HTMLElement {
   constructor() {
     super();
@@ -18,11 +21,9 @@ class TableList extends HTMLElement {
 
     this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
-      <style>
-        ${pmLoadCSS}
-      </style>
       ${pmLoadHTML}
     `;
+    this.shadowRoot.adoptedStyleSheets = [sheet];
   }
 
   connectedCallback()

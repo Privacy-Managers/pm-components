@@ -53,7 +53,7 @@ class TableList extends HTMLElement {
    * Move dataset from the template into the new row element
    * @returns {Element} row element template
    */
-  _createRowFromTempalte = (itemTemplate) => 
+  _createRowFromTempalte(itemTemplate)
   {
     const element = document.createElement("li");
     Object.assign(element.dataset, itemTemplate.dataset);

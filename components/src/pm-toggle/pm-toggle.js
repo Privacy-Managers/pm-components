@@ -1,4 +1,6 @@
 import {getMsg} from "../utils.js";
+import pmLoadCSS from './pm-toggle.css';
+import pmLoadHTML from './pm-toggle.html';
 
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(`${pmLoadCSS}`);

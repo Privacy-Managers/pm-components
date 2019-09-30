@@ -1,4 +1,7 @@
 const sheet = new CSSStyleSheet();
+import pmLoadCSS from './pm-button.css';
+import pmLoadHTML from './pm-button.html';
+
 sheet.replaceSync(`${pmLoadCSS}`);
 
 class PmButton extends HTMLElement {

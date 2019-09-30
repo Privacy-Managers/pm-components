@@ -1,4 +1,5 @@
 components/dist
+components/dist2
 node_modules
 package-lock.json
 .vscode/

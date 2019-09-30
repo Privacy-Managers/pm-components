@@ -1,4 +1,6 @@
 import {registerActionListener, deepCopy} from "../utils.js";
+import pmLoadCSS from './pm-table.css';
+import pmLoadHTML from './pm-table.html';
 
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(`${pmLoadCSS}`);

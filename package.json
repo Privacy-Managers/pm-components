@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run build && npm run test:puppeteer",
-    "start": "npm run build && npm run watch & http-server components -p 3000",
+    "start": "npm run build && npm run watch & http-server components/dist2 -p 3000",
     "test:server": "http-server components -p 3001",
     "test:puppeteer": "npm run test:server & mocha components/tests/puppeteer/*/*.js",
     "posttest:puppeteer": "kill $(lsof -t -i:3001)",
     "build": "node build/index.js",
+    "build:table": "npm run clean && webpack --config webpack.config.js",
+    "clean": "rm -r components/dist2",
     "watch": "node build/watch.js",
+    "start:dev": "webpack-dev-server",
     "deploy": "./deploy.sh"
   },
   "repository": {
@@ -27,7 +30,12 @@
     "http-server": "^0.11.1"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^5.0.4",
     "mocha": "^6.1.4",
-    "puppeteer": "^1.17.0"
+    "puppeteer": "^1.17.0",
+    "raw-loader": "^3.1.0",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1"
   }
 }

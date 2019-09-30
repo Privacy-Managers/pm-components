@@ -90,5 +90,4 @@ function clearBuild(path)
   }
 };
 
-
 module.exports = {build};

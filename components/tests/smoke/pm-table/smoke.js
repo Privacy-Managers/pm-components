@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () =>
   updatable.texts.domain = "example1_@@.com"
   tableList.selectItem("example1.com");
   tableList.updateItem(updatable, "example1.com");
-  document.querySelector("pm-tab-panel").select("adding-data");
+  document.querySelector("pm-tab-panel").select("templating");
 });
 
 function addSubItems(parentId)

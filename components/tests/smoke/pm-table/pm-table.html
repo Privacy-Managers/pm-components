@@ -61,12 +61,40 @@
       <pm-tab-panel>
 
           <pm-tabs>
+            <pm-tab id="templating">Templating</pm-tab>
             <pm-tab id="adding-data">Adding data</pm-tab>
             <pm-tab id="updating-data">Updating data</pm-tab>
             <pm-tab id="removing-data">Removing data</pm-tab>
           </pm-tabs>
       
           <pm-panels>
+            <pm-panel aria-labelledby="templating">
+                <pre>
+                    <code>
+&lt;pm-table&gt;
+  &lt;template sort="domain"&gt;
+    &lt;div&gt;
+      &lt;div class="data-container"&gt;
+        &lt;span data-text="domain" class="domainName"&gt;&lt;/span&gt;
+        &lt;span data-text="cookienum" class="cookiesNumber"&gt;&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;button class="icon delete"&gt;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;/template&gt;
+    &lt;template sort="name$reverse"&gt;
+      &lt;div&gt;
+        &lt;button class="icon edit"&gt;&lt;/button&gt;
+        &lt;div class="data-container"&gt;
+          &lt;span data-text="name"&gt;&lt;/span&gt;
+          &lt;span data-text="value"&gt;&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;button role="checkbox"&gt;&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/template&gt;
+&lt;/pm-table&gt;
+                </pre>
+              </code>
+            </pm-panel>
             <pm-panel aria-labelledby="adding-data">
                 <pre>
                     <code>

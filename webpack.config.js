@@ -48,3 +48,7 @@ if (argv.smoke)
 {
   module.exports.plugins.push(new CopyPlugin([{from: './components/tests/smoke'}]));
 }
+if (argv.watch)
+{
+  module.exports.watch = true;
+}

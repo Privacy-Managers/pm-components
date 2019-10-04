@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run build && (http-server dist -p 3001 & mocha components/tests/puppeteer/*/*.js)",
-    "start": "npm run smoke && http-server dist -p 3000",
+    "start:backup": "npm run smoke && http-server dist -p 3000 & watch 'npm run smoke' ./components",
+    "start": "npm run clean && webpack --config webpack.config.js --smoke --watch & http-server dist -p 3000",
     "posttest": "kill $(lsof -t -i:3001)",
     "build": "npm run clean && webpack --config webpack.config.js",
     "smoke": "npm run clean && webpack --config webpack.config.js --smoke",

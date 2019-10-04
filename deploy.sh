@@ -2,13 +2,13 @@
 
 # set variables
 commit_msg="build and push to gh-pages"
-dirs=("components/dist" "components/img" "components/tests/smoke")
+dir="components/dist"
 pid=$$
 current_branch=`git rev-parse --abbrev-ref HEAD`
 # build project and push to gh-pages branch
 npm run build
 git checkout -b ${pid}
-git add ${dirs[*]} --force
+git add ${dir} --force
 git commit -m "${commit_msg}"
 subtree=`git subtree split --prefix components ${pid}`
 git push --force origin ${subtree}:refs/heads/gh-pages

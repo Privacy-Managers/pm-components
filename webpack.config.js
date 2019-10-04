@@ -14,7 +14,7 @@ module.exports =
     },
     output: {
       filename: '[name]/[name].js',
-      path: path.resolve(__dirname, 'components/dist2'),
+      path: path.resolve(__dirname, 'components/dist'),
     },
     optimization: {
       minimize: false
@@ -34,11 +34,13 @@ module.exports =
       ]
     },
     plugins: [
-      new CopyPlugin([{ from: './components/img', to: "img" }, {from: './components/tests/smoke'}, {from: './components/src/pm-tab-panel/pm-tab-panel.css', to: "pm-tab-panel"}])
+      new CopyPlugin([{ from: './components/img', to: "img" },
+                      {from: './components/tests/smoke', to: 'smoke'},
+                      {from: './components/src/pm-tab-panel/pm-tab-panel.css', to: "pm-tab-panel"},
+                      {flatten: true, from: './components/tests/puppeteer/**/*.html', to: 'puppeteer'}])
     ],
-    watch: true,
     devServer: {
-      contentBase: path.join(__dirname, 'components/dist2/'),
+      contentBase: path.join(__dirname, 'components/dist/'),
       compress: true,
       port: 9000
     }

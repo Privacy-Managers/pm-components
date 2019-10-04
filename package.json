@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run build && (http-server components/dist -p 3001 & mocha components/tests/puppeteer/*/*.js)",
-    "start": "npm run build && http-server components/dist -p 3000",
+    "test": "npm run build && (http-server dist -p 3001 & mocha components/tests/puppeteer/*/*.js)",
+    "start": "npm run build && http-server dist -p 3000",
     "posttest": "kill $(lsof -t -i:3001)",
     "build": "npm run clean && webpack --config webpack.config.js",
-    "clean": "rm -r components/dist",
+    "clean": "rm -r dist || true",
     "start:dev": "webpack-dev-server",
     "deploy": "./deploy.sh"
   },

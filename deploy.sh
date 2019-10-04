@@ -2,7 +2,7 @@
 
 # set variables
 commit_msg="build and push to gh-pages"
-dir="components/dist"
+dir="dist"
 pid=$$
 current_branch=`git rev-parse --abbrev-ref HEAD`
 # build project and push to gh-pages branch

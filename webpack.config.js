@@ -14,7 +14,7 @@ module.exports =
     },
     output: {
       filename: '[name]/[name].js',
-      path: path.resolve(__dirname, 'components/dist'),
+      path: path.resolve(__dirname, 'dist'),
     },
     optimization: {
       minimize: false
@@ -40,7 +40,7 @@ module.exports =
                       {flatten: true, from: './components/tests/puppeteer/**/*.html', to: 'puppeteer'}])
     ],
     devServer: {
-      contentBase: path.join(__dirname, 'components/dist/'),
+      contentBase: path.join(__dirname, 'dist/'),
       compress: true,
       port: 9000
     }

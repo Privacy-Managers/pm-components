@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run build && (http-server dist -p 3001 & mocha components/tests/puppeteer/*/*.js)",
-    "start": "npm run build && http-server dist -p 3000",
+    "start": "npm run smoke && http-server dist -p 3000",
     "posttest": "kill $(lsof -t -i:3001)",
     "build": "npm run clean && webpack --config webpack.config.js",
+    "smoke": "npm run clean && webpack --config webpack.config.js --smoke",
     "clean": "rm -r dist || true",
     "start:dev": "webpack-dev-server",
     "deploy": "./deploy.sh"
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "copy-webpack-plugin": "^5.0.4",
+    "minimist": "^1.2.0",
     "mocha": "^6.1.4",
     "puppeteer": "^1.17.0",
     "raw-loader": "^3.1.0",

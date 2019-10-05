@@ -4,6 +4,7 @@ const argv = require("minimist")(process.argv.slice(2));
 
 module.exports =
 {
+  context: path.resolve(__dirname),
   entry: {
     "pm-table": "./components/src/pm-table/pm-table.js",
     "pm-dialog": "./components/src/pm-dialog/pm-dialog.js",
@@ -13,7 +14,7 @@ module.exports =
   },
   output: {
     filename: '[name]/[name].js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve('dist'),
   },
   optimization: {
     minimize: false

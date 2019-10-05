@@ -49,7 +49,7 @@ if (argv.watch)
 }
 if (argv.output)
 {
-  module.exports.output.path = path.resolve(output);
+  module.exports.output.path = path.resolve(argv.output);
 }
 // Entry and output
 if (argv["single-bundle"])

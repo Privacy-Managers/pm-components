@@ -16,17 +16,20 @@ npm start // Starts server
 npm test // Launch puppeteer tests
 ```
 
+## Import
+
+```
+npm install privacy-manager-components
+pm-components // Build and import components
+pm-components --single-bundle // Build and import components into single file
+// Specify components to import
+pm-components --comp pm-table --comp pm-toggle
+pm-components --output dirname // Specifies output folder
+```
+
 ## Structure
 
 - [components/src](components/src) - Source codes
 - [components/tests/smoke](components/tests/smoke) - Smoke tests
   - GOTO: [http://127.0.0.1:3000/tests/smoke/](http://127.0.0.1:3000/tests/smoke/)
 - [components/tests/smoke](components/tests/puppeteer) - Automated tests
-
-## Deployment
-
-Deploying to the `gh-pages` branch for the Github demo:
-
-```
-npm run deploy
-```

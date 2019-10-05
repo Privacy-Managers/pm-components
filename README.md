@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/Manvel/webcomponents.svg?branch=master)](https://travis-ci.com/Manvel/webcomponents)
 
-Collection of Web Components for my various projects:
+Web components for Privacy Manager:
 - [pm-toggle](https://pm-components.netlify.com/pm-toggle) - Toggle switch to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
 - [pm-table](https://pm-components.netlify.com/pm-table) - Table to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
 - [pm-dialog](https://pm-components.netlify.com/pm-dialog) - Modal dialog to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).

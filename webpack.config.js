@@ -36,12 +36,7 @@ module.exports =
     new CopyPlugin([{ from: './components/img', to: "img" },
                     {from: './components/src/pm-tab-panel/pm-tab-panel.css', to: "pm-tab-panel"},
                     {flatten: true, from: './components/tests/puppeteer/**/*.html', to: 'puppeteer'}])
-  ],
-  devServer: {
-    contentBase: path.join(__dirname, 'dist/'),
-    compress: true,
-    port: 9000
-  }
+  ]
 };
 
 if (argv.smoke)

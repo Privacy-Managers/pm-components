@@ -1,8 +1,8 @@
 {
-  "name": "menno-webcomponents",
+  "name": "pmcomponents",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Web components for the Privacy Manager",
+  "main": "webpack.config.js",
   "scripts": {
     "test": "npm run build && (http-server dist -p 3001 & mocha components/tests/puppeteer/*/*.js)",
     "start:backup": "npm run smoke && http-server dist -p 3000 & watch 'npm run smoke' ./components",
@@ -18,8 +18,8 @@
     "type": "git",
     "url": "git+https://github.com/Manvel/webcomponents.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Manvel Saroyan",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/Manvel/webcomponents/issues"
   },

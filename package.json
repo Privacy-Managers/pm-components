@@ -1,10 +1,10 @@
 {
   "name": "privacy-manager-components",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Web components for the Privacy Manager",
   "main": "index.js",
   "bin": {
-    "pm-components": "./webpack.config.js"
+    "pm-components": "./bin/pm-components.sh"
   },
   "scripts": {
     "test": "npm run build && (http-server dist -p 3001 & mocha components/tests/puppeteer/*/*.js)",

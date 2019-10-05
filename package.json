@@ -1,18 +1,19 @@
 {
   "name": "privacy-manager-components",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Web components for the Privacy Manager",
   "main": "index.js",
   "bin": {
     "pm-components": "./bin/pm-components.js"
   },
   "scripts": {
-    "test": "npm run build && (http-server dist -p 3001 & mocha components/tests/puppeteer/*/*.js)",
-    "start:backup": "npm run smoke && http-server dist -p 3000 & watch 'npm run smoke' ./components",
-    "start": "npm run clean && webpack --config webpack.config.js --smoke --watch & http-server dist -p 3000",
+    "test": "npm run build:puppeteer && (http-server dist -p 3001 & mocha components/tests/puppeteer/*/*.js)",
+    "start": "npm run build:smoke:watch & http-server dist -p 3000",
     "posttest": "kill $(lsof -t -i:3001)",
     "build": "npm run clean && webpack --config webpack.config.js",
-    "smoke": "npm run clean && webpack --config webpack.config.js --smoke",
+    "build:puppeteer": "npm run clean && webpack --config webpack.config.js --puppeteer",
+    "build:smoke": "npm run clean && webpack --config webpack.config.js --smoke",
+    "build:smoke:watch": "npm run clean && webpack --config webpack.config.js --smoke --watch",
     "clean": "rm -r dist || true",
     "start:dev": "webpack-dev-server",
     "deploy": "./deploy.sh"

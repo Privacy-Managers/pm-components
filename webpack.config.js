@@ -35,14 +35,17 @@ module.exports =
   },
   plugins: [
     new CopyPlugin([{ from: './components/img', to: "img" },
-                    {from: './components/src/pm-tab-panel/pm-tab-panel.css', to: "pm-tab-panel"},
-                    {flatten: true, from: './components/tests/puppeteer/**/*.html', to: 'puppeteer'}])
+                    {from: './components/src/pm-tab-panel/pm-tab-panel.css', to: "pm-tab-panel"}])
   ]
 };
 
 if (argv.smoke)
 {
   module.exports.plugins.push(new CopyPlugin([{from: './components/tests/smoke'}]));
+}
+if (argv.puppeteer)
+{
+  module.exports.plugins.push(new CopyPlugin([{flatten: true, from: './components/tests/puppeteer/**/*.html', to: 'puppeteer'}]));
 }
 if (argv.watch)
 {

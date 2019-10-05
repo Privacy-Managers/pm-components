@@ -15,8 +15,7 @@
     "build:smoke": "npm run clean && webpack --config webpack.config.js --smoke",
     "build:smoke:watch": "npm run clean && webpack --config webpack.config.js --smoke --watch",
     "clean": "rm -r dist || true",
-    "start:dev": "webpack-dev-server",
-    "deploy": "./deploy.sh"
+    "start:dev": "webpack-dev-server"
   },
   "repository": {
     "type": "git",

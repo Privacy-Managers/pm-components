@@ -4,7 +4,7 @@
   "description": "Web components for the Privacy Manager",
   "main": "index.js",
   "bin": {
-    "pm-components": "./bin/pm-components.sh"
+    "pm-components": "./bin/pm-components.js"
   },
   "scripts": {
     "test": "npm run build && (http-server dist -p 3001 & mocha components/tests/puppeteer/*/*.js)",

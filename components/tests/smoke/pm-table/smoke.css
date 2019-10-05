@@ -4,8 +4,8 @@
 }
 #documentation pre
 {
-  padding: 10px;
-  border: 1px solid grey;
+  padding: 0 10px;
+  margin: 0;
 }
 
 pm-table

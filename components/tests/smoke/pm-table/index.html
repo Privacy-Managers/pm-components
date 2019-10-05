@@ -7,7 +7,9 @@
   <title>Table list</title>
   <script type="module" src="pm-table.js"></script>
   <script src="../pm-tab-panel/pm-tab-panel.js" defer></script>
+  <script src="../highlight/highlight.js"></script>
   <link rel="stylesheet" href="../pm-tab-panel/pm-tab-panel.css">
+  <link rel="stylesheet" href="../highlight/highlight.css">
   <link rel="stylesheet" href="smoke.css">
 </head>
 <body>
@@ -69,8 +71,7 @@
       
           <pm-panels>
             <pm-panel aria-labelledby="templating">
-                <pre>
-                    <code>
+                <pre><code>
 &lt;pm-table&gt;
   &lt;template sort="domain"&gt;
     &lt;div&gt;
@@ -92,12 +93,10 @@
       &lt;/div&gt;
     &lt;/template&gt;
 &lt;/pm-table&gt;
-                </pre>
-              </code>
+                </code></pre>
             </pm-panel>
             <pm-panel aria-labelledby="adding-data">
-                <pre>
-                    <code>
+                <pre><code>
 const dataObj = {
   id:    "example1.com",
   texts: {"domain": "example1.com", "cookienum": "3 Cookies"}
@@ -108,8 +107,7 @@ const dataSubObj = {
 };
 tableList.addItem(dataObj);
 tableList.addItem(dataSubObj, "example1");
-                  </code>
-              </pre>
+                  </code></pre>
             </pm-panel>
             <pm-panel aria-labelledby="updating-data">
                 <pre><code>
@@ -138,5 +136,6 @@ tableList.removeItem("example2.com");
       </pm-tab-panel>
   </div>
   <script src="smoke.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>

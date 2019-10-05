@@ -1,5 +1,5 @@
 {
-  "name": "pmcomponents",
+  "name": "privacy-manager-components",
   "version": "0.7.0",
   "description": "Web components for the Privacy Manager",
   "main": "webpack.config.js",

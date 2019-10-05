@@ -1,7 +1,7 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const argv = require("minimist")(process.argv.slice(2));
-const components = ["pm-table", "pm-dialog", "pm-tab-panel", "pm-button", "pm-toggle"];
+const components = argv.comp ? argv.comp : ["pm-table", "pm-dialog", "pm-tab-panel", "pm-button", "pm-toggle"];
 
 module.exports =
 {
@@ -27,8 +27,7 @@ module.exports =
     ]
   },
   plugins: [
-    new CopyPlugin([{ from: './components/img', to: "img" },
-                    {from: './components/src/pm-tab-panel/pm-tab-panel.css', to: "pm-tab-panel"}])
+    new CopyPlugin([{ from: './components/img', to: "img" }])
   ]
 };
 
@@ -39,6 +38,10 @@ if (argv.smoke)
 if (argv.puppeteer)
 {
   module.exports.plugins.push(new CopyPlugin([{flatten: true, from: './components/tests/puppeteer/**/*.html', to: 'puppeteer'}]));
+}
+if (components.includes("pm-tab-panel"))
+{
+  module.exports.plugins.push(new CopyPlugin([{from: './components/src/pm-tab-panel/pm-tab-panel.css', to: "pm-tab-panel"}]));
 }
 if (argv.watch)
 {

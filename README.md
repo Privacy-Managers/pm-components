@@ -31,5 +31,4 @@ pm-components --output dirname // Specifies output folder
 
 - [components/src](components/src) - Source codes
 - [components/tests/smoke](components/tests/smoke) - Smoke tests
-  - GOTO: [http://127.0.0.1:3000/tests/smoke/](http://127.0.0.1:3000/tests/smoke/)
 - [components/tests/smoke](components/tests/puppeteer) - Automated tests

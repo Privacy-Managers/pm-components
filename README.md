@@ -1,6 +1,6 @@
 # Web components for Privacy Manager
 
-[![Build Status](https://travis-ci.com/Manvel/webcomponents.svg?branch=master)](https://travis-ci.com/Manvel/webcomponents)
+[![Build Status](https://travis-ci.com/Manvel/privacy-manager-components.svg?branch=master)](https://travis-ci.com/Manvel/privacy-manager-components)
 
 Collection of web components to be used in the [Privacy Manager](https://chrome.google.com/webstore/detail/privacy-manager/giccehglhacakcfemddmfhdkahamfcmd):
 - [pm-toggle](https://pm-components.netlify.com/pm-toggle) - Toggle switch to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
@@ -31,4 +31,4 @@ pm-components --output dirname // Specifies output folder
 
 - [components/src](components/src) - Source codes
 - [components/tests/smoke](components/tests/smoke) - Smoke tests
-- [components/tests/smoke](components/tests/puppeteer) - Automated tests
+- [components/tests/puppeteer](components/tests/puppeteer) - Automated tests

@@ -7,7 +7,7 @@
     "pm-components": "./bin/pm-components.js"
   },
   "scripts": {
-    "test": "npm run build:puppeteer && (http-server dist -p 3001 & mocha components/tests/puppeteer/*/*.js)",
+    "test": "npm run build:puppeteer && (http-server dist -p 3001 & mocha tests/puppeteer/*/*.js)",
     "start": "npm run build:smoke:watch & http-server dist -p 3000",
     "posttest": "kill $(lsof -t -i:3001)",
     "build": "npm run clean && webpack --config webpack.config.js",

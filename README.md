@@ -29,6 +29,6 @@ pm-components --output dirname // Specifies output folder
 
 ## Structure
 
-- [components/src](components/src) - Source codes
-- [components/tests/smoke](components/tests/smoke) - Smoke tests
-- [components/tests/puppeteer](components/tests/puppeteer) - Automated tests
+- [src/components](src/components) - Source codes
+- [tests/smoke](tests/smoke) - Smoke tests
+- [tests/puppeteer](tests/puppeteer) - Automated tests

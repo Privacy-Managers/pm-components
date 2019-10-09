@@ -27,21 +27,21 @@ module.exports =
     ]
   },
   plugins: [
-    new CopyPlugin([{ from: './components/img', to: "img" }])
+    new CopyPlugin([{ from: './src/img', to: "img" }])
   ]
 };
 
 if (argv.smoke)
 {
-  module.exports.plugins.push(new CopyPlugin([{from: './components/tests/smoke'}]));
+  module.exports.plugins.push(new CopyPlugin([{from: './tests/smoke'}]));
 }
 if (argv.puppeteer)
 {
-  module.exports.plugins.push(new CopyPlugin([{flatten: true, from: './components/tests/puppeteer/**/*.html', to: 'puppeteer'}]));
+  module.exports.plugins.push(new CopyPlugin([{flatten: true, from: './tests/puppeteer/**/*.html', to: 'puppeteer'}]));
 }
 if (components.includes("pm-tab-panel"))
 {
-  module.exports.plugins.push(new CopyPlugin([{from: './components/src/pm-tab-panel/pm-tab-panel.css', to: "pm-tab-panel"}]));
+  module.exports.plugins.push(new CopyPlugin([{from: './src/components/pm-tab-panel/pm-tab-panel.css', to: "pm-tab-panel"}]));
 }
 if (argv.watch)
 {
@@ -55,14 +55,14 @@ if (argv.output)
 if (argv["single-bundle"])
 {
   module.exports.entry = components.map((component) =>
-                         `./components/src/${component}/${component}.js`);
-  module.exports.output.filename = "components/components.js";
+                         `./src/components/${component}/${component}.js`);
+  module.exports.output.filename = "src/components.js";
 }
 else
 {
   module.exports.entry = components.reduce((acc, component) =>
   {
-    acc[component] = `./components/src/${component}/${component}.js`;
+    acc[component] = `./src/components/${component}/${component}.js`;
     return acc;
   }, {});
   module.exports.output.filename = "[name]/[name].js";

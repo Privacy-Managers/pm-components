@@ -41,7 +41,7 @@ if (argv.puppeteer)
 }
 if (components.includes("pm-tab-panel"))
 {
-  module.exports.plugins.push(new CopyPlugin([{from: './src/components/pm-tab-panel/pm-tab-panel.css', to: "pm-tab-panel"}]));
+  module.exports.plugins.push(new CopyPlugin([{from: './src/components/pm-tab-panel/pm-tab-panel.css', to: "css"}]));
 }
 if (argv.watch)
 {

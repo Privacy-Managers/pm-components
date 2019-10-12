@@ -56,7 +56,7 @@ if (argv["single-bundle"])
 {
   module.exports.entry = components.map((component) =>
                          `./src/components/${component}/${component}.js`);
-  module.exports.output.filename = "src/components.js";
+  module.exports.output.filename = "pm-components.js";
 }
 else
 {

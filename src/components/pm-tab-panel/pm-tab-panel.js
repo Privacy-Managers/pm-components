@@ -61,12 +61,14 @@ class PmTab extends HTMLElement {
   constructor() {
     super();
     this.panel = null;
+    this.tabPanel = null;
   }
 
   connectedCallback()
   {
     this.setAttribute("role", "tab");
     this.panel = document.querySelector(`[aria-labelledby=${this.id}]`);
+    this.tabPanel = this.closest("pm-tab-panel");
   }
 
   _show()
@@ -75,6 +77,13 @@ class PmTab extends HTMLElement {
     this.setAttribute("tabindex", "0");
     this.focus();
     this.panel._show();
+    this._dispatchTabChange();
+  }
+
+  _dispatchTabChange()
+  {
+    const event = new CustomEvent("tabChange", {"detail": this.id});
+    this.tabPanel.dispatchEvent(event);
   }
 
   _hide()

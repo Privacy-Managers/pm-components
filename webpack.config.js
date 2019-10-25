@@ -33,7 +33,7 @@ module.exports =
 
 if (argv.smoke)
 {
-  module.exports.plugins.push(new CopyPlugin([{from: './tests/smoke'}]));
+  module.exports.plugins.push(new CopyPlugin([{from: './tests/smoke', to: "smoke"}]));
 }
 if (argv.puppeteer)
 {
@@ -56,7 +56,7 @@ if (argv["single-bundle"])
 {
   module.exports.entry = components.map((component) =>
                          `./src/components/${component}/${component}.js`);
-  module.exports.output.filename = "pm-components.js";
+  module.exports.output.filename = "js/pm-components.js";
 }
 else
 {
@@ -65,5 +65,5 @@ else
     acc[component] = `./src/components/${component}/${component}.js`;
     return acc;
   }, {});
-  module.exports.output.filename = "[name]/[name].js";
+  module.exports.output.filename = "js/[name]/[name].js";
 }

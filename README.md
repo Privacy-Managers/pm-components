@@ -3,11 +3,11 @@
 [![Build Status](https://travis-ci.com/Manvel/privacy-manager-components.svg?branch=master)](https://travis-ci.com/Manvel/privacy-manager-components)
 
 Collection of web components to be used in the [Privacy Manager](https://chrome.google.com/webstore/detail/privacy-manager/giccehglhacakcfemddmfhdkahamfcmd):
-- [pm-toggle](https://pm-components.netlify.com/pm-toggle) - Toggle switch to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
-- [pm-table](https://pm-components.netlify.com/pm-table) - Table to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
-- [pm-dialog](https://pm-components.netlify.com/pm-dialog) - Modal dialog to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
-- [pm-tab-panel](https://pm-components.netlify.com/pm-tab-panel) - Tab panel to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
-- [pm-button](https://pm-components.netlify.com/pm-button) - Button to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
+- [pm-toggle](https://pm-components.netlify.com/smoke/pm-toggle) - Toggle switch to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
+- [pm-table](https://pm-components.netlify.com/smoke/pm-table) - Table to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
+- [pm-dialog](https://pm-components.netlify.com/smoke/pm-dialog) - Modal dialog to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
+- [pm-tab-panel](https://pm-components.netlify.com/smoke/pm-tab-panel) - Tab panel to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
+- [pm-button](https://pm-components.netlify.com/smoke/pm-button) - Button to be used by [Privacy Manager](https://github.com/Manvel/Privacy-Manager).
 
 ## Development
 

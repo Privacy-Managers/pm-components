@@ -40,6 +40,24 @@ function getItemElemDatasetId(id, parentId)
   }, tableListHandle, id, parentId);
 }
 
+function getLastItemElemDatasetId()
+{
+  return page.evaluate((tableListHandle) =>
+  {
+    const elements = tableListHandle.shadowRoot.querySelector("ul").children;
+    return elements[elements.length - 1].dataset.id
+  }, tableListHandle);
+}
+
+function scrollToBottom()
+{
+  return page.evaluate((tableListHandle) =>
+  {
+    const scrollableSection = tableListHandle.shadowRoot.querySelector("ul");
+    scrollableSection.scrollTop = scrollableSection.scrollHeight;
+  }, tableListHandle);
+}
+
 function getItemElemIndex(id, parentId)
 {
   return page.evaluate((tableListHandle, id, parentId) =>
@@ -230,6 +248,20 @@ describe("pm-table component", () =>
     subItemObject.id = updatedSubitem;
     await tableList.updateItem(subItemObject, updatableSubitem, updatedParent);
     assert.equal(await ensureItem(updatedSubitem, updatedParent), true);
+  });
+  it("Ensure that last item is the last item in the sorted array(`example299.com`)", async() =>
+  {
+    await scrollToBottom(); // 100 items load
+    await page.waitFor(50);
+    await scrollToBottom(); // 150 items load
+    await page.waitFor(50);
+    await scrollToBottom(); // 200 items load
+    await page.waitFor(50);
+    await scrollToBottom(); // 250 items load
+    await page.waitFor(50);
+    await scrollToBottom(); // 300 items load
+    await page.waitFor(50);
+    assert.equal(await getLastItemElemDatasetId(), "example299.com");
   });
   it("empty(id) should remove all items or subitems", async() =>
   {

@@ -6,13 +6,14 @@ class PmTabPanel extends HTMLElement {
   }
   connectedCallback()
   {
+    const pmTabs = this.querySelector("pm-tabs");
     this.tabs = [...this.querySelectorAll("pm-tab")];
-    this.querySelector("pm-tabs").addEventListener("click", (e) =>
+    pmTabs.addEventListener("click", (e) =>
     {
       this.select(e.target.id);
     });
 
-    this.addEventListener("keydown", ({key}) =>
+    pmTabs.addEventListener("keydown", ({key}) =>
     {
       if (key === "ArrowDown" || key === "ArrowRight")
         this.selectNextTab();

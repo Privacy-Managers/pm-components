@@ -23,6 +23,12 @@ document.addEventListener("DOMContentLoaded", () =>
   tableList.selectItem("example1.com");
   tableList.updateItem(updatable, "example1.com");
   document.querySelector("pm-tab-panel").select("templating");
+  tableList.actionListener((action, current, parent) =>
+  {
+    console.log(action);
+    console.log(current);
+    console.log(parent);
+  });
 });
 
 function addSubItems(parentId)

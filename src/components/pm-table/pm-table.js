@@ -18,6 +18,7 @@ class TableList extends HTMLElement {
     this.loaded = 0;
     this.loadAmount = 50;
     this.scrollLoadPercentage = 0.8;
+    this.actionListeners = [];
     this.defaultRowAttributes = {"data-key-down": "next-sibling", 
                                  "data-key-up": "previouse-sibling" };
 
@@ -523,6 +524,18 @@ class TableList extends HTMLElement {
   }
 
   /**
+   * Sets an action listener for various events set with markup ex.:
+   * data-key-action="action-name" fires on action key in this case enter
+   * data-action="action-name" fires on click.
+   * see - src/components/utils.js for more
+   * @param {Function} callback provides action name, item and parentItem 
+   */
+  setListener(callback)
+  {
+    this.actionListeners.push(callback);
+  }
+
+  /**
    * Deprecated
    * Reverse focus first or last list item
    * @param {Node} parentElement list item parent element
@@ -619,14 +632,22 @@ class TableList extends HTMLElement {
    */
   _onAction(action, element)
   {
+    const currentId = element.dataset.id;
+    const parentId = this._getParentItemElemId(element);
     switch (action)
     {
       case "next-sibling":
-        this.selectItem(element.dataset.id, this._getParentItemElemId(element), "next");
+        this.selectItem(currentId, parentId, "next");
         break;
       case "previouse-sibling":
-        this.selectItem(element.dataset.id, this._getParentItemElemId(element), "previous");
+        this.selectItem(currentId, parentId, "previous");
         break;
+    }
+
+    for (const actionListener of this.actionListeners)
+    {
+      actionListener(action, this.getItem(currentId, parentId, true),
+                             this.getItem(parentId, null, true));
     }
   }
 }

@@ -263,6 +263,26 @@ describe("pm-table component", () =>
     await page.waitFor(50);
     assert.equal(await getLastItemElemDatasetId(), "example299.com");
   });
+  it("Pressing enter on selected element should trigger action specified in data-action", async() => {
+    let result;
+    await tableList.selectItem("subexample3.com", "example0.com");
+    await page.exposeFunction("setListener", ({detail }) => {
+      result = detail;
+    });
+    page.evaluate((tableListHandle) =>
+    {
+      tableListHandle.setListener((action, item, parent) =>
+      {
+        window.setListener({ type: "actionListener", detail: {action, item, parent} });
+      });
+      return true;
+    }, tableListHandle);
+    await page.keyboard.press("Enter");
+    await page.waitFor(50);
+    assert.equal(result.action, "edit-cookie");
+    assert.equal(result.item.id, "subexample3.com");
+    assert.equal(result.parent.id, "example0.com");
+  });
   it("empty(id) should remove all items or subitems", async() =>
   {
     assert.equal(await ensureItem("subexample2.com", "example5.com"), true);

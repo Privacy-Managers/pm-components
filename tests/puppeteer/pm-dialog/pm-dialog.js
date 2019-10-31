@@ -112,7 +112,7 @@ describe("pm-tab-panel component", () =>
     await buttonHandle.focus();
     assert.equal(await getFocusedElement(), "focusableButton");
     await dialog.showDialog("Basic title");
-    await page.waitFor(200);
+    await page.waitFor(400);
     assert.equal(await getFocusedElement(), "firstFocusable");
     await dialog.closeDialog();
     assert.equal(await getFocusedElement(), "focusableButton");

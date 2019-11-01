@@ -49,7 +49,7 @@ class TableList extends HTMLElement {
       }
     }, false);
 
-    registerActionListener(this, this, this._onAction);
+    registerActionListener(this.shadowRoot, this, this._onAction);
   }
 
   /**

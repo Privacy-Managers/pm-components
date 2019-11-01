@@ -13,7 +13,7 @@ function registerActionListener(target, component, callback)
 
 function onKeyUp(ev, component, callback)
 {
-  const root = ev.target.shadowRoot || document;
+  const root = ev.target.getRootNode();
   const key = ev.key;
   const activeElem = root.activeElement;
   let actions = null;

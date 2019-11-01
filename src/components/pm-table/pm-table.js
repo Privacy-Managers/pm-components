@@ -106,7 +106,7 @@ class TableList extends HTMLElement {
     const itemObjsCopy = _deepCopy ? deepCopy(itemObjs) : itemObjs;
     const parentItem = this.getItem(id, null, false);
     let sortMethod = this.sort;
-    if (parentItem && !parentItem.subItems)
+    if (parentItem)
     {
       parentItem.subItems = [];
       sortMethod = this.subSort;

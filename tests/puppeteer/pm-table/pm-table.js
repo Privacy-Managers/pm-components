@@ -154,23 +154,31 @@ describe("pm-table component", () =>
   });
   it("addItems(items, id) method should add subitems to the item when second argument is used", async() =>
   {
-    const createSubitems = (amount) => {
+    const createSubItem = (index) => {
+      return {
+        id:    `subexample${index}.com`,
+        texts: {"name": `subexample${index}.com`, "value": "3 Cookies"}
+      }
+    };
+    const createItemObjects = (amount) => {
       const itemObjects = [];
       for (let i = 0; i < amount; i++) {
-        itemObjects.push({
-          id:    `subexample${i}.com`,
-          texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
-        });
+        itemObjects.push(createSubItem(i));
       }
       return itemObjects;
     };
     
-    await tableList.addItems(createSubitems(5), "example0.com");
+    await tableList.addItems(createItemObjects(5), "example0.com");
     assert.equal(await getLoadedAmount("example0.com"), 5);
-    await tableList.addItems(createSubitems(5), "example5.com");
+    await tableList.addItems(createItemObjects(5), "example5.com");
     assert.equal(await getLoadedAmount("example5.com"), 5);
-    await tableList.addItems(createSubitems(2), "example9.com");
+    await tableList.addItems(createItemObjects(2), "example9.com");
     assert.equal(await getLoadedAmount("example9.com"), 2);
+
+    await tableList.addItems([createSubItem(1)], "example11.com");
+    await tableList.addItems([createSubItem(2)], "example11.com");
+    const example11Item = await tableList.getItem("example11.com");
+    assert.equal(example11Item.subItems.length, 2, "calling addItems multiple times should add subItems accordingy");
   });
   it("getItemIndex(id, parentId) method should return subIndex if one exist", async() =>
   {

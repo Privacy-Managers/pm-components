@@ -108,8 +108,9 @@ class TableList extends HTMLElement {
     let sortMethod = this.sort;
     if (parentItem)
     {
-      parentItem.subItems = [];
       sortMethod = this.subSort;
+      if (!parentItem.subItems)
+        parentItem.subItems = [];
     }
     const items = parentItem ? parentItem.subItems : this.items;
 

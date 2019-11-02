@@ -276,7 +276,8 @@ class TableList extends HTMLElement {
       return;
 
     const activeElement = this.shadowRoot.activeElement;
-    if (activeElement.isSameNode(itemElem))
+    const isActiveRemove = activeElement.isSameNode(itemElem);
+    if (isActiveRemove)
       this.selectItem(id, parentId, "next");
 
     const subListContainerElem = this.getItemElem(parentId);
@@ -284,8 +285,10 @@ class TableList extends HTMLElement {
     subListElems.removeChild(itemElem);
     if (!subListElems.children.length)
     {
-      subListContainerElem.setAttribute("aria-expanded", false);
       subListContainerElem.removeChild(subListElems);
+      subListContainerElem.setAttribute("aria-expanded", false);
+      if (isActiveRemove)
+        this.selectItem(parentId);
     }
   }
 
@@ -421,11 +424,8 @@ class TableList extends HTMLElement {
     if (id)
     {
       const item = this.getItem(id, null, false);
-      const element = this.getItemElem(id);
-      if (item)
-        delete item.subItems;
-      if (element)
-        element.removeChild(element.querySelector("ul"));
+      for (const subItem of item.subItems)
+        this.removeItem(subItem.id, id);
     }
     else
     {

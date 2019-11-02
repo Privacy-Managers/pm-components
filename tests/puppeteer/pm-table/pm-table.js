@@ -154,17 +154,23 @@ describe("pm-table component", () =>
   });
   it("addItems(items, id) method should add subitems to the item when second argument is used", async() =>
   {
-    const itemObjects = [];
-    for (let i = 0; i < 5; i++) {
-      itemObjects.push({
-        id:    `subexample${i}.com`,
-        texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
-      });
-    }
-    await tableList.addItems(itemObjects, "example0.com");
+    const createSubitems = (amount) => {
+      const itemObjects = [];
+      for (let i = 0; i < amount; i++) {
+        itemObjects.push({
+          id:    `subexample${i}.com`,
+          texts: {"name": `subexample${i}.com`, "value": "3 Cookies"}
+        });
+      }
+      return itemObjects;
+    };
+    
+    await tableList.addItems(createSubitems(5), "example0.com");
     assert.equal(await getLoadedAmount("example0.com"), 5);
-    await tableList.addItems(itemObjects, "example5.com");
+    await tableList.addItems(createSubitems(5), "example5.com");
     assert.equal(await getLoadedAmount("example5.com"), 5);
+    await tableList.addItems(createSubitems(2), "example9.com");
+    assert.equal(await getLoadedAmount("example9.com"), 2);
   });
   it("getItemIndex(id, parentId) method should return subIndex if one exist", async() =>
   {
@@ -219,6 +225,12 @@ describe("pm-table component", () =>
     await tableList.selectItem("subexample1.com", "example5.com");
     await tableList.removeItem("subexample1.com", "example5.com");
     assert.equal(await getSelectedDatasetId(), "subexample2.com");
+
+    await tableList.selectItem("subexample1.com", "example9.com");
+    await tableList.removeItem("subexample1.com", "example9.com");
+    assert.equal(await getSelectedDatasetId(), "subexample0.com");
+    await tableList.removeItem("subexample0.com", "example9.com");
+    assert.equal(await getSelectedDatasetId(), "example9.com");
   });
   it("updateItem(id, parentId) method should updated item or subItem", async() =>
   {

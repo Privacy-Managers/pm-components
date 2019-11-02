@@ -276,7 +276,7 @@ class TableList extends HTMLElement {
       return;
 
     const activeElement = this.shadowRoot.activeElement;
-    const isActiveRemove = activeElement.isSameNode(itemElem);
+    const isActiveRemove = activeElement && activeElement.isSameNode(itemElem);
     if (isActiveRemove)
       this.selectItem(id, parentId, "next");
 
@@ -424,8 +424,8 @@ class TableList extends HTMLElement {
     if (id)
     {
       const item = this.getItem(id, null, false);
-      for (const subItem of item.subItems)
-        this.removeItem(subItem.id, id);
+      for (const subItemId of item.subItems.map(item => item.id))
+        this.removeItem(subItemId, id);
     }
     else
     {

@@ -5,7 +5,13 @@ document.addEventListener("DOMContentLoaded", () =>
   for (let i = 0; i < 300; i++) {
     objItems.push({
       id:    `example${i}.com`,
-      texts: {"domain": `example${i}.com`, "cookienum": "3 Cookies"}
+      texts: {"domain": `example${i}.com`, "cookienum": "3 Cookies"},
+      titles: {
+        "whitelist": "Whitelisting toggle"
+      },
+      data: {
+        "whitelist": true
+      }
     });
   }
   tableList.addItems(objItems);

@@ -389,9 +389,16 @@ class TableList extends HTMLElement {
     const titleObjs = itemObj.titles;
     for (const title in titleObjs)
     {
-      const titleElement = listElem.querySelector("[data-text='"+ title +"']");
+      const titleElement = listElem.querySelector("[title='"+ title +"']");
       if (titleElement)
         titleElement.title = titleObjs[title];
+    }
+    const dataObjs = itemObj.data;
+    for (const data in dataObjs)
+    {
+      const dataElement = listElem.querySelector(`[data-${data}`);
+      if (dataElement)
+        dataElement.dataset[data] = dataObjs[data];
     }
 
     // Set default tabindex to the first list Element

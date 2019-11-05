@@ -382,21 +382,24 @@ class TableList extends HTMLElement {
     const textsObj = itemObj.texts;
     for (const name in textsObj)
     {
-      const textElement = listElem.querySelector("[data-text='"+ name +"']");
+      const textElement = listElem.dataset.text === name ? listElem :
+                          listElem.querySelector("[data-text='"+ name +"']");
       if (textElement)
         textElement.textContent = textsObj[name];
     }
     const titleObjs = itemObj.titles;
     for (const title in titleObjs)
     {
-      const titleElement = listElem.querySelector("[title='"+ title +"']");
+      const titleElement = listElem.getAttribute("title") === title ? listElem :
+                           listElem.querySelector("[title='"+ title +"']");
       if (titleElement)
         titleElement.title = titleObjs[title];
     }
     const dataObjs = itemObj.data;
     for (const data in dataObjs)
     {
-      const dataElement = listElem.querySelector(`[data-${data}`);
+      const dataElement = listElem.dataset[data] ? listElem :
+                          listElem.querySelector(`[data-${data}`);
       if (dataElement)
         dataElement.dataset[data] = dataObjs[data];
     }

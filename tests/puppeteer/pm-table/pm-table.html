@@ -13,7 +13,8 @@
       <template sort="domain"
                 data-action="get-cookies"
                 data-key-action="get-cookies"
-                data-key-delete="delete-domain-cookies">
+                data-key-delete="delete-domain-cookies"
+                data-whitelist="false">
             <div>
               <div class="data-container">
                 <span data-text="domain" class="domainName"></span>
@@ -22,6 +23,7 @@
               <button role="checkbox" 
                       data-action="whitelist-cookie-domain"
                       data-text="whitelist"
+                      title="whitelist"
                       class="icon whitelist"></button>
               <button class="icon delete" 
                       data-action="delete-domain-cookies"
@@ -33,7 +35,8 @@
                   data-key-delete="delete-sublist-cookie"
                   data-key-quite="close-expanded-domain"
                   data-action=""
-                  data-dialog="cookie-edit">
+                  data-dialog="cookie-edit"
+                  data-whitelist="false">
             <div>
               <button class="icon edit"
                       data-action="open-dialog,edit-cookie"

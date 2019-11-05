@@ -68,6 +68,22 @@ function getItemElemIndex(id, parentId)
   }, tableListHandle, id, parentId);
 }
 
+function queryAndGetAttribute(query, attribute)
+{
+  return page.evaluate((tableListHandle, query, attribute) =>
+  {
+    return tableListHandle.shadowRoot.querySelector(query).getAttribute(attribute);
+  }, tableListHandle, query, attribute);
+}
+
+function queryAndGetContent(query)
+{
+  return page.evaluate((tableListHandle, query) =>
+  {
+    return tableListHandle.shadowRoot.querySelector(query).textContent;
+  }, tableListHandle, query);
+}
+
 function getSelectedDatasetId()
 {
   return page.evaluate((tableListHandle) =>
@@ -312,8 +328,27 @@ describe("pm-table component", () =>
     await tableList.empty();
     assert.equal(await ensureItem("example5.com"), false);
   });
+  it("Content, data attribute and title can be added using itemObj", async() =>
+  {
+    await tableList.addItems([
+      {
+        id:    `item1`,
+        texts: {"domain": `item1`, "value": "3 Cookies"},
+        titles: {
+          whitelist: "Whitelist test"
+        },
+        dataset: {
+          whitelist: true
+        }
+      }
+    ]);
+    assert.equal(await queryAndGetAttribute("[data-id='item1'] [title='Whitelist test']", "title"), "Whitelist test");
+    assert.equal(await queryAndGetAttribute("[data-id='item1']", "data-whitelist"), "true");
+    assert.equal(await queryAndGetContent("[data-id='item1'] [data-text='domain']"), "item1");
+  });
   it("Sort attribute of template item defines the sorting for list", async() =>
   {
+    await tableList.empty();
     const populateTable = async() =>
     {
       const order = [3,2,4,5,1];

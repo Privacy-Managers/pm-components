@@ -619,32 +619,16 @@ class TableList extends HTMLElement {
   }
 
   /**
-   * Get parent element id
-   * @param  {Node} element DOM Node child of table list item
-   * @return {String} id or null if can't find
-   */
-  _getParentItemElemId(element)
-  {
-    while(element)
-    {
-      element = element.parentElement;
-      if (element && element.tagName === "LI" && element.dataset.id)
-      {
-        return element.dataset.id;
-      }
-    }
-    return null;
-  }
-
-  /**
    * Action listener
    * @param {String} action
    * @param {Node} element target
    */
   _onAction(action, element)
   {
-    const currentId = element.dataset.id;
-    const parentId = this._getParentItemElemId(element);
+    const listElement = element.closest("li[data-id]");
+    const parentListElement = listElement.parentElement.closest("li[data-id]");
+    const currentId = listElement.dataset.id;
+    const parentId = parentListElement ? parentListElement.dataset.id : null;
     switch (action)
     {
       case "next-sibling":

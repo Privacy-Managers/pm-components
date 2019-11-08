@@ -85,7 +85,7 @@ class ModalDialog extends HTMLElement {
       }
       else
         this.closeButton.focus();
-    }, 50);
+    }, 100);
 
   }
 

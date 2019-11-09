@@ -210,6 +210,7 @@ describe("pm-table component", () =>
     }
     await tableList.addItems([item]);
     assert.equal(await ensureItem(domainSub, domain), true, "Adding items with subitems should add subitems accordingly");
+    assert.equal((await tableList.getItem("example01.com")).subItems.length, 1);
   });
   it("getItemIndex(id, parentId) method should return subIndex if one exist", async() =>
   {
@@ -299,6 +300,12 @@ describe("pm-table component", () =>
     subItemObject.id = updatedSubitem;
     await tableList.updateItem(subItemObject, updatableSubitem, updatedParent);
     assert.equal(await ensureItem(updatedSubitem, updatedParent), true);
+
+    assert.equal((await tableList.getItem("example01.com")).subItems.length, 1);
+    const item = await tableList.getItem("example01.com");
+    item.texts.cookienum = "4 Cookies";
+    await tableList.updateItem(item, "example01.com");
+    assert.equal((await tableList.getItem("example01.com")).subItems.length, 1);
   });
   it("Ensure that last item is the last item in the sorted array(`example299.com`)", async() =>
   {

@@ -143,6 +143,7 @@ class TableList extends HTMLElement {
           this._loadItem(itemObj);
       }
       const {subItems} = itemObj;
+      delete itemObj.subItems;
       if (subItems)
       {
         this.addItems(subItems, itemObj.id);

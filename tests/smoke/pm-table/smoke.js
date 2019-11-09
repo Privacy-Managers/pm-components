@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () =>
   firstItem.texts.domain = "example0000.com";
   firstItem.id = "example0000.com";
   tableList.updateItem(firstItem, "example0.com");
+  console.log(tableList.getItem("example0000.com"));
 });
 
 function addSubItems(parentId)

@@ -195,6 +195,21 @@ describe("pm-table component", () =>
     await tableList.addItems([createSubItem(2)], "example11.com");
     const example11Item = await tableList.getItem("example11.com");
     assert.equal(example11Item.subItems.length, 2, "calling addItems multiple times should add subItems accordingy");
+
+    const domain = "example01.com";
+    const domainSub = "subexample01.com";
+    const item = {
+      id: domain,
+      texts: {domain, "cookienum": "3 Cookies"},
+      subItems: [
+        {
+          id: domainSub,
+          texts: {name: domainSub, "cookienum": "3 Cookies"}
+        }
+      ]
+    }
+    await tableList.addItems([item]);
+    assert.equal(await ensureItem(domainSub, domain), true, "Adding items with subitems should add subitems accordingly");
   });
   it("getItemIndex(id, parentId) method should return subIndex if one exist", async() =>
   {

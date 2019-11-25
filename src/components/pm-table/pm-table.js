@@ -116,14 +116,22 @@ class TableList extends HTMLElement {
 
     if (sortMethod)
     {
-      // Sorting the additional items because "_loadItem" doesn't know which
-      // one to add first, only the location in the whole sorted arrays.
-      // This behavior might be changed with:
-      // https://github.com/Manvel/webcomponents/issues/14
-      itemObjsCopy.sort(sortMethod);
-      items.push(...itemObjsCopy);
-      if (items.length > 0)
-        items.sort(sortMethod);
+      if (sortMethod == "reverse")
+      {
+        itemObjsCopy.reverse();
+        items.unshift(...itemObjsCopy);
+      }
+      else
+      {
+        // Sorting the additional items because "_loadItem" doesn't know which
+        // one to add first, only the location in the whole sorted arrays.
+        // This behavior might be changed with:
+        // https://github.com/Manvel/webcomponents/issues/14
+        itemObjsCopy.sort(sortMethod);
+        items.push(...itemObjsCopy);
+        if (items.length > 0)
+          items.sort(sortMethod);
+      }
     }
     else
     {
@@ -246,7 +254,9 @@ class TableList extends HTMLElement {
     if (sort)
     {
       const [sortColumn, type] = sort.split("$");
-      if (type && type == "reverse")
+      if (sort == "reverse")
+        return sort;
+      else if (type && type == "reverse")
         return (a, b) => b.texts[sortColumn].localeCompare(a.texts[sortColumn], undefined, {numeric: true});
       else
         return (a, b) => a.texts[sortColumn].localeCompare(b.texts[sortColumn], undefined, {numeric: true});

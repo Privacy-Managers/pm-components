@@ -414,6 +414,16 @@ describe("pm-table component", () =>
     assert.equal(await getItemAndElemIndex("subexample1.com", "example3.com"), 4);
     assert.equal(await getItemAndElemIndex("subexample2.com", "example3.com"), 3);
     assert.equal(await getItemAndElemIndex("subexample3.com", "example3.com"), 2);
+    await tableList.empty();
+    await updateSortAndReAdd("reverse");
+    await populateTable();
+    assert.equal(await getItemAndElemIndex("example1.com"), 0);
+    assert.equal(await getItemAndElemIndex("example5.com"), 1);
+    await tableList.addItems([{
+      id:      "example9.com",
+      texts:   {"domain": "example9.com", "value": "3 Cookies"}
+    }]);
+    assert.equal(await getItemAndElemIndex("example9.com"), 0);
   });
 });
 

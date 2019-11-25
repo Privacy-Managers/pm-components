@@ -58,7 +58,9 @@ button.icon
   padding: 0px;
   cursor: default;
 }
-button.icon:after
+button.icon:after,
+li[data-type="send"] > div .data-container::before,
+li[data-type="receive"] > div .data-container::before
 {
   display: inline-block;
   content: "";
@@ -97,6 +99,44 @@ button.icon.whitelist:hover:after
 [data-whitelist="true"] [data-whitelist="true"] button.icon.whitelist:after
 {
   background-image: url(../../../img/pm-table//check-mark-double-active.svg);
+}
+li[data-type="send"] > div .data-container::before
+{
+  background-image: url(../../../img/pm-table/arrow-up.svg);
+}
+li[data-type="receive"] > div .data-container::before
+{
+  background-image: url(../../../img/pm-table/arrow-down.svg);
+}
+.tableList .networkUrl
+{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+  width: 300px;
+  margin: 0px 5px;
+}
+.tableList .networkType
+{
+  width: 110px;
+  margin: 0px 5px;
+}
+.tableList .networkName
+{
+  margin: 0px 5px;
+  width: 120px;
+}
+.tableList .networkName:after
+{
+  content: ":";
+  margin: 0px 2px; 
+}
+.tableList .networkValue
+{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+  width: 300px;
 }
 .tableList .domainName
 {

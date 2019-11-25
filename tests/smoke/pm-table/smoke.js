@@ -1,4 +1,5 @@
 const tableList = document.querySelector("pm-table");
+const tableListReverse = document.querySelector("pm-table.reverse");
 document.addEventListener("DOMContentLoaded", () =>
 {
   const objItems = [];
@@ -15,32 +16,68 @@ document.addEventListener("DOMContentLoaded", () =>
     });
   }
   tableList.addItems(objItems);
-  console.log(tableList.getItemIndex("example0.com"));
-
   addSubItems("example0.com");
-  console.log(tableList.getItemIndex("subexample3.com"));
-  // tableList.removeItem("example1.com");
-  console.log(tableList.getItemElem("example100.com"));
   addSubItems("example5.com");
-  console.log(tableList.getItemIndex("subexample3.com", "example0.com"));
-  const updatable = tableList.getItem("example1.com");
-  updatable.id = "example1_@@.com"
-  updatable.texts.domain = "example1_@@.com"
-  tableList.selectItem("example1.com");
-  tableList.updateItem(updatable, "example1.com");
-  document.querySelector("pm-tab-panel").select("templating");
-  tableList.setListener((action, current, parent) =>
-  {
-    console.log(action);
-    console.log(current);
-    console.log(parent);
-  });
-  const firstItem = tableList.getItem("example0.com");
-  firstItem.texts.domain = "example0000.com";
-  firstItem.id = "example0000.com";
-  tableList.updateItem(firstItem, "example0.com");
-  console.log(tableList.getItem("example0000.com"));
+  document.querySelectorAll("pm-tab-panel")[0].select("cookie");
+  document.querySelectorAll("pm-tab-panel")[1].select("templating");
+
+  addItemsNetwork("https://example.com/", "send", "main_frame", 1);
+  addItemsNetwork("https://google.com/", "receive", "main_frame", 2);
+  addItemsNetwork("https://example.com/", "send", "main_frame", 3);
+  addItemsNetwork("https://amazon.com/", "send", "main_frame", 4);
+  addItemsNetwork("https://paypal.com/", "send", "main_frame", 5);
+  addSubitemsNetwork(3);
+
 });
+
+function addItemsNetwork(url, requestType, frame, id)
+{
+  const item = {
+    id: id,
+    texts: {
+      type: frame,
+      url
+    },
+    data: {
+      access: 0,
+      type: requestType
+    }
+  }
+  tableListReverse.addItems([item]);
+}
+
+function addSubitemsNetwork(parentId)
+{
+  const request = {
+    "method": "GET",
+    "Server": "nginx",
+    "Date": "Mon, 25 Nov 2019 14:51:26 GMT",
+    "Content-Type": "text/html; charset=utf-8",
+    "Last-Modified": "Mon, 25 Nov 2019 14:46:49 GMT",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "ETag": 'W/"5ddbe959-8aa9"',
+    "Strict-Transport-Security": "max-age=31536000",
+    "Content-Security-Policy": "default-src 'self'; img-src https://optimize.google.com * data:; style-src 'self' 'unsafe-inline' https://tagmanager.google.com https://fonts.googleapis.com https://optimize.google.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://tagmanager.google.com https://optimize.google.com; frame-src www.youtube-nocookie.com https://optimize.google.com;  connect-src https://www.google-analytics.com; font-src 'self' https://fonts.gstatic.com;",
+    "X-Frame-Options": "sameorigin",
+    "Content-Encoding": "gzip",
+    "statusCode": "200",
+    "statusLine": "HTTP/1.1 200 OK",
+    "type": "main_frame",
+    "url": "https://adblockplus.org/"
+  };
+  const items = [];
+  for (const name in request) {
+    const value = request[name];
+    items.push({
+      id: name,
+      texts: {
+        name, value
+      }
+    });
+  }
+  tableListReverse.addItems(items, parentId);
+}
 
 function addSubItems(parentId)
 {

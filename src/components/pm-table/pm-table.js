@@ -17,6 +17,7 @@ class TableList extends HTMLElement {
     this.listSubItemTemplate = null;
     this.loaded = 0;
     this.loadAmount = 50;
+    this.idCount = 0;
     this.scrollLoadPercentage = 0.8;
     this.actionListeners = [];
     this.defaultRowAttributes = {"data-key-down": "next-sibling", 
@@ -140,6 +141,10 @@ class TableList extends HTMLElement {
 
     for (const itemObj of itemObjsCopy)
     {
+      // Set unique ID for the items missing one.
+      if (!itemObj.id)
+        itemObj.id = `pm-table-item${++this.idCount}`;
+
       if (parentItem)
       {
         this._loadItem(itemObj, id);

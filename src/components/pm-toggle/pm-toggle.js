@@ -71,7 +71,7 @@ class SettingList extends HTMLElement {
    */
   _requestInfo()
   {
-    alert(this.description);
+    this.dispatchEvent(new CustomEvent("info"));
   }
 
   /**

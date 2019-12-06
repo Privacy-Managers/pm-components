@@ -6,6 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Setting List</title>
   <script src="/js/pm-toggle/pm-toggle.js" type="module"></script>
+  <script src="/js/pm-dialog/pm-dialog.js" defer></script>
+  <script src="smoke.js" type="module" defer></script>
   <style>
     body
     {
@@ -18,5 +20,10 @@
     <pm-toggle text="My text" description="Description of the element goes here">
     </pm-toggle>
   </div>
+  <pm-dialog>
+    <div slot="body">
+      <div data-id="description"></div>
+    </div>
+  </pm-dialog>
 </body>
 </html>

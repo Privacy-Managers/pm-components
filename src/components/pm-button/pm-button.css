@@ -3,15 +3,23 @@
   --color-primary: #679c16;
   --color-secondary: #989898;
 }
+
+:host([theme="secondary"]) button
+{
+  color: var(--color-primary);
+  background-color: transparent;
+  border: 1px solid var(--color-secondary);
+}
+
 button
 {
   cursor: pointer;
   line-height: 12px;
   color: #fff;
   font-weight: bold;
-  border-radius: 2px;
+  border-radius: inherit;
   display: inline-block;
-  width: auto;
+  width: inherit;
   margin: 5px;
   padding: 7px;
   background-color: var(--color-primary);

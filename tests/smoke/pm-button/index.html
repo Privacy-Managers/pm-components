@@ -15,11 +15,23 @@
     {
       display: none;
     }
+    pm-button
+    {
+      border-radius: 3px;
+    }
+    pm-button[theme="secondary"]
+    {
+      --width: 100%;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
-  <div style="width: 200px">
-    <pm-button>Test</pm-button>
+  <div style="width: 200px; display: flex;">
+    <pm-button>Primary</pm-button>
+    <pm-button theme="secondary">Secondary</pm-button>
   </div>
 </body>
 </html>

@@ -1,6 +1,6 @@
 {
   "name": "privacy-manager-components",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "Web components for the Privacy Manager",
   "main": "index.js",
   "bin": {
@@ -19,14 +19,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Manvel/webcomponents.git"
+    "url": "git+https://github.com/Privacy-Managers/pm-components.git"
   },
   "author": "Manvel Saroyan",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/Manvel/webcomponents/issues"
+    "url": "https://github.com/Privacy-Managers/pm-components/issues"
   },
-  "homepage": "https://github.com/Manvel/webcomponents#readme",
+  "homepage": "https://github.com/Privacy-Managers/pm-components#readme",
   "dependencies": {
     "copy-webpack-plugin": "^5.0.4",
     "http-server": "^0.11.1",

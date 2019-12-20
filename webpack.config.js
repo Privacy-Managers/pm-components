@@ -67,3 +67,8 @@ else
   }, {});
   module.exports.output.filename = "js/[name]/[name].js";
 }
+if (argv.prod)
+{
+  module.exports.mode = "production";
+  module.exports.optimization.minimize = true;
+}

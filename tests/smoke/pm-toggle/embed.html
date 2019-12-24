@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Setting List</title>
+  <script src="/js/pm-toggle/pm-toggle.js" type="module"></script>
+  <script src="/js/pm-dialog/pm-dialog.js" defer></script>
+  <script src="smoke.js" type="module" defer></script>
+  <style>
+    body
+    {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div style="width: 200px">
+    <pm-toggle text="My text" description="Description of the element goes here">
+    </pm-toggle>
+  </div>
+  <pm-dialog>
+    <div slot="body">
+      <div data-id="description"></div>
+    </div>
+  </pm-dialog>
+  <script>
+    function requestInfo(e)
+    {
+      const dialog = document.querySelector("pm-dialog");
+      const description = e.target.description;
+      dialog.showDialog(e.target.text, {description});
+    }
+
+    document.querySelector("pm-toggle").addEventListener("info", requestInfo);
+  </script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Table list</title>
+  <script type="module" src="/js/pm-table/pm-table.js"></script>
+  <script src="/js/pm-tab-panel/pm-tab-panel.js" defer></script>
+  <link rel="stylesheet" href="/css/pm-tab-panel.css">
+  <link rel="stylesheet" href="smoke.css">
+</head>
+<body>
+  <div id="component">
+      <pm-tab-panel>
+      <pm-tabs>
+          <pm-tab id="cookie">Cookie</pm-tab>
+          <pm-tab id="network">Network</pm-tab>
+        </pm-tabs>
+
+        <pm-panels>
+          <pm-panel aria-labelledby="cookie">
+              <pm-table>
+                  <template sort="domain"
+                            data-action="get-cookies"
+                            data-key-action="get-cookies"
+                            data-key-delete="delete-domain-cookies">
+                        <div>
+                          <div class="data-container">
+                            <span data-text="domain" class="domainName"></span>
+                            <span data-text="cookienum" class="cookiesNumber"></span>
+                          </div>
+                          <button role="checkbox" 
+                                  data-action="whitelist-cookie-domain"
+                                  data-whitelist="false"
+                                  class="icon whitelist"
+                                  title="whitelist"></button>
+                          <button class="icon delete" 
+                                  data-action="delete-domain-cookies"
+                                  tabindex="-1"></button>
+                        </div>
+                    </template>
+                    <template sort="name"
+                              data-key-action="open-dialog,edit-cookie"
+                              data-key-delete="delete-sublist-cookie"
+                              data-key-quite="close-expanded-domain"
+                              data-action=""
+                              data-dialog="cookie-edit">
+                        <div>
+                          <button class="icon edit"
+                                  data-action="open-dialog,edit-cookie"
+                                  data-dialog="cookie-edit"></button>
+                          <div class="data-container">
+                            <span data-text="name" class="cookieName"></span>
+                            <span data-text="value" class="cookieValue"></span>
+                          </div>
+                          <button role="checkbox"
+                                  data-action="whitelist-sublist-cookie" 
+                                  data-text="whitelist"
+                                  class="icon whitelist"></button>
+                          <button class="icon delete"
+                                  data-action="delete-sublist-cookie"></button>
+                        </div>
+                    </template>
+                </pm-table>
+          </pm-panel>
+          <pm-panel aria-labelledby="network">
+              <pm-table class="reverse">
+                  <template sort="reverse"	data-action="get-request" 
+                            data-key-action="get-request"
+                            data-key-down="next-sibling" 
+                            data-key-up="previouse-sibling"
+                            data-type="send/receive">
+                    <div>
+                      <div class="data-container">
+                        <span data-text="url" class="networkUrl"></span>
+                        <span data-text="type" class="networkType"></span>
+                      </div>
+                    </div>
+                  </template>
+                  <template data-key-down="next-sibling" 
+                            data-key-up="previouse-sibling"
+                            data-key-quite="close-expanded-request"
+                            data-action="tba">
+                    <div>
+                      <div class="data-container">
+                        <span data-text="name" class="networkName"></span>
+                        <span data-text="value" class="networkValue"></span>
+                      </div>
+                    </div>
+                  </template>
+                </pm-table>
+          </pm-panel>
+        </pm-panels>
+      </pm-tab-panel>
+  </div>
+  <script>
+    const tableList = document.querySelector("pm-table");
+    const tableListReverse = document.querySelector("pm-table.reverse");
+    document.addEventListener("DOMContentLoaded", () =>
+    {
+      const objItems = [];
+      for (let i = 0; i < 300; i++) {
+        objItems.push({
+          id:    `example${i}.com`,
+          texts: {"domain": `example${i}.com`, "cookienum": "3 Cookies"},
+          titles: {
+            "whitelist": "Whitelisting toggle"
+          },
+          data: {
+            "whitelist": true
+          }
+        });
+      }
+      tableList.addItems(objItems);
+      addSubItems("example0.com");
+      addSubItems("example5.com");
+      document.querySelectorAll("pm-tab-panel")[0].select("cookie");
+
+      addItemsNetwork("https://example.com/", "send", "main_frame", 1);
+      addItemsNetwork("https://google.com/", "receive", "main_frame", 2);
+      addItemsNetwork("https://example.com/", "send", "main_frame", 3);
+      addItemsNetwork("https://amazon.com/", "send", "main_frame", 4);
+      addItemsNetwork("https://paypal.com/", "send", "main_frame", 5);
+      addSubitemsNetwork(3);
+    });
+
+    function addItemsNetwork(url, requestType, frame, id)
+    {
+      const item = {
+        id: id,
+        texts: {
+          type: frame,
+          url
+        },
+        data: {
+          access: 0,
+          type: requestType
+        }
+      }
+      tableListReverse.addItems([item]);
+    }
+
+    function addSubitemsNetwork(parentId)
+    {
+      const request = {
+        "method": "GET",
+        "Server": "nginx",
+        "Date": "Mon, 25 Nov 2019 14:51:26 GMT",
+        "Content-Type": "text/html; charset=utf-8",
+        "Last-Modified": "Mon, 25 Nov 2019 14:46:49 GMT",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "ETag": 'W/"5ddbe959-8aa9"',
+        "Strict-Transport-Security": "max-age=31536000",
+        "Content-Security-Policy": "default-src 'self'; img-src https://optimize.google.com * data:; style-src 'self' 'unsafe-inline' https://tagmanager.google.com https://fonts.googleapis.com https://optimize.google.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://tagmanager.google.com https://optimize.google.com; frame-src www.youtube-nocookie.com https://optimize.google.com;  connect-src https://www.google-analytics.com; font-src 'self' https://fonts.gstatic.com;",
+        "X-Frame-Options": "sameorigin",
+        "Content-Encoding": "gzip",
+        "statusCode": "200",
+        "statusLine": "HTTP/1.1 200 OK",
+        "type": "main_frame",
+        "url": "https://adblockplus.org/"
+      };
+      const items = [];
+      for (const name in request) {
+        const value = request[name];
+        items.push({
+          id: name,
+          texts: {
+            name, value
+          }
+        });
+      }
+      tableListReverse.addItems(items, parentId);
+    }
+
+    function addSubItems(parentId)
+    {
+      const itemObjs = [];
+      const order = [3,2,4,5,1];
+      for (let i = 0; i < order.length; i++) {
+        itemObjs.push({
+          id:      `subexample${order[i]}.com`,
+          texts:   {"name": `subexample${order[i]}.com`, "value": "3 Cookies"}
+        });
+      }
+      tableList.addItems(itemObjs, parentId);
+    }
+  </script>
+</body>
+</html>

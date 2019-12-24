@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Setting List</title>
+  <script src="/js/pm-dialog/pm-dialog.js" type="module" defer></script>
+  <script src="/js/pm-button/pm-button.js" type="module"></script>
+  <link rel="stylesheet" href="smoke.css">
+  <style>
+    body
+    {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    pm-dialog:not(:defined),
+    pm-button:not(:defined)
+    {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div style="width: 200px">
+    <pm-dialog id="basic">
+      <div data-id="description" slot="body"></div>
+    </pm-dialog>
+    <pm-button id="basic-btn">Open dialog</pm-button>
+  </div>
+  <script>
+    document.querySelector("pm-button").addEventListener("click", () =>
+    {
+      const pmDialog = document.querySelector("#basic");
+      const title = "My Title";
+      const data = {
+        description: "My description"
+      };
+      pmDialog.showDialog(title, data);
+    })
+  </script>
+</body>
+</html>

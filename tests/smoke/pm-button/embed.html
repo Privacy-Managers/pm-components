@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Setting List</title>
+  <script src="/js/pm-button/pm-button.js" type="module"></script>
+  <style>
+    body
+    {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    pm-button:not(:defined)
+    {
+      display: none;
+    }
+    pm-button
+    {
+      border-radius: 3px;
+    }
+    pm-button[theme="secondary"]
+    {
+      --width: 100%;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div style="width: 200px; display: flex;">
+    <pm-button>Primary</pm-button>
+    <pm-button theme="secondary">Secondary</pm-button>
+  </div>
+</body>
+</html>

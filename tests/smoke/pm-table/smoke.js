@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () =>
   addItemsNetwork("https://amazon.com/", "send", "main_frame", 4);
   addItemsNetwork("https://paypal.com/", "send", "main_frame", 5);
   addSubitemsNetwork(3);
-
 });
 
 function addItemsNetwork(url, requestType, frame, id)

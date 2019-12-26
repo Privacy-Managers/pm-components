@@ -82,8 +82,8 @@ describe("pm-tab-panel component", () =>
   it("pmTab.select(id) method should select tab and make the panel visible", async() =>
   {
     await tabPanel.select("main-tab");
-    await ensureTabSelectedPanelVisible("main-tab")
-    await ensureTabUnselectedPanelInvisible("cookie-tab")
+    await ensureTabSelectedPanelVisible("main-tab");
+    await ensureTabUnselectedPanelInvisible("cookie-tab");
   });
   it("arrowRight and arrowDown should select next tab", async() =>
   {

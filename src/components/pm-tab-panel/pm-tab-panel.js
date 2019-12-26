@@ -22,14 +22,14 @@ class PmTabPanel extends HTMLElement {
     });
   }
 
-  select(id)
+  select(id, focus = true)
   {
     this.tabs.forEach((tab) =>
     {
       tab._hide();
       if (tab.id === id)
       {
-        tab._show();
+        tab._show(focus);
         this.selectedTab = tab;
       }
     });
@@ -72,11 +72,12 @@ class PmTab extends HTMLElement {
     this.tabPanel = this.closest("pm-tab-panel");
   }
 
-  _show()
+  _show(focus)
   {
     this.setAttribute("aria-selected", true);
     this.setAttribute("tabindex", "0");
-    this.focus();
+    if (focus)
+      this.focus();
     this.panel._show();
     this._dispatchTabChange();
   }

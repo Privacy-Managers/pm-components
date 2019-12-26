@@ -115,7 +115,7 @@
       tableList.addItems(objItems);
       addSubItems("example0.com");
       addSubItems("example5.com");
-      document.querySelectorAll("pm-tab-panel")[0].select("cookie");
+      document.querySelectorAll("pm-tab-panel")[0].select("cookie", false);
 
       addItemsNetwork("https://example.com/", "send", "main_frame", 1);
       addItemsNetwork("https://google.com/", "receive", "main_frame", 2);

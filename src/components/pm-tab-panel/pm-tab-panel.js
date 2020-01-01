@@ -24,6 +24,9 @@ class PmTabPanel extends HTMLElement {
 
   select(id, focus = true)
   {
+    if (!id)
+      return;
+
     this.tabs.forEach((tab) =>
     {
       tab._hide();

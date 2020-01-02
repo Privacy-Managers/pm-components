@@ -34,7 +34,7 @@ class SettingList extends HTMLElement {
 
     this.toggleElem.addEventListener("click", this.toggle.bind(this));
     this.labelElem.addEventListener("click", this._requestInfo.bind(this));
-    this.labelElem.addEventListener("keyup", ({key}) => {
+    this.labelElem.addEventListener("keydown", ({key}) => {
       if (key === "Enter" || key === " ")
         this._requestInfo();
     });

@@ -162,7 +162,7 @@ class ConstructableCSS
     if (this.sheet instanceof CSSStyleSheet)
       shadowRoot.adoptedStyleSheets = [this.sheet];
     else
-      shadowRoot.appendChild(this.sheet);
+      shadowRoot.appendChild(this.sheet.cloneNode(true));
   }
 }
 

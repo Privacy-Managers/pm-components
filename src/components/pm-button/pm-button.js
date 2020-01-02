@@ -1,8 +1,8 @@
-const sheet = new CSSStyleSheet();
+import {ConstructableCSS} from "../utils.js";
 import pmLoadCSS from './pm-button.css';
 import pmLoadHTML from './pm-button.html';
 
-sheet.replaceSync(`${pmLoadCSS}`);
+const constructableCSS = new ConstructableCSS(pmLoadCSS);
 
 class PmButton extends HTMLElement {
   constructor() {
@@ -12,7 +12,7 @@ class PmButton extends HTMLElement {
     this.shadowRoot.innerHTML = `
       ${pmLoadHTML}
     `;
-    this.shadowRoot.adoptedStyleSheets = [sheet];
+    constructableCSS.load(this.shadowRoot);
   }
 }
 

@@ -1,9 +1,8 @@
-import {getMsg} from "../utils.js";
+import {getMsg, ConstructableCSS} from "../utils.js";
 import pmLoadCSS from './pm-toggle.css';
 import pmLoadHTML from './pm-toggle.html';
 
-const sheet = new CSSStyleSheet();
-sheet.replaceSync(`${pmLoadCSS}`);
+const constructableCSS = new ConstructableCSS(pmLoadCSS);
 
 class SettingList extends HTMLElement {
   constructor() {
@@ -19,7 +18,7 @@ class SettingList extends HTMLElement {
     this.shadowRoot.innerHTML = `
       ${pmLoadHTML}
     `;
-    this.shadowRoot.adoptedStyleSheets = [sheet];
+    constructableCSS.load(this.shadowRoot);
   }
 
   /**

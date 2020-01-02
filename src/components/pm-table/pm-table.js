@@ -1,9 +1,8 @@
-import {registerActionListener, deepCopy} from "../utils.js";
+import {registerActionListener, deepCopy, ConstructableCSS} from "../utils.js";
 import pmLoadCSS from './pm-table.css';
 import pmLoadHTML from './pm-table.html';
 
-const sheet = new CSSStyleSheet();
-sheet.replaceSync(`${pmLoadCSS}`);
+const constructableCSS = new ConstructableCSS(pmLoadCSS);
 
 class TableList extends HTMLElement {
   constructor() {
@@ -27,7 +26,7 @@ class TableList extends HTMLElement {
     this.shadowRoot.innerHTML = `
       ${pmLoadHTML}
     `;
-    this.shadowRoot.adoptedStyleSheets = [sheet];
+    constructableCSS.load(this.shadowRoot);
   }
 
   connectedCallback()

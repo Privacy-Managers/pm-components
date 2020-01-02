@@ -1,9 +1,9 @@
-import {registerActionListener, initI18n, getMsg} from "../utils.js";
+import {registerActionListener, initI18n, getMsg,
+        ConstructableCSS} from "../utils.js";
 import pmLoadCSS from './pm-dialog.css';
 import pmLoadHTML from './pm-dialog.html';
 
-const sheet = new CSSStyleSheet();
-sheet.replaceSync(`${pmLoadCSS}`);
+const constructableCSS = new ConstructableCSS(pmLoadCSS);
 
 class ModalDialog extends HTMLElement {
   constructor() {
@@ -21,7 +21,7 @@ class ModalDialog extends HTMLElement {
     this.shadowRoot.innerHTML = `
       ${pmLoadHTML}
     `;
-    this.shadowRoot.adoptedStyleSheets = [sheet];
+    constructableCSS.load(this.shadowRoot);
   }
 
   /**

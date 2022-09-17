@@ -27,23 +27,23 @@ module.exports =
     ]
   },
   plugins: [
-    new CopyPlugin([{ from: './src/img', to: "img" }])
+    new CopyPlugin({patterns: [{ from: './src/img', to: "img" }]})
   ]
 };
 
-if (argv.smoke)
+if (process.env.SMOKE)
 {
-  module.exports.plugins.push(new CopyPlugin([{from: './tests/smoke', to: "smoke"}]));
+  module.exports.plugins.push(new CopyPlugin({patterns: [{from: './tests/smoke', to: "smoke"}]}));
 }
-if (argv.puppeteer)
+if (process.env.PPTR)
 {
-  module.exports.plugins.push(new CopyPlugin([{flatten: true, from: './tests/puppeteer/**/*.html', to: 'puppeteer'}]));
+  module.exports.plugins.push(new CopyPlugin({patterns: [{flatten: true, from: './tests/puppeteer/**/*.html', to: 'puppeteer'}]}));
 }
 if (components.includes("pm-tab-panel"))
 {
-  module.exports.plugins.push(new CopyPlugin([{from: './src/components/pm-tab-panel/pm-tab-panel.css', to: "css"}]));
+  module.exports.plugins.push(new CopyPlugin({patterns: [{from: './src/components/pm-tab-panel/pm-tab-panel.css', to: "css"}]}));
 }
-if (argv.watch)
+if (process.env.WATCH)
 {
   module.exports.watch = true;
 }

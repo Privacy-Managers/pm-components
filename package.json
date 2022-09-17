@@ -11,9 +11,9 @@
     "start": "npm run build:smoke:watch & http-server dist -p 3000",
     "posttest": "kill $(lsof -t -i:3001)",
     "build": "npm run clean && webpack --config webpack.config.js",
-    "build:puppeteer": "npm run clean && webpack --config webpack.config.js --puppeteer",
-    "build:smoke": "npm run clean && webpack --config webpack.config.js --smoke",
-    "build:smoke:watch": "npm run clean && webpack --config webpack.config.js --smoke --watch",
+    "build:puppeteer": "npm run clean && PPTR=1 webpack --config webpack.config.js",
+    "build:smoke": "npm run clean && SMOKE=1 webpack --config webpack.config.js",
+    "build:smoke:watch": "npm run clean && SMOKE=1 WATCH=1 webpack --config webpack.config.js",
     "clean": "rm -r dist || true",
     "start:dev": "webpack-dev-server"
   },
@@ -30,8 +30,8 @@
   "dependencies": {
     "copy-webpack-plugin": "^11.0.0",
     "http-server": "^14.1.1",
-    "minimist": "^1.2.0",
-    "raw-loader": "^3.1.0",
+    "minimist": "^1.2.6",
+    "raw-loader": "^4.0.2",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },

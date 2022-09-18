@@ -37,7 +37,7 @@ if (process.env.SMOKE)
 }
 if (process.env.PPTR)
 {
-  module.exports.plugins.push(new CopyPlugin({patterns: [{flatten: true, from: './tests/puppeteer/**/*.html', to: 'puppeteer'}]}));
+  module.exports.plugins.push(new CopyPlugin({patterns: [{from: './tests/puppeteer/**/*.html', to: 'puppeteer/[name][ext]'}]}));
 }
 if (components.includes("pm-tab-panel"))
 {

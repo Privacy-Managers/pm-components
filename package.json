@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "mocha": "^10.2.0",
-    "puppeteer": "^1.17.0",
+    "puppeteer": "^19.4.1",
     "webpack-dev-server": "^4.11.1"
   }
 }

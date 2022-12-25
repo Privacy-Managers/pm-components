@@ -310,15 +310,15 @@ describe("pm-table component", () =>
   it("Ensure that last item is the last item in the sorted array(`example299.com`)", async() =>
   {
     await scrollToBottom(); // 100 items load
-    await page.waitFor(50);
+    await page.waitForTimeout(50);
     await scrollToBottom(); // 150 items load
-    await page.waitFor(50);
+    await page.waitForTimeout(50);
     await scrollToBottom(); // 200 items load
-    await page.waitFor(50);
+    await page.waitForTimeout(50);
     await scrollToBottom(); // 250 items load
-    await page.waitFor(50);
+    await page.waitForTimeout(50);
     await scrollToBottom(); // 300 items load
-    await page.waitFor(50);
+    await page.waitForTimeout(50);
     assert.equal(await getLastItemElemDatasetId(), "example299.com");
   });
   it("Pressing enter on selected element should trigger action specified in data-action", async() => {
@@ -336,7 +336,7 @@ describe("pm-table component", () =>
       return true;
     }, tableListHandle);
     await page.keyboard.press("Enter");
-    await page.waitFor(50);
+    await page.waitForTimeout(50);
     assert.equal(result.action, "edit-cookie");
     assert.equal(result.item.id, "subexample3.com");
     assert.equal(result.parent.id, "example0.com");

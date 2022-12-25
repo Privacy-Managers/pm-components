@@ -36,7 +36,8 @@
     "webpack-cli": "^4.10.0"
   },
   "devDependencies": {
-    "mocha": "^6.1.4",
-    "puppeteer": "^1.17.0"
+    "mocha": "^10.2.0",
+    "puppeteer": "^1.17.0",
+    "webpack-dev-server": "^4.11.1"
   }
 }
